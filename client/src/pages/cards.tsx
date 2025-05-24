@@ -165,7 +165,7 @@ export default function Cards() {
           </Link>
         </div>
         {/* Bottom indicator bar */}
-        <div className="h-1 bg-white mx-auto w-32 rounded-full mb-1"></div>
+        <div className="h-1 bg-gray-600 mx-auto w-32 rounded-full mb-1"></div>
       </div>
     </div>
   );
