@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLocation } from "wouter";
 import { Badge } from "@/components/ui/badge";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface DepositOption {
   id: string;
@@ -21,7 +22,7 @@ interface DepositOption {
 export default function DepositOptions() {
   const { t } = useLanguage();
   const [, setLocation] = useLocation();
-  
+
   // Get currency from localStorage
   const [selectedCurrency, setSelectedCurrency] = useState(() => {
     const stored = localStorage.getItem("selectedCurrency");
@@ -81,24 +82,30 @@ export default function DepositOptions() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-black pb-20">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-800">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setLocation("/deposit")}
-          className="text-white p-2"
-        >
-          <ArrowLeft className="h-6 w-6" />
-        </Button>
-        
-        <div className="text-center">
-          <h1 className="text-xl font-semibold">Deposit {selectedCurrency.symbol}</h1>
-          <p className="text-sm text-gray-400">Choose deposit method</p>
+      <div className="bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setLocation("/deposit")}
+              className="p-2 text-gray-800 dark:text-white"
+            >
+              <ArrowLeft className="h-6 w-6" />
+            </Button>
+            <h1 className="text-xl font-bold text-gray-800 dark:text-white ml-3">
+              {t("selectCurrency")}
+            </h1>
+          </div>
+          <div className="flex items-center">
+            <ThemeToggle className="mr-2 text-gray-800 dark:text-white" />
+            <Button variant="ghost" size="icon" onClick={() => navigator.clipboard.writeText(window.location.href)}>
+              <Copy className="h-5 w-5 text-gray-800 dark:text-white" />
+            </Button>
+          </div>
         </div>
-        
-        <div className="w-10" /> {/* Spacer */}
       </div>
 
       {/* Currency Info */}
@@ -122,7 +129,7 @@ export default function DepositOptions() {
       {/* Deposit Options */}
       <div className="p-4 space-y-3">
         <h3 className="text-white font-semibold mb-4">Available Deposit Methods</h3>
-        
+
         {depositOptions.map((option) => {
           const Icon = option.icon;
           return (
@@ -140,7 +147,7 @@ export default function DepositOptions() {
                   <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
                     <Icon className="h-6 w-6 text-white" />
                   </div>
-                  
+
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
                       <h4 className="text-white font-semibold">{option.title}</h4>
@@ -148,15 +155,15 @@ export default function DepositOptions() {
                         <p className="text-green-400 text-sm font-semibold">{option.fee}</p>
                       </div>
                     </div>
-                    
+
                     <p className="text-gray-400 text-sm mb-2">{option.description}</p>
-                    
+
                     <div className="flex items-center justify-between text-xs text-gray-500">
                       <span>⏱️ {option.processingTime}</span>
                       <span>{option.minAmount} - {option.maxAmount}</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center">
                     <ExternalLink className="h-4 w-4 text-gray-400" />
                   </div>
