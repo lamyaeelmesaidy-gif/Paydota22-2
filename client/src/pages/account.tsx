@@ -95,11 +95,11 @@ export default function Account() {
                 className="w-full justify-between p-5 h-auto"
                 onClick={() => handleSettingClick(item.path)}
               >
-                <div className="flex items-center space-x-5 space-x-reverse">
+                <div className="flex items-center space-x-5">
                   <div className="bg-gray-100 dark:bg-gray-800 rounded-full p-2">
                     <item.icon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
                   </div>
-                  <div className="text-right">
+                  <div>
                     <p className="text-sm font-semibold text-gray-900 dark:text-white">
                       {item.title}
                     </p>
