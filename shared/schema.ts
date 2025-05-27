@@ -73,7 +73,6 @@ export const cards = pgTable("cards", {
   reapCardId: varchar("reap_card_id").unique(),
   holderName: varchar("holder_name").notNull(),
   lastFour: varchar("last_four", { length: 4 }),
-  fullCardNumber: varchar("full_card_number", { length: 19 }), // Full 16-digit card number with spaces
   type: varchar("type").notNull(), // credit, debit, prepaid
   status: varchar("status").notNull().default("pending"), // pending, active, suspended, closed
   balance: decimal("balance", { precision: 12, scale: 2 }).default("0.00"),

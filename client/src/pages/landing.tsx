@@ -87,7 +87,7 @@ export default function Landing() {
                   <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl p-6 text-white mb-4">
                     <div className="flex justify-between items-center mb-4">
                       <CreditCard className="h-8 w-8" />
-                      <span className="text-sm font-mono">4532 1234 5678 9012</span>
+                      <span className="text-sm">**** 4532</span>
                     </div>
                     <div className="text-lg font-semibold">أحمد محمد</div>
                     <div className="text-sm opacity-90">12/26</div>
