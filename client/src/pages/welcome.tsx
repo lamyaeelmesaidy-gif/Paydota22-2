@@ -56,7 +56,7 @@ export default function Welcome() {
                 
                 {/* رقم البطاقة */}
                 <div className="text-white font-mono text-lg font-bold tracking-wider mb-4">
-                  4532 1234 5678
+                  4532 1234 5678 9012
                 </div>
                 
                 {/* تفاصيل البطاقة */}
@@ -232,7 +232,7 @@ export default function Welcome() {
                   
                   {/* Card number */}
                   <div className="text-white font-mono text-sm lg:text-base xl:text-lg font-bold tracking-[0.15em] lg:tracking-[0.2em] xl:tracking-[0.25em]">
-                    4532 1234 5678
+                    4532 1234 5678 9012
                   </div>
                   
                   {/* Card details */}
