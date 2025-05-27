@@ -64,7 +64,7 @@ export default function CardVisual({
       {/* Card number */}
       <div className="mb-6">
         <div className="text-lg font-mono tracking-widest">
-          •••• •••• •••• {card?.lastFour || "1234"}
+          {card?.fullCardNumber || "4532 1234 5678 9012"}
         </div>
       </div>
 
