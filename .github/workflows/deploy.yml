@@ -8,7 +8,6 @@ on:
 
 env:
   NODE_VERSION: '20'
-  REGISTRY_URL: ghcr.io
 
 jobs:
   web-deploy:
@@ -39,72 +38,9 @@ jobs:
           CI: false
           NODE_ENV: production
 
-      # يمكنك إضافة هنا خطوة للنشر إلى سيرفرك مثلاً بـ SCP أو FTP
-
-  mobile-build:
-    name: Build Mobile Apps
-    runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, '[mobile]')
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci --legacy-peer-deps
-
-      - name: Setup Expo CLI
-        run: npm install -g @expo/cli
-
-      - name: Build for Web (Expo)
-        run: npx expo export --platform web
-
-      - name: Upload Mobile Web Build
-        uses: actions/upload-artifact@v4
-        with:
-          name: mobile-web-build
-          path: dist/
-          retention-days: 30
-
-  quality-check:
-    name: Quality Assurance
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci --legacy-peer-deps
-
-      - name: Type Check
-        run: npm run check
-
-      - name: Security Audit
-        run: npm audit --audit-level=moderate
-
-      - name: Bundle Size Analysis
-        run: |
-          npm run build
-          npx bundlesize
+      # يمكنك هنا إضافة خطوة لرفع الملفات إلى سيرفرك الخاص إذا أردت
 
 permissions:
   contents: read
   id-token: write
   packages: write
-
-concurrency:
-  group: "build-${{ github.ref }}"
-  cancel-in-progress: false
