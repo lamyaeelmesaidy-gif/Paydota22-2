@@ -12,7 +12,7 @@ env:
 
 jobs:
   web-deploy:
-    name: Build and Deploy Web App
+    name: Build Web App
     runs-on: ubuntu-latest
 
     steps:
@@ -39,19 +39,7 @@ jobs:
           CI: false
           NODE_ENV: production
 
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@v4
-        with:
-          enablement: true
-
-      - name: Upload Web Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './client/dist'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      # يمكنك إضافة هنا خطوة للنشر إلى سيرفرك مثلاً بـ SCP أو FTP
 
   mobile-build:
     name: Build Mobile Apps
@@ -114,10 +102,9 @@ jobs:
 
 permissions:
   contents: read
-  pages: write
   id-token: write
   packages: write
 
 concurrency:
-  group: "pages-${{ github.ref }}"
+  group: "build-${{ github.ref }}"
   cancel-in-progress: false
