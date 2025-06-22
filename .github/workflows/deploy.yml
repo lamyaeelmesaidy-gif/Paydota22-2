@@ -42,9 +42,9 @@ jobs:
         NODE_ENV: production
         
     - name: Setup GitHub Pages
-  uses: actions/configure-pages@v4
-  with:
-    enablement: true
+      uses: actions/configure-pages@v4
+      with:
+      enablement: true
       
    - name: Upload Web Artifact
      uses: actions/upload-pages-artifact@v3
