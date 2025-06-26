@@ -2733,6 +2733,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get WhatsApp Business Account info (admin only)
+  app.get("/api/whatsapp/account-info", requireAuth, async (req: any, res) => {
+    try {
+      const user = await storage.getUser(req.session.userId);
+      if (!user || user.role !== 'admin') {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+
+      const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
+      if (!accessToken) {
+        return res.status(503).json({ 
+          message: "WhatsApp access token not configured" 
+        });
+      }
+
+      // Get business account info
+      const businessResponse = await fetch('https://graph.facebook.com/v18.0/me?fields=name,id', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!businessResponse.ok) {
+        throw new Error(`Failed to get business info: ${businessResponse.statusText}`);
+      }
+
+      const businessData = await businessResponse.json();
+
+      // Get phone numbers associated with the business account
+      const phoneResponse = await fetch(`https://graph.facebook.com/v18.0/${businessData.id}/phone_numbers`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!phoneResponse.ok) {
+        throw new Error(`Failed to get phone numbers: ${phoneResponse.statusText}`);
+      }
+
+      const phoneData = await phoneResponse.json();
+
+      res.json({
+        business: businessData,
+        phoneNumbers: phoneData.data || [],
+        configurationHelp: {
+          message: "Use the business ID as WHATSAPP_BUSINESS_ACCOUNT_ID and one of the phone number IDs as WHATSAPP_PHONE_NUMBER_ID",
+          businessAccountId: businessData.id,
+          availablePhoneNumbers: phoneData.data?.map((phone: any) => ({
+            id: phone.id,
+            displayName: phone.display_phone_number,
+            verifiedName: phone.verified_name,
+            status: phone.status
+          })) || []
+        }
+      });
+
+    } catch (error) {
+      console.error("Error getting WhatsApp account info:", error);
+      res.status(500).json({ 
+        message: "Failed to get account info",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   // Send WhatsApp message (admin only)
   app.post("/api/whatsapp/send", requireAuth, async (req: any, res) => {
     try {

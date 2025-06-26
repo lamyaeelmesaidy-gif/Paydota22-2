@@ -47,6 +47,12 @@ export default function WhatsAppSettings() {
     enabled: user?.role === 'admin'
   });
 
+  // Get WhatsApp account info
+  const { data: accountInfo, refetch: refetchAccountInfo, isLoading: accountLoading } = useQuery({
+    queryKey: ['/api/whatsapp/account-info'],
+    enabled: false // Only fetch when manually triggered
+  });
+
   // Send WhatsApp message mutation
   const sendMessageMutation = useMutation({
     mutationFn: (data: { to: string; message: string; language: string }) =>
