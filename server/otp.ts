@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { whatsappService } from './whatsapp';
+import { WhatsAppService } from './whatsapp';
 
 interface OTPRecord {
   code: string;
@@ -19,8 +19,10 @@ export class OTPService {
   private readonly OTP_EXPIRY_MINUTES = 5;
   private readonly MAX_ATTEMPTS = 3;
   private readonly CLEANUP_INTERVAL = 60000; // 1 minute
+  private whatsappService: WhatsAppService;
 
   constructor() {
+    this.whatsappService = new WhatsAppService();
     // تنظيف الـ OTP المنتهية الصلاحية كل دقيقة
     setInterval(() => {
       this.cleanupExpiredOTPs();
@@ -64,23 +66,32 @@ export class OTPService {
 
       this.otpStore.set(otpKey, otpRecord);
 
-      // إرسال OTP عبر WhatsApp
-      if (whatsappService.isConfigured()) {
-        await whatsappService.sendOTP(phone, code, language);
-        
-        console.log(`📱 OTP sent via WhatsApp to ${phone} for ${purpose}`);
+      // إرسال OTP عبر WhatsApp (الإنتاج الحقيقي)
+      try {
+        if (this.whatsappService.isConfigured()) {
+          await this.whatsappService.sendOTP(phone, code, language);
+          
+          console.log(`📱 OTP sent via WhatsApp to ${phone} for ${purpose}`);
+          return {
+            success: true,
+            message: language === 'ar' ? 'تم إرسال رمز التحقق عبر WhatsApp' : 'OTP sent via WhatsApp',
+            expiresIn: this.OTP_EXPIRY_MINUTES * 60
+          };
+        } else {
+          // إذا لم يكن WhatsApp مُعداً، أرجع خطأ في الإنتاج
+          console.error('❌ WhatsApp service not configured in production');
+          return {
+            success: false,
+            message: language === 'ar' ? 'خدمة WhatsApp غير مُعدة بشكل صحيح' : 'WhatsApp service is not configured',
+            expiresIn: 0
+          };
+        }
+      } catch (whatsappError) {
+        console.error('❌ Failed to send WhatsApp OTP:', whatsappError);
         return {
-          success: true,
-          message: language === 'ar' ? 'تم إرسال رمز التحقق عبر WhatsApp' : 'OTP sent via WhatsApp',
-          expiresIn: this.OTP_EXPIRY_MINUTES * 60
-        };
-      } else {
-        // إذا لم يكن WhatsApp مُعداً، اعرض الرمز في السجل (للتطوير فقط)
-        console.log(`🔐 OTP for ${phone} (${purpose}): ${code} - Expires in ${this.OTP_EXPIRY_MINUTES} minutes`);
-        return {
-          success: true,
-          message: language === 'ar' ? 'رمز التحقق (تطوير): ' + code : 'OTP (Development): ' + code,
-          expiresIn: this.OTP_EXPIRY_MINUTES * 60
+          success: false,
+          message: language === 'ar' ? 'فشل في إرسال رمز التحقق عبر WhatsApp' : 'Failed to send OTP via WhatsApp',
+          expiresIn: 0
         };
       }
     } catch (error) {
