@@ -46,12 +46,17 @@ export class WhatsAppService {
 
   constructor() {
     this.config = {
-      phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || '',
-      accessToken: process.env.WHATSAPP_ACCESS_TOKEN || '',
-      verifyToken: process.env.WHATSAPP_VERIFY_TOKEN || '',
-      businessAccountId: process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || '',
+      phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || '637387286132641',
+      accessToken: process.env.WHATSAPP_ACCESS_TOKEN || 'EAAQrRrLPFnMBOZCjlicG9mv99Sq4iESVFfZBc57wQtZCPGQGnSR14qCw7QNIg7i1Gfhun81GxOQo96M9ILlgr0geX5NrhD19w8BXZCCKHGSxeqzoRaTsAVJwbTrQZCx5EBgVVITAPOxdnqBZBfDUxikrCuwMCNli31nfghrEIuy6qV5ec07ZCWXhFhSUXZAc8JFLZB37BvOOTa1cr6W9uTDY6PkZCeXPmreVKzpD64qhXMZCyUOMO8KH3JkWmkmkDMfKwZDZD',
+      verifyToken: process.env.WHATSAPP_VERIFY_TOKEN || 'paydota_webhook_verify_token_2025',
+      businessAccountId: process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || '576288461869738',
       baseUrl: 'https://graph.facebook.com/v18.0'
     };
+    console.log('🔧 WhatsApp Service initialized with config:', {
+      phoneNumberId: this.config.phoneNumberId ? 'configured' : 'missing',
+      accessToken: this.config.accessToken ? 'configured' : 'missing',
+      isConfigured: this.isConfigured()
+    });
   }
 
   // تحقق من إعداد الخدمة
