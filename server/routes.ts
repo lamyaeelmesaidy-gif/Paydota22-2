@@ -6,6 +6,8 @@ import { setupSimpleAuth, requireAuth } from "./simpleAuth";
 import { setupGoogleAuth } from "./googleAuth";
 import { reapService } from "./reap";
 import { binancePayService } from "./binance";
+import { whatsappService } from "./whatsapp";
+import { otpService } from "./otp";
 import { insertCardSchema, insertSupportTicketSchema, insertNotificationSchema, insertNotificationSettingsSchema, kycVerificationFormSchema, insertKycVerificationSchema } from "@shared/schema";
 import { z } from "zod";
 import session from "express-session";
@@ -2698,6 +2700,323 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating profile:", error);
       res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+
+  // ==========================================
+  // WhatsApp API Routes
+  // ==========================================
+
+  // WhatsApp webhook verification
+  app.get("/api/whatsapp/webhook", (req, res) => {
+    const mode = req.query["hub.mode"];
+    const token = req.query["hub.verify_token"];
+    const challenge = req.query["hub.challenge"];
+
+    const result = whatsappService.verifyWebhook(mode as string, token as string, challenge as string);
+    
+    if (result) {
+      res.status(200).send(result);
+    } else {
+      res.status(403).send('Verification failed');
+    }
+  });
+
+  // WhatsApp webhook receiver
+  app.post("/api/whatsapp/webhook", async (req, res) => {
+    try {
+      await whatsappService.handleWebhook(req.body);
+      res.status(200).send('OK');
+    } catch (error) {
+      console.error('WhatsApp webhook error:', error);
+      res.status(500).send('Webhook processing failed');
+    }
+  });
+
+  // Send WhatsApp message (admin only)
+  app.post("/api/whatsapp/send", requireAuth, async (req: any, res) => {
+    try {
+      const user = await storage.getUser(req.session.userId);
+      if (!user || user.role !== 'admin') {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+
+      const { to, message, language = 'ar' } = req.body;
+
+      if (!to || !message) {
+        return res.status(400).json({ message: "Phone number and message are required" });
+      }
+
+      if (!whatsappService.isConfigured()) {
+        return res.status(503).json({ 
+          message: "WhatsApp service is not configured" 
+        });
+      }
+
+      const result = await whatsappService.sendTextMessage(to, message);
+      
+      res.json({
+        success: true,
+        messageId: result.messages[0]?.id,
+        message: "Message sent successfully"
+      });
+
+    } catch (error) {
+      console.error("Error sending WhatsApp message:", error);
+      res.status(500).json({ 
+        message: "Failed to send message",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // ==========================================
+  // OTP Routes
+  // ==========================================
+
+  // Send OTP
+  app.post("/api/otp/send", async (req, res) => {
+    try {
+      const { phone, purpose, email, language = 'ar' } = req.body;
+
+      if (!phone || !purpose) {
+        return res.status(400).json({ 
+          message: "Phone number and purpose are required" 
+        });
+      }
+
+      // التحقق من وجود OTP نشط
+      if (otpService.hasActiveOTP(phone, purpose)) {
+        const expiryTime = otpService.getOTPExpiryTime(phone, purpose);
+        return res.status(429).json({
+          message: language === 'ar' ? 'يوجد رمز تحقق نشط بالفعل' : 'Active OTP already exists',
+          expiresAt: expiryTime
+        });
+      }
+
+      const result = await otpService.sendOTP(phone, purpose, email, language);
+      
+      res.json(result);
+
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      res.status(500).json({ 
+        message: "Failed to send OTP",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Verify OTP
+  app.post("/api/otp/verify", async (req, res) => {
+    try {
+      const { phone, code, purpose } = req.body;
+
+      if (!phone || !code || !purpose) {
+        return res.status(400).json({ 
+          message: "Phone number, code, and purpose are required" 
+        });
+      }
+
+      const result = otpService.verifyOTP(phone, code, purpose);
+      
+      if (result.success) {
+        res.json(result);
+      } else {
+        res.status(400).json(result);
+      }
+
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      res.status(500).json({ 
+        message: "Failed to verify OTP",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Check OTP status
+  app.post("/api/otp/status", (req, res) => {
+    try {
+      const { phone, purpose } = req.body;
+
+      if (!phone || !purpose) {
+        return res.status(400).json({ 
+          message: "Phone number and purpose are required" 
+        });
+      }
+
+      const hasActive = otpService.hasActiveOTP(phone, purpose);
+      const expiryTime = otpService.getOTPExpiryTime(phone, purpose);
+
+      res.json({
+        hasActiveOTP: hasActive,
+        expiresAt: expiryTime
+      });
+
+    } catch (error) {
+      console.error("Error checking OTP status:", error);
+      res.status(500).json({ 
+        message: "Failed to check OTP status"
+      });
+    }
+  });
+
+  // Cancel OTP
+  app.post("/api/otp/cancel", (req, res) => {
+    try {
+      const { phone, purpose } = req.body;
+
+      if (!phone || !purpose) {
+        return res.status(400).json({ 
+          message: "Phone number and purpose are required" 
+        });
+      }
+
+      const cancelled = otpService.cancelOTP(phone, purpose);
+      
+      res.json({
+        success: cancelled,
+        message: cancelled ? "OTP cancelled successfully" : "No active OTP found"
+      });
+
+    } catch (error) {
+      console.error("Error cancelling OTP:", error);
+      res.status(500).json({ 
+        message: "Failed to cancel OTP"
+      });
+    }
+  });
+
+  // OTP statistics (admin only)
+  app.get("/api/otp/stats", requireAuth, async (req: any, res) => {
+    try {
+      const user = await storage.getUser(req.session.userId);
+      if (!user || user.role !== 'admin') {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+
+      const stats = otpService.getStats();
+      res.json(stats);
+
+    } catch (error) {
+      console.error("Error getting OTP stats:", error);
+      res.status(500).json({ 
+        message: "Failed to get OTP statistics"
+      });
+    }
+  });
+
+  // ==========================================
+  // Enhanced Login with OTP
+  // ==========================================
+
+  // Login with OTP (new endpoint)
+  app.post("/api/auth/login-with-otp", async (req, res) => {
+    try {
+      const { phone, password, otpCode } = req.body;
+
+      if (!phone || !password || !otpCode) {
+        return res.status(400).json({ 
+          message: "Phone, password, and OTP code are required" 
+        });
+      }
+
+      // التحقق من OTP أولاً
+      const otpResult = otpService.verifyOTP(phone, otpCode, 'login');
+      if (!otpResult.success) {
+        return res.status(400).json({
+          message: "Invalid or expired OTP",
+          otpError: otpResult.message
+        });
+      }
+
+      // التحقق من بيانات المستخدم
+      const user = await storage.getUserByPhone(phone);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      const bcrypt = await import('bcryptjs');
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      // إنشاء الجلسة
+      req.session.userId = user.id;
+      req.session.save();
+
+      // إرسال إشعار أمان
+      if (whatsappService.isConfigured()) {
+        try {
+          await whatsappService.sendSecurityAlert(phone, 'login', 'ar');
+        } catch (error) {
+          console.warn('Failed to send security alert:', error);
+        }
+      }
+
+      const { password: _, ...userWithoutPassword } = user;
+      res.json({
+        message: "Login successful",
+        user: userWithoutPassword
+      });
+
+    } catch (error) {
+      console.error("Login with OTP error:", error);
+      res.status(500).json({ message: "Login failed" });
+    }
+  });
+
+  // ==========================================
+  // Enhanced Notifications with WhatsApp
+  // ==========================================
+
+  // Send transaction notification via WhatsApp
+  app.post("/api/notifications/send-transaction", requireAuth, async (req: any, res) => {
+    try {
+      const userId = req.session?.userId;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const { transactionType, amount, currency = 'USD', language = 'ar' } = req.body;
+
+      if (!transactionType || !amount) {
+        return res.status(400).json({ 
+          message: "Transaction type and amount are required" 
+        });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user || !user.phone) {
+        return res.status(404).json({ message: "User or phone number not found" });
+      }
+
+      if (whatsappService.isConfigured()) {
+        await whatsappService.sendTransactionNotification(
+          user.phone,
+          transactionType,
+          amount,
+          currency,
+          language
+        );
+
+        res.json({
+          success: true,
+          message: "Transaction notification sent"
+        });
+      } else {
+        res.status(503).json({
+          message: "WhatsApp service not configured"
+        });
+      }
+
+    } catch (error) {
+      console.error("Error sending transaction notification:", error);
+      res.status(500).json({ 
+        message: "Failed to send notification"
+      });
     }
   });
 

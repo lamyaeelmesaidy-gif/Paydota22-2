@@ -43,6 +43,7 @@ import Help from "@/pages/account/help";
 import Community from "@/pages/account/community";
 import PriorityCards from "@/pages/cards/priority";
 import ChooseCard from "@/pages/choose-card";
+import WhatsAppSettings from "@/pages/whatsapp-settings";
 
 import KYCVerification from "@/pages/kyc-verification-new";
 import KycManagement from "@/pages/kyc-management";
@@ -160,6 +161,7 @@ function Router() {
         <Route path="/binance-pay" component={BinancePay} />
         <Route path="/services" component={Services} />
         <Route path="/hub" component={Services} />
+        <Route path="/whatsapp-settings" component={WhatsAppSettings} />
         <Route path="/camera-test" component={CameraTest} />
 
         {/* Root route - immediately show dashboard for authenticated users */}

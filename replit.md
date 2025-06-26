@@ -141,6 +141,8 @@ PayDota is a comprehensive digital banking platform built with modern web techno
 - **Mobile Stores**: Google Play Store and Apple App Store distribution
 
 ## Changelog
+- June 26, 2025: Implemented comprehensive WhatsApp API integration with OTP system - added WhatsApp Business API service for sending notifications, OTP codes, security alerts, and transaction confirmations. Created complete OTP management system with phone verification, multi-purpose support (login, registration, password reset, phone verification, transactions), and automatic cleanup. Added admin WhatsApp settings page for managing messaging and OTP statistics. Enhanced login system with optional OTP verification and automatic security notifications.
+- June 26, 2025: Enhanced Binance Pay page with responsive design - optimized for all screen sizes using light purple color scheme (80% opacity), improved mobile layout with sticky header, clean white background, better touch targets, and consistent purple branding throughout the interface.
 - June 25, 2025: Optimized Bank Transfer page layout for mobile - reduced padding, improved spacing, smaller text sizes, more compact design for better mobile experience
 - June 25, 2025: Updated Bank Transfer page to use English language interface - changed all Arabic text to English to match user preference
 - June 25, 2025: Updated Deposit page to match app design - clean white background, consistent layout, responsive for all screen sizes, simplified header and payment options
