@@ -16,7 +16,8 @@ import {
   Ticket,
   DollarSign,
   MessageSquare,
-  Plus
+  Plus,
+  MessageCircle
 } from "lucide-react";
 
 export default function AdminNavigation() {
@@ -94,6 +95,14 @@ export default function AdminNavigation() {
       icon: MessageSquare,
       color: "bg-blue-500",
       isActive: location === "/admin/community"
+    },
+    {
+      title: "WhatsApp Settings",
+      description: "Configure WhatsApp API and OTP templates",
+      href: "/admin-panel/whatsapp",
+      icon: MessageCircle,
+      color: "bg-green-500",
+      isActive: location === "/admin-panel/whatsapp"
     },
     {
       title: "Admin Settings",
