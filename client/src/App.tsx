@@ -51,6 +51,7 @@ import AdminNavigation from "@/components/admin-navigation";
 import UserManagement from "@/pages/admin/users";
 import SystemReports from "@/pages/admin/reports";
 import AdminSettings from "@/pages/admin/settings";
+import AdminWhatsAppSettings from "@/pages/admin/whatsapp-settings";
 import AdminBankTransfers from "@/pages/admin/bank-transfers";
 import AdminReferrals from "@/pages/admin/referrals";
 import AdminVouchers from "@/pages/admin/vouchers";
@@ -118,6 +119,7 @@ function Router() {
         <Route path="/admin/currency" component={AdminCurrency} />
         <Route path="/admin/community" component={AdminCommunity} />
         <Route path="/admin-panel" component={AdminNavigation} />
+        <Route path="/admin-panel/whatsapp" component={AdminWhatsAppSettings} />
 
         {/* Account routes */}
         <Route path="/account/settings" component={AccountSettings} />

@@ -89,14 +89,65 @@ export class WhatsAppService {
     return await this.sendMessage(messageData);
   }
 
-  // إرسال رمز OTP
+  // إرسال رمز OTP باستخدام القالب المعتمد
   async sendOTP(to: string, otpCode: string, language: 'ar' | 'en' = 'ar'): Promise<SendMessageResponse> {
-    const messages = {
-      ar: `رمز التحقق الخاص بك في PayDota هو: ${otpCode}\n\nلا تشارك هذا الرمز مع أي شخص آخر.\nصالح لمدة 5 دقائق.`,
-      en: `Your PayDota verification code is: ${otpCode}\n\nDo not share this code with anyone.\nValid for 5 minutes.`
+    try {
+      // محاولة إرسال باستخدام القالب المعتمد أولاً
+      return await this.sendOTPTemplate(to, otpCode, language);
+    } catch (error) {
+      console.log('⚠️ Template OTP failed, falling back to text message:', error);
+      // في حالة فشل القالب، استخدم الرسالة النصية
+      const messages = {
+        ar: `رمز التحقق الخاص بك في PayDota هو: ${otpCode}\n\nلا تشارك هذا الرمز مع أي شخص آخر.\nصالح لمدة 5 دقائق.`,
+        en: `Your PayDota verification code is: ${otpCode}\n\nDo not share this code with anyone.\nValid for 5 minutes.`
+      };
+      return await this.sendTextMessage(to, messages[language]);
+    }
+  }
+
+  // إرسال OTP باستخدام القالب المعتمد
+  async sendOTPTemplate(to: string, otpCode: string, language: 'ar' | 'en' = 'ar'): Promise<SendMessageResponse> {
+    if (!this.isConfigured()) {
+      throw new Error('WhatsApp API is not configured. Please provide the required environment variables.');
+    }
+
+    const formattedPhone = this.formatPhoneNumber(to);
+
+    // قوالب مختلفة حسب اللغة
+    const templateNames = {
+      ar: 'otp_verification_ar', // اسم القالب باللغة العربية
+      en: 'otp_verification_en'  // اسم القالب باللغة الإنجليزية
     };
 
-    return await this.sendTextMessage(to, messages[language]);
+    const languageCodes = {
+      ar: 'ar',
+      en: 'en'
+    };
+
+    const messageData: WhatsAppMessage = {
+      messaging_product: 'whatsapp',
+      to: formattedPhone,
+      type: 'template',
+      template: {
+        name: templateNames[language],
+        language: {
+          code: languageCodes[language]
+        },
+        components: [
+          {
+            type: 'body',
+            parameters: [
+              {
+                type: 'text',
+                text: otpCode
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    return await this.sendMessage(messageData);
   }
 
   // إرسال إشعار معاملة
