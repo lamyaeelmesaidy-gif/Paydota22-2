@@ -48,8 +48,6 @@ import WhatsAppSettings from "@/pages/whatsapp-settings";
 import KYCVerification from "@/pages/kyc-verification-new";
 import KycManagement from "@/pages/kyc-management";
 import AdminNavigation from "@/components/admin-navigation";
-import AdminLogin from "@/pages/admin-login";
-import AdminSetup from "@/pages/admin-setup";
 import UserManagement from "@/pages/admin/users";
 import SystemReports from "@/pages/admin/reports";
 import AdminSettings from "@/pages/admin/settings";
@@ -94,8 +92,6 @@ function Router() {
         <Route path="/" component={Welcome} />
         <Route path="/welcome" component={Welcome} />
         <Route path="/login" component={Login} />
-        <Route path="/admin-login" component={AdminLogin} />
-        <Route path="/admin-setup" component={AdminSetup} />
         <Route path="/register" component={Register} />
         <Route path="/camera-test" component={CameraTest} />
         <Route path="/about" component={About} />
