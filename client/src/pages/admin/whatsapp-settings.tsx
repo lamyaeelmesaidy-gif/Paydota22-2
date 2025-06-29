@@ -105,9 +105,21 @@ export default function WhatsAppSettings() {
       setTestOTP('');
     },
     onError: (error: any) => {
+      let title = "فشل الإرسال";
+      let description = error.message || "فشل في إرسال رسالة الاختبار";
+      
+      // تحقق من أخطاء انتهاء صلاحية الرمز
+      if (error.message && error.message.includes("Session has expired")) {
+        title = "رمز الوصول منتهي الصلاحية";
+        description = "رمز الوصول (Access Token) انتهت صلاحيته. يرجى تحديث الرمز من Facebook Developer Console.";
+      } else if (error.message && error.message.includes("OAuthException")) {
+        title = "مشكلة في المصادقة";
+        description = "خطأ في مصادقة WhatsApp API. تحقق من صحة رمز الوصول.";
+      }
+      
       toast({
-        title: "فشل الإرسال",
-        description: error.message || "فشل في إرسال رسالة الاختبار",
+        title,
+        description,
         variant: "destructive",
       });
     },
@@ -201,6 +213,30 @@ export default function WhatsAppSettings() {
                     placeholder="EAAQrRrLPFnMBOZC..."
                     className="font-mono text-sm"
                   />
+                  <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-md">
+                    <p className="text-sm text-red-800 font-medium">⚠️ تحذير: انتهت صلاحية رمز الوصول</p>
+                    <p className="text-xs text-red-600 mt-1">
+                      انتهت صلاحية الرمز في 25 يونيو. تحتاج إلى الحصول على رمز جديد من Facebook Developer Console.
+                    </p>
+                    <div className="mt-2 text-xs text-red-600">
+                      <p><strong>خطوات الحصول على رمز جديد:</strong></p>
+                      <ol className="list-decimal list-inside mt-1 space-y-1">
+                        <li>اذهب إلى Facebook Developers Console</li>
+                        <li>اختر تطبيق WhatsApp Business</li>
+                        <li>اذهب إلى WhatsApp → Getting Started</li>
+                        <li>انسخ رمز الوصول الجديد</li>
+                        <li>الصق الرمز هنا واحفظ الإعدادات</li>
+                      </ol>
+                      <a 
+                        href="https://developers.facebook.com/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-block mt-2 px-3 py-1 bg-red-100 text-red-700 rounded-md text-xs font-medium hover:bg-red-200 transition-colors"
+                      >
+                        🔗 فتح Facebook Developer Console
+                      </a>
+                    </div>
+                  </div>
                 </div>
 
                 <div>
