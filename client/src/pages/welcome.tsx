@@ -112,6 +112,15 @@ export default function Welcome() {
             </Button>
           </Link>
           
+          {/* Admin Access - Mobile */}
+          <div className="flex justify-center pt-4 sm:pt-6">
+            <Link href="/admin-login">
+              <span className="text-xs text-gray-400 hover:text-purple-600 transition-colors duration-300 cursor-pointer opacity-50 hover:opacity-100">
+                Administrative Access
+              </span>
+            </Link>
+          </div>
+
           {/* Bottom indicator */}
           <div className="flex justify-center pt-2 sm:pt-3">
             <div className="w-12 h-1 sm:w-16 sm:h-1.5 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full shadow-md"></div>
@@ -168,6 +177,15 @@ export default function Welcome() {
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-100/20 via-pink-100/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="relative z-10 tracking-wide">OPEN A DIGITAL ACCOUNT</span>
                 </Button>
+              </Link>
+            </div>
+
+            {/* Admin Access - Discreet */}
+            <div className="mt-8 text-center">
+              <Link href="/admin-login">
+                <span className="text-xs text-gray-400 hover:text-purple-600 transition-colors duration-300 cursor-pointer opacity-50 hover:opacity-100">
+                  Administrative Access
+                </span>
               </Link>
             </div>
 
