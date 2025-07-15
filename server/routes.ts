@@ -15,15 +15,10 @@ import connectPg from "connect-pg-simple";
 import { db } from "./db";
 import * as schema from "@shared/schema";
 import { eq, desc, and, sql, isNull } from "drizzle-orm";
-import Stripe from "stripe";
+import { createAirwallexService } from "./airwallex";
 
-// Initialize Stripe
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
-}
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-05-28.basil",
-});
+// Initialize Airwallex service
+const airwallex = createAirwallexService();
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup session middleware first
@@ -96,25 +91,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const cards = await storage.getCardsByUserId(userId);
       
-      // Sync status with Stripe for each card
+      // Sync status with Airwallex for each card
       const syncedCards = [];
       for (const card of cards) {
-        if (card.stripeCardId) {
+        if (card.airwallexCardId) {
           try {
-            const stripeCard = await stripe.issuing.cards.retrieve(card.stripeCardId);
-            console.log(`🔄 Stripe card ${card.id} status: ${stripeCard.status}, Platform: ${card.status}`);
+            const airwallexCard = await airwallex.getCard(card.airwallexCardId);
+            console.log(`🔄 Airwallex card ${card.id} status: ${airwallexCard.status}, Platform: ${card.status}`);
             
-            // Map Stripe status to our status
+            // Map Airwallex status to our status
             let newStatus = card.status;
-            if (stripeCard.status === 'active' && card.status !== 'active') {
+            if (airwallexCard.status === 'ACTIVE' && card.status !== 'active') {
               newStatus = 'active';
-              console.log(`✅ Activating card ${card.id} (Stripe is active)`);
-            } else if (stripeCard.status === 'inactive' && card.status === 'active') {
+              console.log(`✅ Activating card ${card.id} (Airwallex is active)`);
+            } else if (airwallexCard.status === 'INACTIVE' && card.status === 'active') {
               newStatus = 'pending';
-              console.log(`⏳ Setting card ${card.id} to pending (Stripe inactive)`);
-            } else if (stripeCard.status === 'canceled' && card.status !== 'blocked') {
+              console.log(`⏳ Setting card ${card.id} to pending (Airwallex inactive)`);
+            } else if (airwallexCard.status === 'CANCELLED' && card.status !== 'blocked') {
               newStatus = 'blocked';
-              console.log(`🚫 Blocking card ${card.id} (Stripe canceled)`);
+              console.log(`🚫 Blocking card ${card.id} (Airwallex cancelled)`);
+            } else if (airwallexCard.status === 'SUSPENDED' && card.status !== 'suspended') {
+              newStatus = 'suspended';
+              console.log(`⏸️ Suspending card ${card.id} (Airwallex suspended)`);
             }
             
             // Update database if status changed
@@ -125,8 +123,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             } else {
               syncedCards.push(card);
             }
-          } catch (stripeError) {
-            console.log(`⚠️ Could not sync status for card ${card.id}:`, stripeError.message);
+          } catch (airwallexError) {
+            console.log(`⚠️ Could not sync status for card ${card.id}:`, airwallexError.message);
             syncedCards.push(card);
           }
         } else {
@@ -141,7 +139,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get sensitive card details from Stripe
+  // Get sensitive card details from Airwallex
   app.get("/api/cards/:cardId/details", requireAuth, async (req: any, res) => {
     try {
       const userId = req.session?.userId;
@@ -156,21 +154,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Card not found" });
       }
 
-      if (!card.stripeCardId) {
-        return res.status(400).json({ message: "Card is not a Stripe card" });
+      if (!card.airwallexCardId) {
+        return res.status(400).json({ message: "Card is not an Airwallex card" });
       }
 
-      // Get sensitive details from Stripe
-      const stripeCard = await stripe.issuing.cards.retrieve(card.stripeCardId, {
-        expand: ['number', 'cvc']
-      });
+      // Get sensitive details from Airwallex
+      const airwallexCard = await airwallex.getCardDetails(card.airwallexCardId);
 
       res.json({
-        number: stripeCard.number,
-        cvc: stripeCard.cvc,
-        expMonth: stripeCard.exp_month,
-        expYear: stripeCard.exp_year,
-        last4: stripeCard.last4
+        number: airwallexCard.card_number,
+        cvc: airwallexCard.cvv,
+        expMonth: airwallexCard.expiry_month,
+        expYear: airwallexCard.expiry_year,
+        last4: airwallexCard.card_number?.slice(-4) || card.lastFour
       });
     } catch (error: any) {
       console.error("Error fetching card details:", error);
@@ -212,136 +208,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // Create card with Stripe Issuing
+      // Create card with Airwallex Issuing
       try {
-        console.log("Creating card with Stripe Issuing with automatic terms acceptance...");
+        console.log("Creating card with Airwallex Issuing...");
         
-        // Create Stripe cardholder using real user information
-        console.log("Creating Stripe cardholder with user's real information...");
+        // Create Airwallex cardholder using real user information
+        console.log("Creating Airwallex cardholder with user's real information...");
         
-        // Parse user's date of birth if available
-        let dobDay = 1, dobMonth = 1, dobYear = 1990;
-        if (user.dateOfBirth) {
-          const dob = new Date(user.dateOfBirth);
-          dobDay = dob.getDate();
-          dobMonth = dob.getMonth() + 1;
-          dobYear = dob.getFullYear();
-        }
-        
-        const cardholder = await stripe.issuing.cardholders.create({
-          name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email?.split('@')[0] || 'User',
-          email: user.email || `user${user.id}@paydota.com`,
-          phone_number: user.phone || undefined,
-          type: 'individual',
+        const cardholder = await airwallex.createCardholder({
+          type: 'INDIVIDUAL',
           individual: {
-            first_name: user.firstName || user.email?.split('@')[0] || 'User', 
+            first_name: user.firstName || user.email?.split('@')[0] || 'User',
             last_name: user.lastName || 'User',
-            dob: {
-              day: dobDay,
-              month: dobMonth, 
-              year: dobYear
-            }
-          },
-          billing: {
-            address: {
-              line1: '8206 Louisiana Blvd Ne, Ste A 6342',
-              city: 'Albuquerque',
-              state: 'NM',
-              country: 'US',
-              postal_code: '87113'
-            }
-          },
-          metadata: {
-            platform: 'PayDota',
-            user_id: user.id,
-            user_phone: user.phone || 'not_provided'
+            email: user.email || `user${user.id}@paydota.com`,
+            phone_number: user.phone || undefined,
+            date_of_birth: user.dateOfBirth || '1990-01-01'
           }
         });
 
-        console.log("📋 Cardholder created with status:", cardholder.status);
-        console.log("📋 Cardholder requirements:", cardholder.requirements);
+        console.log("📋 Cardholder created with status:", cardholder.id);
+        console.log("📋 Cardholder type:", cardholder.type);
         
-        // In test mode, proceed with card creation even if cardholder has requirements
-        // The requirements will be automatically handled by Stripe test environment
+        // Create Airwallex card
+        const airwallexCard = await airwallex.createCard({
+          cardholder_id: cardholder.id,
+          form_factor: cardData.type === 'virtual' ? 'VIRTUAL' : 'PHYSICAL',
+          type: 'PREPAID',
+          currency: (cardData.currency || 'USD').toUpperCase(),
+          purpose: 'BUSINESS_EXPENSES',
+          spending_limits: {
+            single_transaction_limit: 100000, // $1000 limit
+            daily_limit: 500000, // $5000 daily limit
+            monthly_limit: 2000000 // $20000 monthly limit
+          },
+          primary_contact_details: {
+            first_name: user.firstName || user.email?.split('@')[0] || 'User',
+            last_name: user.lastName || 'User',
+            email: user.email || `user${user.id}@paydota.com`
+          },
+          postal_address: cardData.type === 'physical' ? {
+            line1: user.address || '8206 Louisiana Blvd Ne, Ste A 6342',
+            city: user.city || 'Albuquerque',
+            state: 'NM',
+            postcode: user.postalCode || '87113',
+            country_code: 'US'
+          } : undefined
+        });
 
-        // Create Stripe card - handle potential verification requirements gracefully
-        let stripeCard;
-        try {
-          stripeCard = await stripe.issuing.cards.create({
-            cardholder: cardholder.id,
-            type: cardData.type === 'virtual' ? 'virtual' : 'physical',
-            currency: (cardData.currency || 'USD').toLowerCase(),
-            status: 'active',
-            spending_controls: {
-              spending_limits: [{
-                amount: 100000, // $1000 limit
-                categories: [],
-                interval: 'monthly'
-              }],
-              allowed_categories: [], // Allow all categories by default
-              blocked_categories: [] // No blocked categories
-            },
-            metadata: {
-              user_id: userId,
-              design: cardData.design || 'blue',
-              auto_approved: 'true',
-              terms_accepted: 'automatic'
-            }
-          });
-        } catch (cardCreationError: any) {
-          // If card creation fails due to cardholder requirements, create with inactive status
-          if (cardCreationError.message.includes('outstanding requirements') || 
-              cardCreationError.message.includes('preventing them from activating')) {
-            console.log("📋 Creating card in inactive state due to cardholder requirements...");
-            
-            stripeCard = await stripe.issuing.cards.create({
-              cardholder: cardholder.id,
-              type: cardData.type === 'virtual' ? 'virtual' : 'physical',
-              currency: (cardData.currency || 'USD').toLowerCase(),
-              status: 'inactive', // Create as inactive initially
-              spending_controls: {
-                spending_limits: [{
-                  amount: 100000,
-                  categories: [],
-                  interval: 'monthly'
-                }],
-                allowed_categories: [],
-                blocked_categories: []
-              },
-              metadata: {
-                user_id: userId,
-                design: cardData.design || 'blue',
-                requires_activation: 'true',
-                terms_accepted: 'automatic'
-              }
-            });
-          } else {
-            throw cardCreationError;
-          }
-        }
+        console.log("📋 Airwallex card created with ID:", airwallexCard.id);
+        console.log("📋 Card status:", airwallexCard.status);
 
         // Get sensitive card details (number and CVC)
-        const cardDetails = await stripe.issuing.cards.retrieve(stripeCard.id, {
-          expand: ['number', 'cvc']
-        });
+        const cardDetails = await airwallex.getCardDetails(airwallexCard.id);
 
-        // Generate expiry date (4 years from now)
-        const now = new Date();
-        const expiryYear = now.getFullYear() + 4;
-        const expiryMonth = now.getMonth() + 1;
+        // Use actual expiry date from Airwallex card
+        const expiryMonth = cardDetails.expiry_month || new Date().getMonth() + 1;
+        const expiryYear = cardDetails.expiry_year || new Date().getFullYear() + 4;
 
-        // Activate the card in Stripe immediately
+        // Activate the card in Airwallex if needed
         let cardStatus = "pending";
         try {
-          // Check if card needs activation
-          if (stripeCard.status === "inactive") {
-            await stripe.testHelpers.issuing.cards.ship(stripeCard.id);
-            await stripe.testHelpers.issuing.cards.deliver(stripeCard.id);
+          if (airwallexCard.status === "INACTIVE") {
+            await airwallex.activateCard(airwallexCard.id);
+            const updatedCard = await airwallex.getCard(airwallexCard.id);
+            cardStatus = updatedCard.status === "ACTIVE" ? "active" : "pending";
+          } else {
+            cardStatus = airwallexCard.status === "ACTIVE" ? "active" : "pending";
           }
-          
-          // Get updated card status
-          const updatedStripeCard = await stripe.issuing.cards.retrieve(stripeCard.id);
-          cardStatus = updatedStripeCard.status === "active" ? "active" : "pending";
           console.log(`💳 Card activation status: ${cardStatus}`);
         } catch (activationError) {
           console.log("Note: Could not activate card automatically:", activationError.message);
@@ -353,12 +286,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const newCard = await storage.createCard({
           userId,
           type: cardData.type,
-          holderName: cardholder.name,
-          stripeCardId: stripeCard.id,
-          stripeCardHolderId: cardholder.id,
-          cardNumber: cardDetails.number,
-          cvv: cardDetails.cvc,
-          brand: stripeCard.brand,
+          holderName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email?.split('@')[0] || 'User',
+          airwallexCardId: airwallexCard.id,
+          airwallexCardHolderId: cardholder.id,
+          cardNumber: cardDetails.card_number,
+          cvv: cardDetails.cvv,
+          brand: "visa", // Airwallex cards are typically Visa
           status: cardStatus,
           currency: cardData.currency || "USD",
           spendingLimit: "1000.00",
@@ -419,30 +352,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         ];
 
-        // Create test transactions in Stripe for the new card
+        // Create test transactions in Airwallex for the new card
         try {
           const testTransactions = [
-            { amount: 4599, merchant: 'Amazon' },
-            { amount: 1250, merchant: 'Starbucks' },
-            { amount: 8999, merchant: 'Nike Store' },
-            { amount: 2500, merchant: 'Uber' },
-            { amount: 6750, merchant: 'Target' }
+            { amount: 45.99, merchant: 'Amazon' },
+            { amount: 12.50, merchant: 'Starbucks' },
+            { amount: 89.99, merchant: 'Nike Store' },
+            { amount: 25.00, merchant: 'Uber' },
+            { amount: 67.50, merchant: 'Target' }
           ];
 
           for (const testTxn of testTransactions) {
             try {
-              // Create authorization using Stripe Test API
-              await stripe.testHelpers.issuing.transactions.createForceCapture({
-                card: stripeCard.id,
+              // Create authorization using Airwallex Simulation API
+              await airwallex.simulateTransaction(airwallexCard.id, {
                 amount: testTxn.amount,
-                currency: 'usd',
-                merchant_data: {
-                  category: 'miscellaneous_stores',
-                  name: testTxn.merchant,
-                  city: 'San Francisco',
-                  state: 'CA',
-                  country: 'US'
-                }
+                currency: 'USD',
+                merchant_category_code: '5411',
+                merchant_name: testTxn.merchant
               });
             } catch (testError) {
               console.log(`Note: Could not create test transaction for ${testTxn.merchant}:`, testError.message);
@@ -457,14 +384,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           await storage.createTransaction(txn);
         }
         
-        console.log("✅ Successfully created Stripe card with automatic terms acceptance:", newCard.id);
-        console.log("📋 Cardholder status:", cardholder.status);
-        console.log("💳 Card status:", stripeCard.status);
+        console.log("✅ Successfully created Airwallex card:", newCard.id);
+        console.log("📋 Cardholder status:", cardholder.type);
+        console.log("💳 Card status:", airwallexCard.status);
         return res.status(201).json(newCard);
       } catch (error: any) {
-        console.error("Error creating Stripe card:", error);
+        console.error("Error creating Airwallex card:", error);
         return res.status(500).json({ 
-          message: "Failed to create card with Stripe Issuing",
+          message: "Failed to create card with Airwallex Issuing",
           error: error.message 
         });
       }
@@ -489,11 +416,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access denied" });
       }
 
-      // Activate with Stripe Issuing
-      if (card.stripeCardId) {
-        await stripe.issuing.cards.update(card.stripeCardId, {
-          status: 'active'
-        });
+      // Activate with Airwallex Issuing
+      if (card.airwallexCardId) {
+        await airwallex.activateCard(card.airwallexCardId);
       }
 
       // Update database
@@ -548,10 +473,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log(`📋 Found card for freezing:`, card);
 
-      // Freeze with Reap API
-      if (card.reapCardId) {
-        console.log(`🌐 Freezing card in Reap API: ${card.reapCardId}`);
-        await reapService.freezeCard(card.reapCardId);
+      // Freeze with Airwallex API
+      if (card.airwallexCardId) {
+        console.log(`🌐 Freezing card in Airwallex API: ${card.airwallexCardId}`);
+        await airwallex.freezeCard(card.airwallexCardId);
       }
 
       // Update database
@@ -583,10 +508,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log(`📋 Found card for unfreezing:`, card);
 
-      // Unfreeze with Reap API
-      if (card.reapCardId) {
-        console.log(`🌐 Unfreezing card in Reap API: ${card.reapCardId}`);
-        await reapService.unfreezeCard(card.reapCardId);
+      // Unfreeze with Airwallex API
+      if (card.airwallexCardId) {
+        console.log(`🌐 Unfreezing card in Airwallex API: ${card.airwallexCardId}`);
+        await airwallex.unfreezeCard(card.airwallexCardId);
       }
 
       // Update database to active status
@@ -1053,50 +978,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Accept Stripe terms automatically for existing cardholders
-  app.post("/api/stripe/accept-terms", requireAuth, async (req: any, res) => {
+  // Accept Airwallex terms automatically for existing cardholders
+  app.post("/api/airwallex/accept-terms", requireAuth, async (req: any, res) => {
     try {
       const userId = req.session?.userId;
       if (!userId) {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
-      // Get all user cards with Stripe cardholder IDs
+      // Get all user cards with Airwallex cardholder IDs
       const cards = await storage.getCardsByUserId(userId);
-      const stripeCards = cards.filter(card => card.stripeCardHolderId);
+      const airwallexCards = cards.filter(card => card.airwallexCardHolderId);
       
       let processedCount = 0;
       let results = [];
 
-      for (const card of stripeCards) {
+      for (const card of airwallexCards) {
         try {
           // Get current cardholder status
-          const cardholder = await stripe.issuing.cardholders.retrieve(card.stripeCardHolderId!);
+          const cardholder = await airwallex.getCardholder(card.airwallexCardHolderId!);
           
           results.push({
             cardId: card.id,
             cardholderId: cardholder.id,
-            currentStatus: cardholder.status,
-            requirements: cardholder.requirements || {}
+            currentStatus: cardholder.type,
+            individual: cardholder.individual || {}
           });
 
-          // Try to update metadata to indicate terms acceptance
-          if (cardholder.status !== 'active') {
-            await stripe.issuing.cardholders.update(cardholder.id, {
-              metadata: {
-                ...cardholder.metadata,
-                terms_accepted: 'automatic',
-                acceptance_date: new Date().toISOString(),
-                platform: 'PayDota'
-              }
-            });
-            processedCount++;
-          }
+          processedCount++;
         } catch (error: any) {
-          console.error(`Error processing cardholder ${card.stripeCardHolderId}:`, error.message);
+          console.error(`Error processing cardholder ${card.airwallexCardHolderId}:`, error.message);
           results.push({
             cardId: card.id,
-            cardholderId: card.stripeCardHolderId,
+            cardholderId: card.airwallexCardHolderId,
             error: error.message
           });
         }
@@ -1105,7 +1019,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         message: "Terms acceptance processing completed",
         processedCount,
-        totalCards: stripeCards.length,
+        totalCards: airwallexCards.length,
         results
       });
     } catch (error) {
@@ -1114,8 +1028,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create test transactions in Stripe for existing cards
-  app.post("/api/transactions/create-stripe-test", requireAuth, async (req: any, res) => {
+  // Create test transactions in Airwallex for existing cards
+  app.post("/api/transactions/create-airwallex-test", requireAuth, async (req: any, res) => {
     try {
       const userId = req.session?.userId;
       if (!userId) {
@@ -1129,49 +1043,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Card not found" });
       }
 
-      if (!card.stripeCardId) {
-        return res.status(400).json({ message: "Not a Stripe card" });
+      if (!card.airwallexCardId) {
+        return res.status(400).json({ message: "Not an Airwallex card" });
       }
 
-      // Create test transactions using Stripe Test Helpers
+      // Create test transactions using Airwallex API
       const testTransactions = [
-        { amount: 12599, merchant: 'Apple Store', category: 'electronics_stores' },
-        { amount: 850, merchant: 'McDonald\'s', category: 'quick_service_restaurants' },
-        { amount: 7999, merchant: 'H&M', category: 'clothing_stores' },
-        { amount: 3500, merchant: 'Shell', category: 'gas_stations' },
-        { amount: 4599, merchant: 'Amazon', category: 'miscellaneous_stores' }
+        { amount: 125.99, merchant: 'Apple Store', category: 'electronics_stores' },
+        { amount: 8.50, merchant: 'McDonald\'s', category: 'quick_service_restaurants' },
+        { amount: 79.99, merchant: 'H&M', category: 'clothing_stores' },
+        { amount: 35.00, merchant: 'Shell', category: 'gas_stations' },
+        { amount: 45.99, merchant: 'Amazon', category: 'miscellaneous_stores' }
       ];
 
       let createdCount = 0;
       for (const testTxn of testTransactions) {
         try {
-          await stripe.testHelpers.issuing.transactions.createForceCapture({
-            card: card.stripeCardId,
+          await airwallex.simulateTransaction(card.airwallexCardId, {
             amount: testTxn.amount,
-            currency: 'usd',
-            merchant_data: {
-              category: testTxn.category,
-              name: testTxn.merchant,
-              city: 'San Francisco',
-              state: 'CA',
-              country: 'US'
-            }
+            currency: 'USD',
+            merchant_name: testTxn.merchant,
+            merchant_category_code: testTxn.category
           });
           createdCount++;
-          console.log(`✅ Created Stripe test transaction: ${testTxn.merchant} - $${testTxn.amount/100}`);
+          console.log(`✅ Created Airwallex test transaction: ${testTxn.merchant} - $${testTxn.amount}`);
         } catch (testError: any) {
           console.log(`❌ Failed to create test transaction for ${testTxn.merchant}:`, testError.message);
         }
       }
 
       res.json({ 
-        message: "Stripe test transactions created", 
+        message: "Airwallex test transactions created", 
         created: createdCount,
         total: testTransactions.length 
       });
     } catch (error) {
-      console.error("Error creating Stripe test transactions:", error);
-      res.status(500).json({ message: "Failed to create Stripe test transactions" });
+      console.error("Error creating Airwallex test transactions:", error);
+      res.status(500).json({ message: "Failed to create Airwallex test transactions" });
     }
   });
 
@@ -1187,39 +1095,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let allTransactions = [];
 
       for (const card of cards) {
-        if (card.stripeCardId) {
+        if (card.airwallexCardId) {
           try {
-            // Fetch real transactions from Stripe Issuing
-            const stripeTransactions = await stripe.issuing.transactions.list({
-              card: card.stripeCardId,
+            // Fetch real transactions from Airwallex Issuing
+            const airwallexTransactions = await airwallex.getCardTransactions(card.airwallexCardId, {
               limit: 10
             });
 
-            // Convert Stripe transactions to our format
-            const formattedTransactions = stripeTransactions.data.map(txn => {
-              // Extract merchant information from various possible locations
-              let merchantName = 'Unknown Merchant';
-              let merchantCategory = '';
-              
-              // Check different locations for merchant data
-              if (txn.merchant_data?.name) {
-                merchantName = txn.merchant_data.name;
-                merchantCategory = txn.merchant_data.category || '';
-              } else if (txn.authorization?.merchant_data?.name) {
-                merchantName = txn.authorization.merchant_data.name;
-                merchantCategory = txn.authorization.merchant_data.category || '';
-              } else if (txn.purchase_details?.flight?.departure_at) {
-                merchantName = 'Flight Purchase';
-              } else if (txn.purchase_details?.fuel?.type) {
-                merchantName = 'Fuel Station';
-              } else if (txn.purchase_details?.lodging?.check_in_at) {
-                merchantName = 'Hotel/Lodging';
-              } else {
-                // Fallback: try to extract from any available fields
-                merchantName = txn.description || 
-                             txn.merchant?.name || 
-                             `Transaction ${txn.id.slice(-4)}`;
-              }
+            // Convert Airwallex transactions to our format
+            const formattedTransactions = airwallexTransactions.items.map(txn => {
+              // Extract merchant information from Airwallex transaction
+              let merchantName = txn.merchant_name || 'Unknown Merchant';
+              let merchantCategory = txn.merchant_category_code || '';
               
               // Create Arabic descriptions for merchant categories
               const categoryMap: Record<string, string> = {
@@ -1250,26 +1137,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
               return {
                 id: txn.id,
                 cardId: card.id,
-                type: txn.type === 'capture' ? 'purchase' : txn.type,
-                status: txn.dispute ? 'disputed' : 'completed',
-                amount: (txn.amount / 100).toString(),
+                type: txn.transaction_type.toLowerCase(),
+                status: txn.status.toLowerCase(),
+                amount: txn.amount.toString(),
                 currency: txn.currency.toUpperCase(),
                 merchant: merchantName,
                 description: description,
-                createdAt: new Date(txn.created * 1000).toISOString(),
-                stripeTransactionId: txn.id
+                createdAt: new Date(txn.created_at).toISOString(),
+                airwallexTransactionId: txn.id
               };
             });
 
             allTransactions.push(...formattedTransactions);
-          } catch (stripeError) {
-            console.error(`Error fetching Stripe transactions for card ${card.id}:`, stripeError);
-            // Fallback to database transactions if Stripe fails
+          } catch (airwallexError) {
+            console.error(`Error fetching Airwallex transactions for card ${card.id}:`, airwallexError);
+            // Fallback to database transactions if Airwallex fails
             const dbTransactions = await storage.getTransactionsByCardId(card.id);
             allTransactions.push(...dbTransactions);
           }
         } else {
-          // For non-Stripe cards, get from database
+          // For non-Airwallex cards, get from database
           const dbTransactions = await storage.getTransactionsByCardId(card.id);
           allTransactions.push(...dbTransactions);
         }
@@ -1278,7 +1165,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Sort by date (newest first)
       allTransactions.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-      console.log(`📊 Returning ${allTransactions.length} transactions (real Stripe data) for user ${userId}`);
+      console.log(`📊 Returning ${allTransactions.length} transactions (real Airwallex data) for user ${userId}`);
       res.json(allTransactions);
     } catch (error) {
       console.error("Error fetching transactions:", error);
