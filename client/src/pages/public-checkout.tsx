@@ -18,7 +18,7 @@ export default function PublicCheckoutPage() {
   const [isFlutterwaveLoaded, setIsFlutterwaveLoaded] = useState(false);
 
   const { data: paymentLink, isLoading, error } = useQuery({
-    queryKey: ["/api/public/payment-link", params?.txRef],
+    queryKey: [`/api/public/payment-link/${params?.txRef}`],
     enabled: !!params?.txRef,
   });
 
