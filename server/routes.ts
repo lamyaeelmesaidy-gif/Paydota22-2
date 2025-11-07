@@ -3566,37 +3566,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const cleanLogo = validatedData.logo?.trim() || undefined;
       const cleanDescription = validatedData.description?.trim() || undefined;
 
-      // Validate that customer email is not empty (Flutterwave requires it)
+      // Validate that customer email is not empty (required for payment)
       if (!cleanEmail) {
         return res.status(400).json({ 
           message: 'Customer email is required for payment links' 
         });
       }
 
-      const flwResponse = await flutterwaveService.createPaymentLink({
-        txRef,
-        amount: validatedData.amount || "0",
-        currency: validatedData.currency || "NGN",
-        redirectUrl: cleanRedirectUrl,
-        paymentOptions: validatedData.paymentOptions || "card",
-        customer: {
-          email: cleanEmail,
-          name: cleanName,
-          phonenumber: cleanPhone,
-        },
-        customizations: {
-          title: validatedData.title,
-          description: cleanDescription,
-          logo: cleanLogo,
-        },
-        metadata: validatedData.metadata as Record<string, any>,
-      });
+      // Generate internal payment link (our own checkout page)
+      const domain = process.env.REPLIT_DEV_DOMAIN || 'http://localhost:5000';
+      const fullDomain = domain.startsWith('http') ? domain : `https://${domain}`;
+      const internalPaymentLink = `${fullDomain}/pay/${txRef}`;
 
       const paymentLink = await storage.createPaymentLink({
         ...validatedData,
         userId,
         txRef,
-        flutterwaveLink: flwResponse.data.link,
+        flutterwaveLink: internalPaymentLink,
         status: 'active',
       });
 
@@ -3674,6 +3660,89 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({
         message: error.message || 'Failed to disable payment link',
       });
+    }
+  });
+
+  // Public API endpoint to get payment link details (no auth required)
+  app.get('/api/public/payment-link/:txRef', async (req, res) => {
+    try {
+      const { txRef } = req.params;
+      const paymentLink = await storage.getPaymentLinkByTxRef(txRef);
+      
+      if (!paymentLink) {
+        return res.status(404).json({ message: 'Payment link not found' });
+      }
+
+      // Return only necessary public information
+      res.json({
+        id: paymentLink.id,
+        title: paymentLink.title,
+        description: paymentLink.description,
+        amount: paymentLink.amount,
+        currency: paymentLink.currency,
+        paymentOptions: paymentLink.paymentOptions,
+        customerEmail: paymentLink.customerEmail,
+        customerName: paymentLink.customerName,
+        customerPhone: paymentLink.customerPhone,
+        txRef: paymentLink.txRef,
+        status: paymentLink.status,
+        redirectUrl: paymentLink.redirectUrl,
+        logo: paymentLink.logo,
+      });
+    } catch (error: any) {
+      console.error('Error fetching public payment link:', error);
+      res.status(500).json({ message: 'Failed to fetch payment link' });
+    }
+  });
+
+  // Public API endpoint to verify payment (no auth required)
+  app.post('/api/public/payment-verify/:transactionId', async (req, res) => {
+    try {
+      const { transactionId } = req.params;
+
+      const verification = await flutterwaveService.verifyTransaction(transactionId);
+      
+      if (verification.status !== 'success') {
+        return res.status(400).json({ 
+          message: 'Transaction verification failed',
+          data: verification,
+        });
+      }
+
+      const txData = verification.data;
+      
+      let existingTransaction = await storage.getPaymentTransactionByTxRef(txData.tx_ref);
+      
+      if (!existingTransaction) {
+        const paymentLink = await storage.getPaymentLinkByTxRef(txData.tx_ref);
+        
+        existingTransaction = await storage.createPaymentTransaction({
+          paymentLinkId: paymentLink?.id,
+          txRef: txData.tx_ref,
+          flutterwaveRef: txData.flw_ref,
+          transactionId: txData.id.toString(),
+          amount: txData.amount.toString(),
+          currency: txData.currency,
+          chargedAmount: txData.charged_amount?.toString(),
+          customerEmail: txData.customer.email,
+          customerName: txData.customer.name,
+          customerPhone: txData.customer.phone_number,
+          paymentMethod: txData.payment_type,
+          status: txData.status === 'successful' ? 'successful' : 'failed',
+          cardNumber: txData.card ? `${txData.card.first_6digits}****${txData.card.last_4digits}` : undefined,
+          cardType: txData.card?.type,
+          cardCountry: txData.card?.country,
+          metadata: txData as any,
+        });
+      }
+
+      res.json({
+        message: 'Payment verified successfully',
+        transaction: existingTransaction,
+      });
+    } catch (error: any) {
+      console.error('Error verifying public payment:', error);
+      res.status(500).json({ message: 'Failed to verify payment' });
     }
   });
 

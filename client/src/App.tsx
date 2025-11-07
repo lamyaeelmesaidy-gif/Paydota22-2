@@ -67,6 +67,7 @@ import CameraTest from "@/pages/camera-test";
 import AdminAddUser from "@/pages/admin-add-user";
 import PasswordDemo from "@/pages/password-demo";
 import PaymentLinks from "@/pages/payment-links";
+import PublicCheckout from "@/pages/public-checkout";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -102,6 +103,7 @@ function Router() {
         <Route path="/register" component={Register} />
         <Route path="/camera-test" component={CameraTest} />
         <Route path="/about" component={About} />
+        <Route path="/pay/:txRef" component={PublicCheckout} />
         {/* Redirect all other routes to welcome page */}
         <Route>
           <Welcome />
@@ -177,6 +179,7 @@ function Router() {
         <Route path="/airwallex-test" component={AirwallexTestPage} />
         <Route path="/admin/add-user" component={AdminAddUser} />
         <Route path="/password-demo" component={PasswordDemo} />
+        <Route path="/pay/:txRef" component={PublicCheckout} />
 
         {/* Root route - immediately show dashboard for authenticated users */}
         <Route path="/" component={Dashboard} />
