@@ -91,13 +91,18 @@ class FlutterwaveService {
     }
 
     try {
+      const defaultRedirectUrl = `${process.env.REPLIT_DEV_DOMAIN || 'http://localhost:5000'}/payment/verify`;
+      const redirectUrl = params.redirectUrl && params.redirectUrl.trim() !== '' 
+        ? params.redirectUrl 
+        : defaultRedirectUrl;
+
       const response = await axios.post<FlutterwavePaymentLinkResponse>(
         `${this.config.baseUrl}/payments`,
         {
           tx_ref: params.txRef,
           amount: params.amount,
           currency: params.currency,
-          redirect_url: params.redirectUrl || `${process.env.REPLIT_DEV_DOMAIN || 'http://localhost:5000'}/payment/verify`,
+          redirect_url: redirectUrl,
           payment_options: params.paymentOptions || 'card',
           customer: params.customer,
           customizations: params.customizations,

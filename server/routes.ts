@@ -3558,21 +3558,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = insertPaymentLinkSchema.parse(req.body);
       const txRef = flutterwaveService.generateTxRef(userId);
 
+      // Clean up empty string values
+      const cleanEmail = validatedData.customerEmail?.trim() || "";
+      const cleanName = validatedData.customerName?.trim() || undefined;
+      const cleanPhone = validatedData.customerPhone?.trim() || undefined;
+      const cleanRedirectUrl = validatedData.redirectUrl?.trim() || undefined;
+      const cleanLogo = validatedData.logo?.trim() || undefined;
+      const cleanDescription = validatedData.description?.trim() || undefined;
+
       const flwResponse = await flutterwaveService.createPaymentLink({
         txRef,
         amount: validatedData.amount || "0",
         currency: validatedData.currency || "NGN",
-        redirectUrl: validatedData.redirectUrl || undefined,
+        redirectUrl: cleanRedirectUrl,
         paymentOptions: validatedData.paymentOptions || "card",
         customer: {
-          email: validatedData.customerEmail || "",
-          name: validatedData.customerName || undefined,
-          phonenumber: validatedData.customerPhone || undefined,
+          email: cleanEmail,
+          name: cleanName,
+          phonenumber: cleanPhone,
         },
         customizations: {
           title: validatedData.title,
-          description: validatedData.description || undefined,
-          logo: validatedData.logo || undefined,
+          description: cleanDescription,
+          logo: cleanLogo,
         },
         metadata: validatedData.metadata as Record<string, any>,
       });
