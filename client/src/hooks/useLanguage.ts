@@ -5,6 +5,7 @@ const translations = {
     // Navigation
     home: "Home",
     cards: "Cards",
+    payments: "Payments",
     transactions: "Transactions",
     account: "Account",
     settings: "Settings",
@@ -347,6 +348,7 @@ const translations = {
     // Navigation
     home: "الرئيسية",
     cards: "البطاقات",
+    payments: "المدفوعات",
     transactions: "المعاملات",
     account: "الحساب",
     settings: "الإعدادات",
