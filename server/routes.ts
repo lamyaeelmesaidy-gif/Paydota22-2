@@ -3548,9 +3548,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Flutterwave Payment Link Routes
-  app.post('/api/payment-links', requireAuth, async (req, res) => {
+  app.post('/api/payment-links', requireAuth, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
+      const userId = req.session?.userId;
       if (!userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
@@ -3560,19 +3560,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const flwResponse = await flutterwaveService.createPaymentLink({
         txRef,
-        amount: validatedData.amount,
-        currency: validatedData.currency,
-        redirectUrl: validatedData.redirectUrl,
-        paymentOptions: validatedData.paymentOptions,
+        amount: validatedData.amount || "0",
+        currency: validatedData.currency || "NGN",
+        redirectUrl: validatedData.redirectUrl || undefined,
+        paymentOptions: validatedData.paymentOptions || "card",
         customer: {
-          email: validatedData.customerEmail!,
-          name: validatedData.customerName,
-          phonenumber: validatedData.customerPhone,
+          email: validatedData.customerEmail || "",
+          name: validatedData.customerName || undefined,
+          phonenumber: validatedData.customerPhone || undefined,
         },
         customizations: {
           title: validatedData.title,
-          description: validatedData.description,
-          logo: validatedData.logo,
+          description: validatedData.description || undefined,
+          logo: validatedData.logo || undefined,
         },
         metadata: validatedData.metadata as Record<string, any>,
       });
@@ -3597,9 +3597,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/payment-links', requireAuth, async (req, res) => {
+  app.get('/api/payment-links', requireAuth, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
+      const userId = req.session?.userId;
       if (!userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
@@ -3612,7 +3612,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/payment-links/:txRef', requireAuth, async (req, res) => {
+  app.get('/api/payment-links/:txRef', requireAuth, async (req: any, res) => {
     try {
       const { txRef } = req.params;
       const paymentLink = await storage.getPaymentLinkByTxRef(txRef);
@@ -3633,10 +3633,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/payment-links/:id/disable', requireAuth, async (req, res) => {
+  app.post('/api/payment-links/:id/disable', requireAuth, async (req: any, res) => {
     try {
       const { id } = req.params;
-      const userId = req.user?.id;
+      const userId = req.session?.userId;
 
       const paymentLink = await storage.getPaymentLinkByTxRef(id);
       if (!paymentLink) {
@@ -3784,19 +3784,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/payment/transactions', requireAuth, async (req, res) => {
+  app.get('/api/payment/transactions', requireAuth, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
+      const userId = req.session?.userId;
       if (!userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
 
       const paymentLinks = await storage.getPaymentLinksByUserId(userId);
-      const allTransactions = [];
+      const allTransactions: any[] = [];
 
       for (const link of paymentLinks) {
         const transactions = await storage.getPaymentTransactionsByLinkId(link.id);
-        allTransactions.push(...transactions.map(t => ({ ...t, paymentLink: link })));
+        allTransactions.push(...transactions.map((t: any) => ({ ...t, paymentLink: link })));
       }
 
       res.json(allTransactions);

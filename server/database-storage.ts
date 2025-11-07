@@ -7,6 +7,8 @@ import {
   notificationSettings,
   kycVerifications,
   kycDocuments,
+  paymentLinks,
+  paymentTransactions,
   type User,
   type UpsertUser,
   type Card,
@@ -23,6 +25,10 @@ import {
   type InsertKycVerification,
   type KycDocument,
   type InsertKycDocument,
+  type PaymentLink,
+  type InsertPaymentLink,
+  type PaymentTransaction,
+  type InsertPaymentTransaction,
 } from "../shared/schema";
 import { db } from "./db";
 import { eq, desc, and, count, sql } from "drizzle-orm";
@@ -80,6 +86,27 @@ export interface IStorage {
   // KYC document operations
   getKycDocumentsByKycId(kycId: string): Promise<KycDocument[]>;
   createKycDocument(document: InsertKycDocument): Promise<KycDocument>;
+  
+  // Payment Link operations
+  createPaymentLink(link: InsertPaymentLink): Promise<PaymentLink>;
+  getPaymentLinksByUserId(userId: string): Promise<PaymentLink[]>;
+  getPaymentLinkByTxRef(txRef: string): Promise<PaymentLink | undefined>;
+  disablePaymentLink(txRef: string): Promise<void>;
+  
+  // Payment Transaction operations
+  createPaymentTransaction(transaction: InsertPaymentTransaction): Promise<PaymentTransaction>;
+  getPaymentTransactionsByLinkId(linkId: string): Promise<PaymentTransaction[]>;
+  getPaymentTransactionByTxRef(txRef: string): Promise<PaymentTransaction | undefined>;
+  updatePaymentTransaction(id: string, updates: Partial<PaymentTransaction>): Promise<PaymentTransaction>;
+  
+  // Admin operations
+  getAllKycVerifications(): Promise<KycVerification[]>;
+  updateKycStatus(id: string, status: string, reviewedBy: string, comments?: string): Promise<KycVerification>;
+  getUserByPhone(phone: string): Promise<User | undefined>;
+  markAllNotificationsAsRead(userId: string): Promise<void>;
+  deleteNotification(id: string): Promise<void>;
+  createNotificationSettings(settings: InsertNotificationSettings): Promise<NotificationSettings>;
+  updateNotificationSettings(userId: string, settings: Partial<NotificationSettings>): Promise<NotificationSettings>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -200,13 +227,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createCard(card: InsertCard): Promise<Card> {
-    const cardData = {
-      ...card,
-      expiryMonth: card.expiryMonth || 12,
-      expiryYear: card.expiryYear || 2028
-    };
-    
-    const [newCard] = await db.insert(cards).values(cardData).returning();
+    const [newCard] = await db.insert(cards).values(card).returning();
     return newCard;
   }
 
@@ -395,6 +416,129 @@ export class DatabaseStorage implements IStorage {
         updatedAt: new Date() 
       })
       .where(eq(users.id, userId));
+  }
+
+  // Payment Link operations
+  async createPaymentLink(link: InsertPaymentLink): Promise<PaymentLink> {
+    const [newLink] = await db.insert(paymentLinks).values({
+      ...link,
+      id: crypto.randomUUID(),
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }).returning();
+    return newLink;
+  }
+
+  async getPaymentLinksByUserId(userId: string): Promise<PaymentLink[]> {
+    return await db
+      .select()
+      .from(paymentLinks)
+      .where(eq(paymentLinks.userId, userId))
+      .orderBy(desc(paymentLinks.createdAt));
+  }
+
+  async getPaymentLinkByTxRef(txRef: string): Promise<PaymentLink | undefined> {
+    const [link] = await db
+      .select()
+      .from(paymentLinks)
+      .where(eq(paymentLinks.txRef, txRef));
+    return link || undefined;
+  }
+
+  async disablePaymentLink(txRef: string): Promise<void> {
+    await db
+      .update(paymentLinks)
+      .set({ status: 'disabled', updatedAt: new Date() })
+      .where(eq(paymentLinks.txRef, txRef));
+  }
+
+  // Payment Transaction operations
+  async createPaymentTransaction(transaction: InsertPaymentTransaction): Promise<PaymentTransaction> {
+    const [newTransaction] = await db.insert(paymentTransactions).values({
+      ...transaction,
+      id: crypto.randomUUID(),
+      createdAt: new Date()
+    }).returning();
+    return newTransaction;
+  }
+
+  async getPaymentTransactionsByLinkId(linkId: string): Promise<PaymentTransaction[]> {
+    return await db
+      .select()
+      .from(paymentTransactions)
+      .where(eq(paymentTransactions.paymentLinkId, linkId))
+      .orderBy(desc(paymentTransactions.createdAt));
+  }
+
+  async getPaymentTransactionByTxRef(txRef: string): Promise<PaymentTransaction | undefined> {
+    const [transaction] = await db
+      .select()
+      .from(paymentTransactions)
+      .where(eq(paymentTransactions.txRef, txRef));
+    return transaction || undefined;
+  }
+
+  async updatePaymentTransaction(id: string, updates: Partial<PaymentTransaction>): Promise<PaymentTransaction> {
+    const [updatedTransaction] = await db
+      .update(paymentTransactions)
+      .set({ ...updates })
+      .where(eq(paymentTransactions.id, id))
+      .returning();
+    return updatedTransaction;
+  }
+
+  // Admin operations
+  async getAllKycVerifications(): Promise<KycVerification[]> {
+    return await db.select().from(kycVerifications).orderBy(desc(kycVerifications.createdAt));
+  }
+
+  async updateKycStatus(id: string, status: string, reviewedBy: string, comments?: string): Promise<KycVerification> {
+    const [updatedKyc] = await db
+      .update(kycVerifications)
+      .set({
+        status,
+        reviewComments: comments,
+        reviewedAt: new Date(),
+        updatedAt: new Date()
+      })
+      .where(eq(kycVerifications.id, id))
+      .returning();
+    return updatedKyc;
+  }
+
+  async getUserByPhone(phone: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.phone, phone));
+    return user || undefined;
+  }
+
+  async markAllNotificationsAsRead(userId: string): Promise<void> {
+    await db
+      .update(notifications)
+      .set({ readAt: new Date() })
+      .where(eq(notifications.userId, userId));
+  }
+
+  async deleteNotification(id: string): Promise<void> {
+    await db.delete(notifications).where(eq(notifications.id, id));
+  }
+
+  async createNotificationSettings(settings: InsertNotificationSettings): Promise<NotificationSettings> {
+    const [newSettings] = await db.insert(notificationSettings).values({
+      ...settings,
+      id: crypto.randomUUID(),
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }).returning();
+    return newSettings;
+  }
+
+  async updateNotificationSettings(userId: string, settings: Partial<NotificationSettings>): Promise<NotificationSettings> {
+    const [updatedSettings] = await db
+      .update(notificationSettings)
+      .set({ ...settings, updatedAt: new Date() })
+      .where(eq(notificationSettings.userId, userId))
+      .returning();
+    return updatedSettings;
   }
 }
 
