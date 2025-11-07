@@ -20,7 +20,7 @@ const paymentLinkFormSchema = z.object({
   amount: z.string().min(1, "Amount is required"),
   currency: z.string().default("NGN"),
   paymentOptions: z.string().default("card"),
-  customerEmail: z.string().email("Invalid email address"),
+  customerEmail: z.string().min(1, "Customer email is required").email("Invalid email address"),
   customerName: z.string().optional(),
   customerPhone: z.string().optional(),
   redirectUrl: z.string().url().optional().or(z.literal("")),

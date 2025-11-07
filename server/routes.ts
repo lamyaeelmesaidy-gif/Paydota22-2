@@ -3559,12 +3559,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const txRef = flutterwaveService.generateTxRef(userId);
 
       // Clean up empty string values
-      const cleanEmail = validatedData.customerEmail?.trim() || "";
+      const cleanEmail = validatedData.customerEmail?.trim();
       const cleanName = validatedData.customerName?.trim() || undefined;
       const cleanPhone = validatedData.customerPhone?.trim() || undefined;
       const cleanRedirectUrl = validatedData.redirectUrl?.trim() || undefined;
       const cleanLogo = validatedData.logo?.trim() || undefined;
       const cleanDescription = validatedData.description?.trim() || undefined;
+
+      // Validate that customer email is not empty (Flutterwave requires it)
+      if (!cleanEmail) {
+        return res.status(400).json({ 
+          message: 'Customer email is required for payment links' 
+        });
+      }
 
       const flwResponse = await flutterwaveService.createPaymentLink({
         txRef,
