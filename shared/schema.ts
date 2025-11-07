@@ -802,6 +802,9 @@ export const paymentTransactionsRelations = relations(paymentTransactions, ({ on
 // Insert schemas for payment links
 export const insertPaymentLinkSchema = createInsertSchema(paymentLinks).omit({
   id: true,
+  userId: true,
+  txRef: true,
+  flutterwaveLink: true,
   createdAt: true,
   updatedAt: true,
 });
