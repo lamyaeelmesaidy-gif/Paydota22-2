@@ -91,7 +91,15 @@ class FlutterwaveService {
     }
 
     try {
-      const defaultRedirectUrl = `${process.env.REPLIT_DEV_DOMAIN || 'http://localhost:5000'}/payment/verify`;
+      // Build a valid redirect URL
+      let defaultRedirectUrl = 'http://localhost:5000/payment/verify';
+      if (process.env.REPLIT_DEV_DOMAIN) {
+        const domain = process.env.REPLIT_DEV_DOMAIN;
+        // Ensure domain has protocol
+        const fullDomain = domain.startsWith('http') ? domain : `https://${domain}`;
+        defaultRedirectUrl = `${fullDomain}/payment/verify`;
+      }
+      
       const redirectUrl = params.redirectUrl && params.redirectUrl.trim() !== '' 
         ? params.redirectUrl 
         : defaultRedirectUrl;
