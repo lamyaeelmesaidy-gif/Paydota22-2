@@ -408,9 +408,9 @@ export default function PaymentLinksPage() {
                           <CreditCard className="w-4 h-4" />
                         </div>
                         <div>
-                          <p className="font-medium text-sm" data-testid={`transaction-email-${tx.id}`}>{tx.customerEmail}</p>
+                          <p className="font-medium text-sm" data-testid={`transaction-method-${tx.id}`}>{tx.paymentMethod || 'Payment'}</p>
                           <p className="text-xs text-muted-foreground">
-                            {tx.paymentMethod} • {new Date(tx.createdAt).toLocaleString()}
+                            {new Date(tx.createdAt).toLocaleString()}
                           </p>
                         </div>
                       </div>
