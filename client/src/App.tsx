@@ -68,6 +68,7 @@ import AdminAddUser from "@/pages/admin-add-user";
 import PasswordDemo from "@/pages/password-demo";
 import PaymentLinks from "@/pages/payment-links";
 import PublicCheckout from "@/pages/public-checkout";
+import CustomCheckout from "@/pages/custom-checkout";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -104,6 +105,7 @@ function Router() {
         <Route path="/camera-test" component={CameraTest} />
         <Route path="/about" component={About} />
         <Route path="/pay/:txRef" component={PublicCheckout} />
+        <Route path="/checkout/:txRef" component={CustomCheckout} />
         {/* Redirect all other routes to welcome page */}
         <Route>
           <Welcome />

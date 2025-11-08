@@ -3890,6 +3890,146 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post('/api/payment/charge-card', async (req: any, res) => {
+    try {
+      const {
+        txRef,
+        amount,
+        currency,
+        cardNumber,
+        cvv,
+        expiryMonth,
+        expiryYear,
+        customerEmail,
+        customerName,
+        customerPhone,
+        pin,
+      } = req.body;
+
+      if (!txRef || !amount || !currency || !cardNumber || !cvv || !expiryMonth || !expiryYear || !customerEmail || !customerName) {
+        return res.status(400).json({ message: 'Missing required fields' });
+      }
+
+      const chargeData: any = {
+        txRef,
+        amount: amount.toString(),
+        currency,
+        cardNumber,
+        cvv,
+        expiryMonth,
+        expiryYear,
+        customer: {
+          email: customerEmail,
+          name: customerName,
+          phonenumber: customerPhone,
+        },
+      };
+
+      if (pin) {
+        chargeData.authorization = {
+          mode: 'pin',
+          pin,
+        };
+      }
+
+      const result = await flutterwaveService.chargeCard(chargeData);
+
+      const transactionStatus = result.data.status === 'successful' ? 'successful' : 'pending';
+      
+      const existingTransaction = await storage.getPaymentTransactionByTxRef(txRef);
+      
+      if (!existingTransaction) {
+        await storage.createPaymentTransaction({
+          txRef,
+          flutterwaveRef: result.data.flw_ref,
+          transactionId: result.data.id.toString(),
+          amount: result.data.amount.toString(),
+          currency: result.data.currency,
+          chargedAmount: result.data.charged_amount?.toString() || result.data.amount.toString(),
+          customerEmail: result.data.customer.email,
+          customerName: result.data.customer.name,
+          customerPhone: result.data.customer.phone_number,
+          paymentMethod: 'card',
+          status: transactionStatus,
+          cardNumber: result.data.card?.last_4digits,
+          cardType: result.data.card?.type,
+          cardCountry: result.data.card?.country,
+          metadata: result.data as any,
+          verifiedAt: transactionStatus === 'successful' ? new Date() : undefined,
+        });
+      } else if (result.data.status === 'successful') {
+        await storage.updatePaymentTransaction(existingTransaction.id, {
+          status: 'successful',
+          flutterwaveRef: result.data.flw_ref,
+          transactionId: result.data.id.toString(),
+          verifiedAt: new Date(),
+        });
+      }
+
+      res.json(result);
+    } catch (error: any) {
+      console.error('Error charging card:', error);
+      res.status(500).json({
+        message: error.message || 'Failed to charge card',
+      });
+    }
+  });
+
+  app.post('/api/payment/validate-charge', async (req, res) => {
+    try {
+      const { flwRef, otp } = req.body;
+
+      if (!flwRef || !otp) {
+        return res.status(400).json({ message: 'Missing flwRef or otp' });
+      }
+
+      const result = await flutterwaveService.validateCharge(flwRef, otp);
+
+      if (result.data.status === 'successful') {
+        const existingTransaction = await storage.getPaymentTransactionByTxRef(result.data.tx_ref);
+        
+        if (existingTransaction) {
+          await storage.updatePaymentTransaction(existingTransaction.id, {
+            status: 'successful',
+            flutterwaveRef: result.data.flw_ref,
+            transactionId: result.data.id.toString(),
+            verifiedAt: new Date(),
+          });
+        }
+      }
+
+      res.json(result);
+    } catch (error: any) {
+      console.error('Error validating charge:', error);
+      res.status(500).json({
+        message: error.message || 'Failed to validate charge',
+      });
+    }
+  });
+
+  app.get('/api/public/payment-link/:txRef', async (req, res) => {
+    try {
+      const { txRef } = req.params;
+      
+      if (!txRef) {
+        return res.status(400).json({ message: 'Missing txRef' });
+      }
+
+      const paymentLink = await storage.getPaymentLinkByTxRef(txRef);
+
+      if (!paymentLink) {
+        return res.status(404).json({ message: 'Payment link not found' });
+      }
+
+      res.json(paymentLink);
+    } catch (error: any) {
+      console.error('Error fetching payment link:', error);
+      res.status(500).json({
+        message: error.message || 'Failed to fetch payment link',
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
