@@ -84,46 +84,47 @@ export default function DepositOptions() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-background text-black dark:text-foreground">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-border">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setLocation("/deposit")}
-          className="p-2"
-        >
-          <ArrowLeft className="h-6 w-6" />
-        </Button>
-        
-        <div className="text-center">
-          <h1 className="text-xl font-semibold">Deposit {selectedCurrency.symbol}</h1>
-          <p className="text-sm text-gray-500 dark:text-muted-foreground">Choose deposit method</p>
+      <div className="max-w-md lg:max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 lg:p-6 border-b border-gray-200 dark:border-border">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setLocation("/deposit")}
+            className="p-2"
+          >
+            <ArrowLeft className="h-6 w-6" />
+          </Button>
+          
+          <div className="text-center">
+            <h1 className="text-xl lg:text-2xl font-semibold">Deposit {selectedCurrency.symbol}</h1>
+            <p className="text-sm text-gray-500 dark:text-muted-foreground">Choose deposit method</p>
+          </div>
+          
+          <ThemeToggle className="text-black dark:text-foreground" />
         </div>
-        
-        <ThemeToggle className="text-black dark:text-foreground" />
-      </div>
 
-      {/* Currency Info */}
-      <div className="p-4 border-b border-gray-200 dark:border-border">
-        <div className="flex items-center space-x-3">
-          <div className={`w-12 h-12 ${selectedCurrency.color} rounded-full flex items-center justify-center text-white font-bold text-lg`}>
-            {selectedCurrency.icon}
-          </div>
-          <div>
-            <h2 className="font-semibold text-lg">{selectedCurrency.symbol}</h2>
-            <p className="text-gray-500 dark:text-muted-foreground text-sm">{selectedCurrency.name}</p>
-          </div>
-          <div className="ml-auto">
-            <Badge variant="secondary" className="bg-green-600 text-white">
-              Available
-            </Badge>
+        {/* Currency Info */}
+        <div className="p-4 lg:p-6 border-b border-gray-200 dark:border-border">
+          <div className="flex items-center space-x-3 lg:max-w-lg lg:mx-auto lg:bg-white dark:lg:bg-card lg:p-4 lg:rounded-xl lg:shadow-sm lg:border-0">
+            <div className={`w-12 h-12 lg:w-14 lg:h-14 ${selectedCurrency.color} rounded-full flex items-center justify-center text-white font-bold text-lg lg:text-xl`}>
+              {selectedCurrency.icon}
+            </div>
+            <div>
+              <h2 className="font-semibold text-lg lg:text-xl">{selectedCurrency.symbol}</h2>
+              <p className="text-gray-500 dark:text-muted-foreground text-sm">{selectedCurrency.name}</p>
+            </div>
+            <div className="ml-auto">
+              <Badge variant="secondary" className="bg-green-600 text-white">
+                Available
+              </Badge>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Deposit Options */}
-      <div className="p-4 space-y-3">
-        <h3 className="font-semibold mb-4">Available Deposit Methods</h3>
+        {/* Deposit Options */}
+        <div className="p-4 lg:p-6 space-y-3 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
+          <h3 className="font-semibold mb-4 lg:col-span-2 lg:text-xl">Available Deposit Methods</h3>
         
         {depositOptions.map((option) => {
           const Icon = option.icon;
@@ -184,13 +185,14 @@ export default function DepositOptions() {
         </div>
       </div>
 
-      {/* Support */}
-      <div className="p-4">
-        <div className="text-center">
-          <p className="text-gray-500 dark:text-muted-foreground text-sm mb-2">Need help with deposits?</p>
-          <Button variant="outline" size="sm">
-            Contact Support
-          </Button>
+        {/* Support */}
+        <div className="p-4 lg:p-6">
+          <div className="text-center">
+            <p className="text-gray-500 dark:text-muted-foreground text-sm mb-2">Need help with deposits?</p>
+            <Button variant="outline" size="sm">
+              Contact Support
+            </Button>
+          </div>
         </div>
       </div>
     </div>

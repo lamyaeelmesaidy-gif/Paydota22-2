@@ -109,20 +109,20 @@ export default function Services() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="px-4 py-6 pb-20">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="max-w-md lg:max-w-5xl mx-auto px-4 lg:px-6 py-6 pb-20">
         
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-4 mb-8 lg:mb-10">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setLocation("/dashboard")}
-            className="p-2 hover:bg-purple-100 text-gray-700"
+            className="p-2 hover:bg-purple-100 text-gray-700 dark:text-gray-300"
           >
             <ArrowLeft className="h-6 w-6" />
           </Button>
-          <h1 className="text-xl font-bold text-gray-900">
+          <h1 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
             Services Hub
           </h1>
         </div>
