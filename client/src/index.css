@@ -791,6 +791,17 @@ html, body {
     min-height: 100dvh; /* Dynamic viewport height for mobile */
   }
 
+  /* Remove top padding on large screens */
+  @media (min-width: 1024px) {
+    .app-container {
+      padding-top: 0;
+    }
+    
+    .page-content {
+      padding-top: 0;
+    }
+  }
+
   /* Page content safe area */
   .page-content {
     padding-top: max(env(safe-area-inset-top), 44px);
