@@ -9,6 +9,7 @@ import {
   kycDocuments,
   paymentLinks,
   paymentTransactions,
+  pendingBalances,
   type User,
   type UpsertUser,
   type Card,
@@ -49,6 +50,14 @@ export interface IStorage {
   getAllUsers(): Promise<User[]>;
   getWalletBalance(userId: string): Promise<number>;
   updateWalletBalance(userId: string, amount: number): Promise<void>;
+  getPendingBalance(userId: string): Promise<number>;
+  updatePendingBalance(userId: string, newPendingBalance: number): Promise<void>;
+  
+  // Pending Balance operations
+  createPendingBalance(data: { userId: string; transactionId: string; amount: string; currency: string; releaseDate: Date; description?: string }): Promise<any>;
+  getPendingBalancesByUserId(userId: string): Promise<any[]>;
+  releasePendingBalance(id: string): Promise<void>;
+  getTotalPendingBalance(userId: string): Promise<number>;
   
   // Card operations
   getCardsByUserId(userId: string): Promise<Card[]>;
@@ -416,6 +425,99 @@ export class DatabaseStorage implements IStorage {
         updatedAt: new Date() 
       })
       .where(eq(users.id, userId));
+  }
+
+  async getPendingBalance(userId: string): Promise<number> {
+    const user = await db.select()
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
+    
+    return parseFloat(user[0]?.pendingBalance || "0");
+  }
+
+  async updatePendingBalance(userId: string, newPendingBalance: number): Promise<void> {
+    await db.update(users)
+      .set({ pendingBalance: newPendingBalance.toString() })
+      .where(eq(users.id, userId));
+  }
+
+  // Pending Balance operations
+  async createPendingBalance(data: { userId: string; transactionId: string; amount: string; currency: string; releaseDate: Date; description?: string }): Promise<any> {
+    const [pendingBalance] = await db.insert(pendingBalances)
+      .values({
+        userId: data.userId,
+        transactionId: data.transactionId,
+        amount: data.amount,
+        currency: data.currency,
+        status: 'pending',
+        releaseDate: data.releaseDate,
+        description: data.description,
+      })
+      .returning();
+    
+    // Update user's pending balance
+    const currentPending = await this.getPendingBalance(data.userId);
+    const newPending = currentPending + parseFloat(data.amount);
+    await this.updatePendingBalance(data.userId, newPending);
+    
+    return pendingBalance;
+  }
+
+  async getPendingBalancesByUserId(userId: string): Promise<any[]> {
+    return await db.select()
+      .from(pendingBalances)
+      .where(and(
+        eq(pendingBalances.userId, userId),
+        eq(pendingBalances.status, 'pending')
+      ))
+      .orderBy(desc(pendingBalances.createdAt));
+  }
+
+  async releasePendingBalance(id: string): Promise<void> {
+    const [pendingBalance] = await db.select()
+      .from(pendingBalances)
+      .where(eq(pendingBalances.id, id))
+      .limit(1);
+    
+    if (!pendingBalance) {
+      throw new Error('Pending balance not found');
+    }
+
+    if (pendingBalance.status !== 'pending') {
+      throw new Error('Pending balance already processed');
+    }
+
+    // Update pending balance status
+    await db.update(pendingBalances)
+      .set({ 
+        status: 'released',
+        releasedAt: new Date()
+      })
+      .where(eq(pendingBalances.id, id));
+    
+    // Update user's balances
+    const currentWallet = await this.getWalletBalance(pendingBalance.userId);
+    const currentPending = await this.getPendingBalance(pendingBalance.userId);
+    const amount = parseFloat(pendingBalance.amount);
+    
+    await this.updateWalletBalance(pendingBalance.userId, currentWallet + amount);
+    await this.updatePendingBalance(pendingBalance.userId, Math.max(0, currentPending - amount));
+    
+    console.log(`✅ Released ${amount} ${pendingBalance.currency} to user ${pendingBalance.userId} wallet`);
+  }
+
+  async getTotalPendingBalance(userId: string): Promise<number> {
+    const result = await db.select({
+      total: sql<string>`COALESCE(SUM(${pendingBalances.amount}::numeric), 0)`
+    })
+      .from(pendingBalances)
+      .where(and(
+        eq(pendingBalances.userId, userId),
+        eq(pendingBalances.status, 'pending')
+      ));
+    
+    return parseFloat(result[0]?.total || "0");
   }
 
   // Payment Link operations
