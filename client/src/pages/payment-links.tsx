@@ -117,30 +117,30 @@ export default function PaymentLinksPage() {
   const getTransactionStatusBadge = (status: string) => {
     switch (status) {
       case "successful":
-        return <Badge className="bg-green-600" data-testid="badge-successful"><CheckCircle2 className="w-3 h-3 mr-1" /> Successful</Badge>;
+        return <Badge className="bg-green-600 text-xs" data-testid="badge-successful"><CheckCircle2 className="w-2.5 h-2.5 lg:w-3 lg:h-3 mr-1" /> Successful</Badge>;
       case "failed":
-        return <Badge className="bg-red-600" data-testid="badge-failed"><XCircle className="w-3 h-3 mr-1" /> Failed</Badge>;
+        return <Badge className="bg-red-600 text-xs" data-testid="badge-failed"><XCircle className="w-2.5 h-2.5 lg:w-3 lg:h-3 mr-1" /> Failed</Badge>;
       case "pending":
-        return <Badge className="bg-yellow-600" data-testid="badge-pending"><Clock className="w-3 h-3 mr-1" /> Pending</Badge>;
+        return <Badge className="bg-yellow-600 text-xs" data-testid="badge-pending"><Clock className="w-2.5 h-2.5 lg:w-3 lg:h-3 mr-1" /> Pending</Badge>;
       default:
-        return <Badge data-testid="badge-unknown">{status}</Badge>;
+        return <Badge className="text-xs" data-testid="badge-unknown">{status}</Badge>;
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto p-4 lg:p-6 max-w-7xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2" data-testid="heading-payment-links">Flutterwave Payment Links</h1>
-        <p className="text-muted-foreground">Create and manage payment links for card payments</p>
+      <div className="container mx-auto p-3 lg:p-6 max-w-7xl">
+      <div className="mb-4 lg:mb-8">
+        <h1 className="text-xl lg:text-3xl font-bold mb-1 lg:mb-2" data-testid="heading-payment-links">Payment Links</h1>
+        <p className="text-xs lg:text-sm text-muted-foreground">Create and manage payment links</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1">
           <Card>
-            <CardHeader>
-              <CardTitle data-testid="heading-create-link">Create Payment Link</CardTitle>
-              <CardDescription>Generate a new payment link for your customers</CardDescription>
+            <CardHeader className="p-4 lg:p-6">
+              <CardTitle className="text-base lg:text-lg" data-testid="heading-create-link">Create Payment Link</CardTitle>
+              <CardDescription className="text-xs lg:text-sm">Generate a new payment link</CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -298,11 +298,11 @@ export default function PaymentLinksPage() {
           </Card>
         </div>
 
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4 lg:space-y-6">
           <Card>
-            <CardHeader>
-              <CardTitle data-testid="heading-your-links">Your Payment Links</CardTitle>
-              <CardDescription>Manage and track your payment links</CardDescription>
+            <CardHeader className="p-4 lg:p-6">
+              <CardTitle className="text-base lg:text-lg" data-testid="heading-your-links">Your Payment Links</CardTitle>
+              <CardDescription className="text-xs lg:text-sm">Manage and track your payment links</CardDescription>
             </CardHeader>
             <CardContent>
               {isLoading ? (
@@ -310,41 +310,37 @@ export default function PaymentLinksPage() {
               ) : paymentLinks && Array.isArray(paymentLinks) && paymentLinks.length > 0 ? (
                 <div className="space-y-4">
                   {paymentLinks.map((link: any) => (
-                    <div key={link.id} className="border rounded-lg p-4 space-y-3" data-testid={`link-item-${link.txRef}`}>
+                    <div key={link.id} className="border rounded-lg p-3 lg:p-4 space-y-2 lg:space-y-3" data-testid={`link-item-${link.txRef}`}>
                       <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-lg" data-testid={`link-title-${link.txRef}`}>{link.title}</h3>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="font-semibold text-sm lg:text-lg truncate" data-testid={`link-title-${link.txRef}`}>{link.title}</h3>
                             <Badge className={getStatusColor(link.status)} data-testid={`link-status-${link.txRef}`}>
                               {link.status}
                             </Badge>
                           </div>
                           {link.description && (
-                            <p className="text-sm text-muted-foreground mt-1">{link.description}</p>
+                            <p className="text-xs lg:text-sm text-muted-foreground mt-1 line-clamp-2">{link.description}</p>
                           )}
-                          <div className="flex items-center gap-4 mt-2 text-sm">
-                            <span className="font-medium" data-testid={`link-amount-${link.txRef}`}>
+                          <div className="mt-2">
+                            <span className="font-medium text-sm lg:text-base" data-testid={`link-amount-${link.txRef}`}>
                               {link.currency} {parseFloat(link.amount).toLocaleString()}
-                            </span>
-                            <span className="text-muted-foreground">
-                              {link.customerEmail}
                             </span>
                           </div>
                         </div>
                       </div>
 
                       {link.flutterwaveLink && (
-                        <div className="flex items-center gap-2 bg-muted p-2 rounded">
-                          <input
-                            type="text"
-                            value={link.flutterwaveLink}
-                            readOnly
-                            className="flex-1 bg-transparent text-sm outline-none"
-                            data-testid={`link-url-${link.txRef}`}
-                          />
+                        <div className="flex items-center gap-1 lg:gap-2 bg-muted p-2 rounded">
+                          <div className="flex-1 min-w-0 overflow-hidden">
+                            <p className="text-xs truncate" data-testid={`link-url-${link.txRef}`}>
+                              {link.flutterwaveLink}
+                            </p>
+                          </div>
                           <Button
                             size="sm"
                             variant="ghost"
+                            className="h-8 w-8 p-0 flex-shrink-0"
                             onClick={() => copyToClipboard(link.flutterwaveLink, link.id)}
                             data-testid={`button-copy-${link.txRef}`}
                           >
@@ -357,6 +353,7 @@ export default function PaymentLinksPage() {
                           <Button
                             size="sm"
                             variant="ghost"
+                            className="h-8 w-8 p-0 flex-shrink-0"
                             onClick={() => window.open(link.flutterwaveLink, '_blank')}
                             data-testid={`button-open-${link.txRef}`}
                           >
@@ -367,12 +364,13 @@ export default function PaymentLinksPage() {
 
                       <div className="flex items-center justify-between pt-2 border-t">
                         <span className="text-xs text-muted-foreground">
-                          Created: {new Date(link.createdAt).toLocaleDateString()}
+                          {new Date(link.createdAt).toLocaleDateString()}
                         </span>
                         {link.status === 'active' && (
                           <Button
                             size="sm"
                             variant="destructive"
+                            className="h-7 text-xs px-2 lg:h-8 lg:text-sm lg:px-3"
                             onClick={() => disableLinkMutation.mutate(link.txRef)}
                             disabled={disableLinkMutation.isPending}
                             data-testid={`button-disable-${link.txRef}`}
@@ -394,31 +392,33 @@ export default function PaymentLinksPage() {
           </Card>
 
           <Card>
-            <CardHeader>
-              <CardTitle data-testid="heading-transactions">Recent Transactions</CardTitle>
-              <CardDescription>Track payments made via your links</CardDescription>
+            <CardHeader className="p-4 lg:p-6">
+              <CardTitle className="text-base lg:text-lg" data-testid="heading-transactions">Recent Transactions</CardTitle>
+              <CardDescription className="text-xs lg:text-sm">Track payments made via your links</CardDescription>
             </CardHeader>
             <CardContent>
               {transactions && Array.isArray(transactions) && transactions.length > 0 ? (
                 <div className="space-y-3">
                   {transactions.slice(0, 10).map((tx: any) => (
-                    <div key={tx.id} className="flex items-center justify-between border rounded-lg p-3" data-testid={`transaction-${tx.id}`}>
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-muted rounded">
-                          <CreditCard className="w-4 h-4" />
+                    <div key={tx.id} className="flex items-center justify-between border rounded-lg p-2 lg:p-3" data-testid={`transaction-${tx.id}`}>
+                      <div className="flex items-center gap-2 lg:gap-3 flex-1 min-w-0">
+                        <div className="p-1.5 lg:p-2 bg-muted rounded flex-shrink-0">
+                          <CreditCard className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
                         </div>
-                        <div>
-                          <p className="font-medium text-sm" data-testid={`transaction-method-${tx.id}`}>{tx.paymentMethod || 'Payment'}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {new Date(tx.createdAt).toLocaleString()}
+                        <div className="min-w-0 flex-1">
+                          <p className="font-medium text-xs lg:text-sm truncate" data-testid={`transaction-method-${tx.id}`}>{tx.paymentMethod || 'Payment'}</p>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {new Date(tx.createdAt).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-semibold" data-testid={`transaction-amount-${tx.id}`}>
+                      <div className="text-right flex-shrink-0 ml-2">
+                        <p className="font-semibold text-xs lg:text-sm" data-testid={`transaction-amount-${tx.id}`}>
                           {tx.currency} {parseFloat(tx.amount).toLocaleString()}
                         </p>
-                        {getTransactionStatusBadge(tx.status)}
+                        <div className="mt-1">
+                          {getTransactionStatusBadge(tx.status)}
+                        </div>
                       </div>
                     </div>
                   ))}
