@@ -1841,9 +1841,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const latestKyc = kycVerifications[0];
       
       res.json({
-        isVerified: latestKyc.status === 'approved',
+        isVerified: latestKyc.status === 'approved' || latestKyc.status === 'verified',
         status: latestKyc.status,
-        message: latestKyc.status === 'approved' 
+        message: latestKyc.status === 'approved' || latestKyc.status === 'verified'
           ? "تم التحقق من الهوية بنجاح"
           : latestKyc.status === 'pending'
           ? "طلب التحقق قيد المراجعة"
