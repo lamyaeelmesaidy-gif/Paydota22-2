@@ -3766,11 +3766,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const txData = verification.data;
       
+      const paymentLink = await storage.getPaymentLinkByTxRef(txData.tx_ref);
       let existingTransaction = await storage.getPaymentTransactionByTxRef(txData.tx_ref);
       
       if (!existingTransaction) {
-        const paymentLink = await storage.getPaymentLinkByTxRef(txData.tx_ref);
-        
         await storage.createPaymentTransaction({
           paymentLinkId: paymentLink?.id,
           txRef: txData.tx_ref,
@@ -3800,6 +3799,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const successStatus = txData.status === 'successful' ? 'success' : 'failed';
+      
+      if (paymentLink?.redirectUrl && paymentLink.redirectUrl.trim() !== '') {
+        const redirectUrl = paymentLink.redirectUrl;
+        const separator = redirectUrl.includes('?') ? '&' : '?';
+        return res.redirect(`${redirectUrl}${separator}status=${successStatus}&amount=${txData.amount}&currency=${txData.currency}&tx_ref=${txData.tx_ref}`);
+      }
+      
       res.redirect(`/payment-links?status=${successStatus}&amount=${txData.amount}&currency=${txData.currency}`);
     } catch (error: any) {
       console.error('Error verifying payment:', error);
