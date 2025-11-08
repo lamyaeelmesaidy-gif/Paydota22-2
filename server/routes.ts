@@ -3712,10 +3712,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const txData = verification.data;
       
       let existingTransaction = await storage.getPaymentTransactionByTxRef(txData.tx_ref);
+      const paymentLink = await storage.getPaymentLinkByTxRef(txData.tx_ref);
       
       if (!existingTransaction) {
-        const paymentLink = await storage.getPaymentLinkByTxRef(txData.tx_ref);
-        
         existingTransaction = await storage.createPaymentTransaction({
           paymentLinkId: paymentLink?.id,
           userId: paymentLink?.userId,
@@ -3741,6 +3740,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const newBalance = currentBalance + parseFloat(txData.amount.toString());
           await storage.updateWalletBalance(paymentLink.userId, newBalance);
           console.log(`✅ Added ${txData.amount} ${txData.currency} to user ${paymentLink.userId} wallet. New balance: ${newBalance}`);
+        }
+      } else {
+        if (txData.status === 'successful') {
+          const updatedTransaction = await storage.updatePaymentTransactionToSuccessful(existingTransaction.id, {
+            status: 'successful',
+            flutterwaveRef: txData.flw_ref,
+            transactionId: txData.id.toString(),
+          });
+
+          if (updatedTransaction && paymentLink?.userId) {
+            const currentBalance = await storage.getWalletBalance(paymentLink.userId);
+            const newBalance = currentBalance + parseFloat(txData.amount.toString());
+            await storage.updateWalletBalance(paymentLink.userId, newBalance);
+            console.log(`✅ Added ${txData.amount} ${txData.currency} to user ${paymentLink.userId} wallet (on status update). New balance: ${newBalance}`);
+          }
+          
+          existingTransaction = updatedTransaction || existingTransaction;
+        } else {
+          existingTransaction = await storage.updatePaymentTransaction(existingTransaction.id, {
+            status: 'failed',
+            flutterwaveRef: txData.flw_ref,
+            transactionId: txData.id.toString(),
+          });
         }
       }
 
@@ -3806,12 +3828,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.log(`✅ Added ${txData.amount} ${txData.currency} to user ${paymentLink.userId} wallet. New balance: ${newBalance}`);
         }
       } else {
-        await storage.updatePaymentTransaction(existingTransaction.id, {
-          status: txData.status === 'successful' ? 'successful' : 'failed',
-          flutterwaveRef: txData.flw_ref,
-          transactionId: txData.id.toString(),
-          verifiedAt: new Date(),
-        });
+        if (txData.status === 'successful') {
+          const updatedTransaction = await storage.updatePaymentTransactionToSuccessful(existingTransaction.id, {
+            status: 'successful',
+            flutterwaveRef: txData.flw_ref,
+            transactionId: txData.id.toString(),
+            verifiedAt: new Date(),
+          });
+
+          if (updatedTransaction && paymentLink?.userId) {
+            const currentBalance = await storage.getWalletBalance(paymentLink.userId);
+            const newBalance = currentBalance + parseFloat(txData.amount.toString());
+            await storage.updateWalletBalance(paymentLink.userId, newBalance);
+            console.log(`✅ Added ${txData.amount} ${txData.currency} to user ${paymentLink.userId} wallet (on status update). New balance: ${newBalance}`);
+          }
+        } else {
+          await storage.updatePaymentTransaction(existingTransaction.id, {
+            status: 'failed',
+            flutterwaveRef: txData.flw_ref,
+            transactionId: txData.id.toString(),
+            verifiedAt: new Date(),
+          });
+        }
       }
 
       const successStatus = txData.status === 'successful' ? 'success' : 'failed';
@@ -3868,13 +3906,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
           metadata: txData as any,
           verifiedAt: new Date(),
         });
+
+        if (txData.status === 'successful' && paymentLink?.userId) {
+          const currentBalance = await storage.getWalletBalance(paymentLink.userId);
+          const newBalance = currentBalance + parseFloat(txData.amount.toString());
+          await storage.updateWalletBalance(paymentLink.userId, newBalance);
+          console.log(`✅ Added ${txData.amount} ${txData.currency} to user ${paymentLink.userId} wallet. New balance: ${newBalance}`);
+        }
       } else {
-        existingTransaction = await storage.updatePaymentTransaction(existingTransaction.id, {
-          status: txData.status === 'successful' ? 'successful' : 'failed',
-          flutterwaveRef: txData.flw_ref,
-          transactionId: txData.id.toString(),
-          verifiedAt: new Date(),
-        });
+        const paymentLink = await storage.getPaymentLinkByTxRef(txData.tx_ref);
+        
+        if (txData.status === 'successful') {
+          const updatedTransaction = await storage.updatePaymentTransactionToSuccessful(existingTransaction.id, {
+            status: 'successful',
+            flutterwaveRef: txData.flw_ref,
+            transactionId: txData.id.toString(),
+            verifiedAt: new Date(),
+          });
+
+          if (updatedTransaction && paymentLink?.userId) {
+            const currentBalance = await storage.getWalletBalance(paymentLink.userId);
+            const newBalance = currentBalance + parseFloat(txData.amount.toString());
+            await storage.updateWalletBalance(paymentLink.userId, newBalance);
+            console.log(`✅ Added ${txData.amount} ${txData.currency} to user ${paymentLink.userId} wallet (on status update). New balance: ${newBalance}`);
+          }
+          
+          existingTransaction = updatedTransaction || existingTransaction;
+        } else {
+          existingTransaction = await storage.updatePaymentTransaction(existingTransaction.id, {
+            status: 'failed',
+            flutterwaveRef: txData.flw_ref,
+            transactionId: txData.id.toString(),
+            verifiedAt: new Date(),
+          });
+        }
       }
 
       res.json({

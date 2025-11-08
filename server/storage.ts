@@ -99,6 +99,7 @@ export interface IStorage {
   getPaymentTransactionsByLinkId(linkId: string): Promise<PaymentTransaction[]>;
   getPaymentTransactionByTxRef(txRef: string): Promise<PaymentTransaction | undefined>;
   updatePaymentTransaction(id: string, updates: Partial<PaymentTransaction>): Promise<PaymentTransaction>;
+  updatePaymentTransactionToSuccessful(id: string, updates: Partial<PaymentTransaction>): Promise<PaymentTransaction | null>;
 
 }
 
@@ -557,6 +558,17 @@ export class DatabaseStorage implements IStorage {
       .where(eq(paymentTransactions.id, id))
       .returning();
     return transaction;
+  }
+
+  async updatePaymentTransactionToSuccessful(id: string, updates: Partial<PaymentTransaction>): Promise<PaymentTransaction | null> {
+    const [transaction] = await db.update(paymentTransactions)
+      .set(updates)
+      .where(and(
+        eq(paymentTransactions.id, id),
+        sql`${paymentTransactions.status} != 'successful'`
+      ))
+      .returning();
+    return transaction || null;
   }
 }
 
