@@ -318,33 +318,36 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col safe-area-inset keyboard-adjust">
+    <div className="min-h-screen bg-white relative overflow-hidden flex flex-col safe-area-inset keyboard-adjust">
+      {/* Background decorative elements */}
+      <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 bg-gradient-to-br from-purple-200/15 to-pink-200/15 rounded-full blur-xl"></div>
+      <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-gradient-to-tr from-blue-200/10 to-purple-200/10 rounded-full blur-xl"></div>
       
       {/* Header */}
-      <div className="flex-none pt-2 pb-3 px-6">
+      <div className="flex-none pt-2 pb-3 px-4 sm:px-6 md:px-8 relative z-10">
         {/* Language Toggle */}
         <div className="flex justify-end mb-1">
           <LanguageToggle />
         </div>
         
         <div className="text-center">
-          <h1 className="text-gray-600 text-base mb-1 font-medium">
+          <h1 className="text-gray-600 text-base sm:text-lg md:text-xl mb-1 font-medium">
             {t('joinUs')}
           </h1>
-          <h2 className="text-gray-900 text-xl font-bold">
+          <h2 className="text-gray-900 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
             {t('createNewAccount')}
           </h2>
         </div>
       </div>
 
       {/* Register Form */}
-      <div className="flex-1 px-6 pb-6 overflow-y-auto scroll-smooth">
-        <div className="max-w-sm mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-5 min-h-0">
+      <div className="flex-1 px-4 sm:px-6 md:px-8 pb-6 overflow-y-auto scroll-smooth relative z-10">
+        <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6 min-h-0 bg-white border border-gray-200 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 lg:p-10 shadow-xl">
                 
             {/* First Name Field */}
             <div>
-              <Label htmlFor="firstName" className="text-gray-700 font-medium">
+              <Label htmlFor="firstName" className="text-gray-700 font-medium text-sm sm:text-base md:text-lg">
                 {t('firstName')}
               </Label>
               <Input
@@ -352,7 +355,7 @@ export default function Register() {
                 type="text"
                 value={formData.firstName}
                 onChange={(e) => handleInputChange('firstName', e.target.value)}
-                className="w-full h-12 mt-2 rounded-xl border-gray-200 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 bg-white text-base"
+                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-xl border-gray-200 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 bg-white text-base md:text-lg"
                 placeholder={t('enterFirstName')}
                 required
               />
@@ -360,7 +363,7 @@ export default function Register() {
 
             {/* Last Name Field */}
             <div>
-              <Label htmlFor="lastName" className="text-gray-700 font-medium">
+              <Label htmlFor="lastName" className="text-gray-700 font-medium text-sm sm:text-base md:text-lg">
                 {t('lastName')}
               </Label>
               <Input
@@ -368,7 +371,7 @@ export default function Register() {
                 type="text"
                 value={formData.lastName}
                 onChange={(e) => handleInputChange('lastName', e.target.value)}
-                className="w-full h-12 mt-2 rounded-xl border-gray-200 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 bg-white text-base"
+                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-xl border-gray-200 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 bg-white text-base md:text-lg"
                 placeholder={t('enterLastName')}
                 required
               />
@@ -376,7 +379,7 @@ export default function Register() {
 
             {/* Email Field */}
             <div>
-              <Label htmlFor="email" className="text-gray-700 font-medium">
+              <Label htmlFor="email" className="text-gray-700 font-medium text-sm sm:text-base md:text-lg">
                 {t('email')}
               </Label>
               <Input
@@ -384,7 +387,7 @@ export default function Register() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
-                className="w-full h-12 mt-2 rounded-xl border-gray-200 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 bg-white text-base"
+                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-xl border-gray-200 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 bg-white text-base md:text-lg"
                 placeholder={t('enterEmail')}
                 required
               />
@@ -392,10 +395,10 @@ export default function Register() {
 
             {/* Phone Number Field */}
             <div>
-              <Label htmlFor="phone" className="text-gray-700 font-medium">
+              <Label htmlFor="phone" className="text-gray-700 font-medium text-sm sm:text-base md:text-lg">
                 {t('phoneNumber')}
               </Label>
-              <div className="flex rounded-xl border border-gray-200 bg-white overflow-hidden h-12 mt-2">
+              <div className="flex rounded-xl border border-gray-200 bg-white overflow-hidden h-11 sm:h-12 md:h-14 mt-2">
                 {/* Country Code Selector */}
                 <div className="relative">
                   <select
@@ -404,7 +407,7 @@ export default function Register() {
                       const country = countries.find(c => c.code === e.target.value);
                       if (country) setSelectedCountry(country);
                     }}
-                    className="h-12 pl-3 pr-8 bg-gray-50 border-r border-gray-200 text-sm font-medium appearance-none cursor-pointer hover:bg-gray-100 transition-colors"
+                    className="h-11 sm:h-12 md:h-14 pl-3 pr-8 bg-gray-50 border-r border-gray-200 text-sm md:text-base font-medium appearance-none cursor-pointer hover:bg-gray-100 transition-colors"
                   >
                     {countries.map((country, index) => (
                       <option key={`${country.code}-${country.name}-${index}`} value={country.code}>
@@ -425,7 +428,7 @@ export default function Register() {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
-                  className="flex-1 h-12 border-0 focus:ring-0 focus:ring-offset-0 bg-transparent text-base"
+                  className="flex-1 h-11 sm:h-12 md:h-14 border-0 focus:ring-0 focus:ring-offset-0 bg-transparent text-base md:text-lg"
                   placeholder={t('enterPhoneNumber')}
                   required
                 />
@@ -434,7 +437,7 @@ export default function Register() {
 
             {/* Password Field */}
             <div>
-              <Label htmlFor="password" className="text-gray-700 font-medium">
+              <Label htmlFor="password" className="text-gray-700 font-medium text-sm sm:text-base md:text-lg">
                 {t('password')}
               </Label>
               <Input
@@ -442,29 +445,29 @@ export default function Register() {
                 type="password"
                 value={formData.password}
                 onChange={(e) => handleInputChange('password', e.target.value)}
-                className="w-full h-12 mt-2 rounded-xl border-gray-200 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 bg-white text-base"
+                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-xl border-gray-200 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 bg-white text-base md:text-lg"
                 placeholder={t('enterPassword')}
                 required
               />
             </div>
 
             {/* Submit Button */}
-            <div className="pt-3">
+            <div className="pt-3 md:pt-4">
               <Button
                 type="submit"
                 disabled={registerMutation.isPending}
-                className="w-full h-12 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl"
+                className="w-full h-11 sm:h-12 md:h-14 lg:h-16 banking-gradient hover:opacity-90 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base md:text-lg"
               >
                 {registerMutation.isPending ? t('creatingAccount') : t('createAccount')}
               </Button>
             </div>
 
             {/* Login Link */}
-            <div className="text-center pt-6">
-              <p className="text-gray-600 text-sm">
+            <div className="text-center pt-4 sm:pt-5 md:pt-6">
+              <p className="text-gray-600 text-sm sm:text-base md:text-lg">
                 {t('alreadyHaveAccount')}{' '}
                 <Link href="/login">
-                  <span className="text-purple-600 font-medium hover:underline cursor-pointer">
+                  <span className="text-purple-600 font-semibold hover:underline cursor-pointer">
                     {t('signIn')}
                   </span>
                 </Link>
