@@ -21,6 +21,25 @@ import { createAirwallexService } from "./airwallex";
 // Initialize Airwallex service
 const airwallex = createAirwallexService();
 
+// Helper function to automatically release pending balances that have passed their release date
+async function autoReleasePendingBalances(userId: string): Promise<void> {
+  try {
+    const pendingBalances = await storage.getPendingBalancesByUserId(userId);
+    const now = new Date();
+    
+    for (const pending of pendingBalances) {
+      const releaseDate = new Date(pending.releaseDate);
+      
+      if (releaseDate <= now && pending.status === 'pending') {
+        await storage.releasePendingBalance(pending.id);
+        console.log(`🎉 Auto-released pending balance ${pending.id} for user ${userId}`);
+      }
+    }
+  } catch (error) {
+    console.error('Error auto-releasing pending balances:', error);
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup session middleware first
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
@@ -1346,17 +1365,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
+      // Auto-release any pending balances that have passed their release date
+      await autoReleasePendingBalances(userId);
+
       const balance = await storage.getWalletBalance(userId);
+      const pendingBalance = await storage.getPendingBalance(userId);
       
       // Prevent caching
       res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
       res.set('Pragma', 'no-cache');
       res.set('Expires', '0');
       
-      res.json({ balance });
+      res.json({ balance, pendingBalance });
     } catch (error) {
       console.error("Error fetching wallet balance:", error);
       res.status(500).json({ message: "Failed to fetch balance" });
+    }
+  });
+
+  app.get("/api/wallet/pending-balances", requireAuth, async (req: any, res) => {
+    try {
+      const userId = req.session?.userId;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      // Auto-release any pending balances that have passed their release date
+      await autoReleasePendingBalances(userId);
+
+      const pendingBalances = await storage.getPendingBalancesByUserId(userId);
+      
+      // Prevent caching
+      res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+      res.set('Pragma', 'no-cache');
+      res.set('Expires', '0');
+      
+      res.json(pendingBalances);
+    } catch (error) {
+      console.error("Error fetching pending balances:", error);
+      res.status(500).json({ message: "Failed to fetch pending balances" });
     }
   });
 
@@ -3736,10 +3783,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
 
         if (txData.status === 'successful' && paymentLink?.userId) {
-          const currentBalance = await storage.getWalletBalance(paymentLink.userId);
-          const newBalance = currentBalance + parseFloat(txData.amount.toString());
-          await storage.updateWalletBalance(paymentLink.userId, newBalance);
-          console.log(`✅ Added ${txData.amount} ${txData.currency} to user ${paymentLink.userId} wallet. New balance: ${newBalance}`);
+          // Create pending balance (hold for 7 days)
+          const releaseDate = new Date();
+          releaseDate.setDate(releaseDate.getDate() + 7);
+          
+          await storage.createPendingBalance({
+            userId: paymentLink.userId,
+            transactionId: existingTransaction.id,
+            amount: txData.amount.toString(),
+            currency: txData.currency,
+            releaseDate: releaseDate,
+            description: `Payment from ${txData.customer.name || txData.customer.email} - ${paymentLink.title}`
+          });
+          
+          console.log(`💰 Created pending balance of ${txData.amount} ${txData.currency} for user ${paymentLink.userId}. Will be released on ${releaseDate.toISOString()}`);
         }
       } else {
         if (txData.status === 'successful') {
@@ -3822,10 +3879,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
 
         if (txData.status === 'successful' && paymentLink?.userId) {
-          const currentBalance = await storage.getWalletBalance(paymentLink.userId);
-          const newBalance = currentBalance + parseFloat(txData.amount.toString());
-          await storage.updateWalletBalance(paymentLink.userId, newBalance);
-          console.log(`✅ Added ${txData.amount} ${txData.currency} to user ${paymentLink.userId} wallet. New balance: ${newBalance}`);
+          // Create pending balance (hold for 7 days)
+          const releaseDate = new Date();
+          releaseDate.setDate(releaseDate.getDate() + 7);
+          
+          await storage.createPendingBalance({
+            userId: paymentLink.userId,
+            transactionId: existingTransaction.id,
+            amount: txData.amount.toString(),
+            currency: txData.currency,
+            releaseDate: releaseDate,
+            description: `Payment from ${txData.customer.name || txData.customer.email} - ${paymentLink.title}`
+          });
+          
+          console.log(`💰 Created pending balance of ${txData.amount} ${txData.currency} for user ${paymentLink.userId}. Will be released on ${releaseDate.toISOString()}`);
         }
       } else {
         if (txData.status === 'successful') {
@@ -3908,10 +3975,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
 
         if (txData.status === 'successful' && paymentLink?.userId) {
-          const currentBalance = await storage.getWalletBalance(paymentLink.userId);
-          const newBalance = currentBalance + parseFloat(txData.amount.toString());
-          await storage.updateWalletBalance(paymentLink.userId, newBalance);
-          console.log(`✅ Added ${txData.amount} ${txData.currency} to user ${paymentLink.userId} wallet. New balance: ${newBalance}`);
+          // Create pending balance (hold for 7 days)
+          const releaseDate = new Date();
+          releaseDate.setDate(releaseDate.getDate() + 7);
+          
+          await storage.createPendingBalance({
+            userId: paymentLink.userId,
+            transactionId: existingTransaction.id,
+            amount: txData.amount.toString(),
+            currency: txData.currency,
+            releaseDate: releaseDate,
+            description: `Payment from ${txData.customer.name || txData.customer.email} - ${paymentLink.title}`
+          });
+          
+          console.log(`💰 Created pending balance of ${txData.amount} ${txData.currency} for user ${paymentLink.userId}. Will be released on ${releaseDate.toISOString()}`);
         }
       } else {
         const paymentLink = await storage.getPaymentLinkByTxRef(txData.tx_ref);

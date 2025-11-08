@@ -27,6 +27,11 @@ export default function Dashboard() {
     queryKey: ["/api/wallet/balance"],
   });
 
+  // Fetch pending balances
+  const { data: pendingBalances = [], isLoading: pendingLoading } = useQuery({
+    queryKey: ["/api/wallet/pending-balances"],
+  });
+
   // Fetch unread notifications count
   const { data: notificationsData } = useQuery({
     queryKey: ["/api/notifications/unread-count"],
@@ -38,6 +43,7 @@ export default function Dashboard() {
   });
 
   const balance = walletData?.balance || 0;
+  const pendingBalance = walletData?.pendingBalance || 0;
   const unreadCount = notificationsData?.count || 0;
 
   // Pull to refresh function
@@ -46,6 +52,7 @@ export default function Dashboard() {
     await Promise.all([
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] }),
       queryClient.invalidateQueries({ queryKey: ["/api/wallet/balance"] }),
+      queryClient.invalidateQueries({ queryKey: ["/api/wallet/pending-balances"] }),
       queryClient.invalidateQueries({ queryKey: ["/api/notifications/unread-count"] }),
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] }),
     ]);
@@ -130,6 +137,20 @@ export default function Dashboard() {
                   {isBalanceVisible ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
                 </Button>
               </div>
+              
+              {pendingBalance > 0 && (
+                <div className="flex items-center justify-center gap-2 mt-3 pt-3 border-t border-gray-200">
+                  <div className="flex items-center gap-2 bg-purple-50 px-4 py-2 rounded-full">
+                    <Clock className="h-4 w-4 text-purple-600" />
+                    <div className="text-left">
+                      <p className="text-xs text-purple-600 font-medium">Pending Balance</p>
+                      <p className="text-sm font-bold text-purple-700">
+                        {isBalanceVisible ? `${pendingBalance.toLocaleString()} USD` : '*******'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -176,6 +197,70 @@ export default function Dashboard() {
                 </Link>
               </div>
             </div>
+
+            {/* Pending Balances Section */}
+            {pendingBalances.length > 0 && (
+              <div className="mb-6 lg:bg-white lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-purple-600" />
+                    <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white">Pending Funds</h3>
+                  </div>
+                  <Badge variant="secondary" className="bg-purple-100 text-purple-700">
+                    {pendingBalances.length} pending
+                  </Badge>
+                </div>
+                
+                <div className="space-y-3">
+                  {pendingBalances.map((pending: any) => {
+                    const releaseDate = new Date(pending.releaseDate);
+                    const now = new Date();
+                    const daysLeft = Math.max(0, Math.ceil((releaseDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+                    const isAvailableNow = daysLeft === 0;
+                    
+                    return (
+                      <div key={pending.id} className={`p-3 rounded-lg border ${isAvailableNow ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800'}`}>
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <p className="font-medium text-gray-900 dark:text-white text-sm mb-1">
+                              {pending.description || 'Payment Link Transaction'}
+                            </p>
+                            <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+                              <Clock className="h-3 w-3" />
+                              <span className={isAvailableNow ? 'text-green-600 dark:text-green-400 font-semibold' : ''}>
+                                {isAvailableNow
+                                  ? 'Releasing now...'
+                                  : `Available in ${daysLeft} day${daysLeft > 1 ? 's' : ''}`}
+                              </span>
+                            </div>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              Release: {releaseDate.toLocaleDateString()}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className={`font-bold text-sm ${isAvailableNow ? 'text-green-700 dark:text-green-400' : 'text-purple-700 dark:text-purple-400'}`}>
+                              +${parseFloat(pending.amount).toLocaleString()}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              {pending.currency}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <div className="flex items-start gap-2">
+                    <Info className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-blue-700 dark:text-blue-300">
+                      For your security, funds from payment links are held for 7 days before being released to your wallet.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Recent Transactions - Fixed */}
             <div className="pb-3 lg:bg-white lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
