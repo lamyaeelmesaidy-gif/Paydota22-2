@@ -1817,6 +1817,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // KYC verification status endpoint
+  app.get("/api/user/kyc-status", requireAuth, async (req: any, res) => {
+    try {
+      const userId = req.session?.userId;
+      
+      // Get the latest KYC verification for the user
+      const kycVerifications = await db
+        .select()
+        .from(schema.kycVerifications)
+        .where(eq(schema.kycVerifications.userId, userId))
+        .orderBy(desc(schema.kycVerifications.createdAt))
+        .limit(1);
+      
+      if (kycVerifications.length === 0) {
+        return res.json({
+          isVerified: false,
+          status: null,
+          message: "لم يتم تقديم طلب التحقق من الهوية بعد"
+        });
+      }
+      
+      const latestKyc = kycVerifications[0];
+      
+      res.json({
+        isVerified: latestKyc.status === 'approved',
+        status: latestKyc.status,
+        message: latestKyc.status === 'approved' 
+          ? "تم التحقق من الهوية بنجاح"
+          : latestKyc.status === 'pending'
+          ? "طلب التحقق قيد المراجعة"
+          : latestKyc.status === 'under_review'
+          ? "طلب التحقق قيد المعالجة"
+          : "تم رفض طلب التحقق"
+      });
+    } catch (error) {
+      console.error("Error fetching KYC status:", error);
+      res.status(500).json({ message: "Failed to fetch KYC status" });
+    }
+  });
+
   // Webhook routes for Reap API
   app.post("/api/webhooks/subscribe", requireAuth, async (req: any, res) => {
     try {

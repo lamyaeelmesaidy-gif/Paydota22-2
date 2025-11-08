@@ -9,7 +9,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { useNativeInteractions } from "@/hooks/useNativeInteractions";
 import NotificationCenter from "@/components/notification-center";
 import PullToRefresh from "@/components/pull-to-refresh";
-// Removed DashboardSkeleton import to prevent duplicate loading screens
+import KycWarning from "@/components/kyc-warning";
 
 export default function Dashboard() {
   const { t } = useLanguage();
@@ -40,6 +40,11 @@ export default function Dashboard() {
   // Fetch recent transactions
   const { data: transactions = [], isLoading: transactionsLoading } = useQuery({
     queryKey: ["/api/transactions"],
+  });
+
+  // Fetch KYC status
+  const { data: kycStatus } = useQuery({
+    queryKey: ["/api/user/kyc-status"],
   });
 
   const balance = walletData?.balance || 0;
@@ -167,12 +172,19 @@ export default function Dashboard() {
 
           {/* Fixed Content Area - Completely Static */}
           <div className="flex-shrink-0 p-3 lg:p-0 lg:mt-6 overflow-hidden">
+            {/* KYC Warning */}
+            {kycStatus && !kycStatus.isVerified && (
+              <div className="mb-6 lg:mx-4">
+                <KycWarning status={kycStatus.status} message={kycStatus.message} />
+              </div>
+            )}
+
             {/* Quick Actions - Fixed */}
             <div className="mb-6 lg:bg-white lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
               <h3 className="hidden lg:block text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
               <div className="grid grid-cols-4 lg:grid-cols-8 gap-4">
-                <Link href="/send">
-                  <div className="text-center cursor-pointer hover:opacity-80 transition-opacity">
+                <Link href={kycStatus?.isVerified ? "/send" : "#"}>
+                  <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
                     <div className="w-16 h-16 bg-purple-100/80 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
                       <ArrowUpRight className="h-6 w-6 text-purple-600" />
                     </div>
@@ -180,8 +192,8 @@ export default function Dashboard() {
                   </div>
                 </Link>
 
-                <Link href="/deposit">
-                  <div className="text-center cursor-pointer hover:opacity-80 transition-opacity">
+                <Link href={kycStatus?.isVerified ? "/deposit" : "#"}>
+                  <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
                     <div className="w-16 h-16 bg-purple-100/80 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
                       <ArrowDownLeft className="h-6 w-6 text-purple-600" />
                     </div>
@@ -189,8 +201,8 @@ export default function Dashboard() {
                   </div>
                 </Link>
 
-                <Link href="/withdraw">
-                  <div className="text-center cursor-pointer hover:opacity-80 transition-opacity">
+                <Link href={kycStatus?.isVerified ? "/withdraw" : "#"}>
+                  <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
                     <div className="w-16 h-16 bg-purple-100/80 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
                       <Banknote className="h-6 w-6 text-purple-600" />
                     </div>
@@ -198,8 +210,8 @@ export default function Dashboard() {
                   </div>
                 </Link>
 
-                <Link href="/services">
-                  <div className="text-center cursor-pointer hover:opacity-80 transition-opacity">
+                <Link href={kycStatus?.isVerified ? "/services" : "#"}>
+                  <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
                     <div className="w-16 h-16 bg-purple-100/80 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
                       <Grid3X3 className="h-6 w-6 text-purple-600" />
                     </div>
