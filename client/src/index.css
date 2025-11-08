@@ -29,6 +29,8 @@ html, body {
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
+  margin: 0;
+  padding: 0;
 }
 
 /* Additional scrollbar hiding for all browsers */
@@ -56,6 +58,8 @@ body::-webkit-scrollbar {
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
+  margin: 0;
+  padding: 0;
 }
 
 /* Bottom navigation spacing */

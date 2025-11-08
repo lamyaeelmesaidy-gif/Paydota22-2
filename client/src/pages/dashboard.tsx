@@ -122,35 +122,46 @@ export default function Dashboard() {
             </div>
 
             {/* Balance Section - Fixed */}
-            <div className="mb-2 text-center py-2 border-b border-gray-50 lg:border-0 lg:py-6 lg:bg-white lg:rounded-xl lg:shadow-sm lg:mt-4 lg:mx-4">
-              <p className="text-gray-600 dark:text-gray-400 text-sm mb-2">Balance account</p>
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {isBalanceVisible ? `${balance.toLocaleString()} USD` : '******* USD'}
-                </h2>
+            <div className="mb-2 py-4 border-b border-gray-50 lg:border-0 lg:py-6 lg:bg-white lg:rounded-xl lg:shadow-sm lg:mt-4 lg:mx-4">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Total Balance</p>
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full"
+                  className="text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full h-6 w-6"
                   onClick={() => setIsBalanceVisible(!isBalanceVisible)}
                 >
-                  {isBalanceVisible ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
+                  {isBalanceVisible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                 </Button>
               </div>
               
-              {pendingBalance > 0 && (
-                <div className="flex items-center justify-center gap-2 mt-3 pt-3 border-t border-gray-200">
-                  <div className="flex items-center gap-2 bg-purple-50 px-4 py-2 rounded-full">
-                    <Clock className="h-4 w-4 text-purple-600" />
-                    <div className="text-left">
-                      <p className="text-xs text-purple-600 font-medium">Pending Balance</p>
-                      <p className="text-sm font-bold text-purple-700">
-                        {isBalanceVisible ? `${pendingBalance.toLocaleString()} USD` : '*******'}
-                      </p>
-                    </div>
+              <div className="text-center mb-3">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  {isBalanceVisible ? `${(balance + pendingBalance).toLocaleString()} USD` : '******* USD'}
+                </h2>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 px-4 mt-4">
+                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Wallet className="h-4 w-4 text-green-600" />
+                    <p className="text-xs text-green-600 font-medium">Available</p>
                   </div>
+                  <p className="text-lg font-bold text-green-700 dark:text-green-400">
+                    {isBalanceVisible ? `${balance.toLocaleString()} USD` : '*******'}
+                  </p>
                 </div>
-              )}
+                
+                <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Clock className="h-4 w-4 text-purple-600" />
+                    <p className="text-xs text-purple-600 font-medium">Pending</p>
+                  </div>
+                  <p className="text-lg font-bold text-purple-700 dark:text-purple-400">
+                    {isBalanceVisible ? `${pendingBalance.toLocaleString()} USD` : '*******'}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
