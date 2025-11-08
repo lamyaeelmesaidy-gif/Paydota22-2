@@ -3718,6 +3718,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         existingTransaction = await storage.createPaymentTransaction({
           paymentLinkId: paymentLink?.id,
+          userId: paymentLink?.userId,
           txRef: txData.tx_ref,
           flutterwaveRef: txData.flw_ref,
           transactionId: txData.id.toString(),
@@ -3734,6 +3735,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           cardCountry: txData.card?.country,
           metadata: txData as any,
         });
+
+        if (txData.status === 'successful' && paymentLink?.userId) {
+          const currentBalance = await storage.getWalletBalance(paymentLink.userId);
+          const newBalance = currentBalance + parseFloat(txData.amount.toString());
+          await storage.updateWalletBalance(paymentLink.userId, newBalance);
+          console.log(`✅ Added ${txData.amount} ${txData.currency} to user ${paymentLink.userId} wallet. New balance: ${newBalance}`);
+        }
       }
 
       res.json({
@@ -3772,6 +3780,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!existingTransaction) {
         await storage.createPaymentTransaction({
           paymentLinkId: paymentLink?.id,
+          userId: paymentLink?.userId,
           txRef: txData.tx_ref,
           flutterwaveRef: txData.flw_ref,
           transactionId: txData.id.toString(),
@@ -3789,6 +3798,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           metadata: txData as any,
           verifiedAt: new Date(),
         });
+
+        if (txData.status === 'successful' && paymentLink?.userId) {
+          const currentBalance = await storage.getWalletBalance(paymentLink.userId);
+          const newBalance = currentBalance + parseFloat(txData.amount.toString());
+          await storage.updateWalletBalance(paymentLink.userId, newBalance);
+          console.log(`✅ Added ${txData.amount} ${txData.currency} to user ${paymentLink.userId} wallet. New balance: ${newBalance}`);
+        }
       } else {
         await storage.updatePaymentTransaction(existingTransaction.id, {
           status: txData.status === 'successful' ? 'successful' : 'failed',
