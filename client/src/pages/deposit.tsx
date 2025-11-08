@@ -11,8 +11,8 @@ export default function Deposit() {
   const [selectedMethod, setSelectedMethod] = useState("card");
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="px-4 py-6 pb-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-4xl mx-auto px-4 lg:px-6 py-6 pb-20">
         
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
@@ -30,12 +30,12 @@ export default function Deposit() {
         </div>
 
         {/* Payment Method Section */}
-        <div className="mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+        <div className="mb-6 lg:bg-white lg:rounded-xl lg:shadow-sm lg:p-6">
+          <h2 className="text-lg lg:text-2xl font-bold text-gray-900 mb-4">
             Payment Method
           </h2>
           
-          <div className="space-y-3">
+          <div className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
             {/* Credit Card Option */}
             <div 
               className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${

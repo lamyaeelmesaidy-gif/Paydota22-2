@@ -97,23 +97,23 @@ export default function Transactions() {
   }
 
   return (
-    <div className="h-screen h-[100dvh] bg-white w-full overflow-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 lg:h-auto h-screen lg:overflow-auto overflow-hidden">
       <PullToRefresh onRefresh={handleRefresh}>
-        <div className="h-full flex flex-col max-w-md mx-auto">
+        <div className="h-full flex flex-col max-w-md lg:max-w-4xl mx-auto lg:p-6">
           
           {/* Fixed Header Area */}
-          <div className="flex-shrink-0 bg-white border-b border-gray-100 pt-safe-top">
+          <div className="flex-shrink-0 bg-white lg:bg-transparent lg:rounded-xl lg:shadow-sm lg:p-6 border-b lg:border-0 border-gray-100 pt-safe-top lg:pt-0">
             {/* Header - Fixed */}
-            <div className="flex items-center justify-between px-4 py-4">
-              <h1 className="text-xl font-semibold text-gray-900">Transactions</h1>
+            <div className="flex items-center justify-between px-4 lg:px-0 py-4 lg:py-0 lg:mb-4">
+              <h1 className="text-xl lg:text-3xl font-semibold text-gray-900">Transactions</h1>
               <Button variant="outline" size="icon" className="bg-white border-gray-200 hover:bg-gray-50">
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
 
             {/* Search - Fixed */}
-            <div className="relative px-4 mb-4">
-              <Search className="absolute left-7 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+            <div className="relative px-4 lg:px-0 mb-4">
+              <Search className="absolute left-7 lg:left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
               <Input
                 placeholder="Search transactions..."
                 value={searchTerm}

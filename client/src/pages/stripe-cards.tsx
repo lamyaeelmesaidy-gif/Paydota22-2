@@ -262,13 +262,13 @@ export default function AirwallexCards() {
   };
 
   return (
-    <div className="app-page bg-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 lg:bg-gray-50">
       <PullToRefresh onRefresh={handleRefresh}>
-        <div className="max-w-md mx-auto relative page-content">
+        <div className="max-w-md lg:max-w-7xl mx-auto relative lg:p-6">
           {/* Header */}
-          <div className="sticky top-0 z-50 bg-white border-b border-gray-200 p-4" style={{ paddingTop: 'calc(1rem + env(safe-area-inset-top, 0px))' }}>
-            <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold text-gray-900">
+          <div className="sticky top-0 z-50 bg-white lg:bg-transparent lg:static border-b lg:border-0 border-gray-200 p-4 lg:p-0 lg:mb-6" style={{ paddingTop: 'calc(1rem + env(safe-area-inset-top, 0px))' }}>
+            <div className="flex items-center justify-between lg:bg-white lg:rounded-xl lg:shadow-sm lg:p-6">
+              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
                 {t("cards")}
               </h1>
               <Button
@@ -282,7 +282,7 @@ export default function AirwallexCards() {
             </div>
 
             {/* Card Type Toggle */}
-            <div className="bg-gray-200 rounded-full p-1 flex mt-4">
+            <div className="bg-gray-200 rounded-full p-1 flex mt-4 lg:max-w-md lg:mx-auto lg:bg-white lg:shadow-sm lg:p-2">
               <Button
                 onClick={() => setSelectedCardType("virtual")}
                 className={cn(
@@ -311,7 +311,7 @@ export default function AirwallexCards() {
           </div>
 
           {/* Content */}
-          <div className="p-4">
+          <div className="p-4 lg:p-0 lg:grid lg:grid-cols-2 lg:gap-6">
             {/* Show skeleton only in content area while loading */}
             {(cardsLoading || transactionsLoading) ? (
               <div className="space-y-4">

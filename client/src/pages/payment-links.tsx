@@ -128,7 +128,8 @@ export default function PaymentLinksPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="container mx-auto p-4 lg:p-6 max-w-7xl">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2" data-testid="heading-payment-links">Flutterwave Payment Links</h1>
         <p className="text-muted-foreground">Create and manage payment links for card payments</p>
@@ -431,6 +432,7 @@ export default function PaymentLinksPage() {
             </CardContent>
           </Card>
         </div>
+      </div>
       </div>
     </div>
   );

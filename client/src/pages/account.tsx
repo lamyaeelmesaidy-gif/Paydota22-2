@@ -85,10 +85,10 @@ export default function Account() {
   }
 
   return (
-    <div className="app-page bg-white w-full">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 w-full">
       <PullToRefresh onRefresh={handleRefresh}>
         {/* Header */}
-        <div className="bg-white border-b border-gray-100 p-4 relative z-10">
+        <div className="bg-white lg:bg-transparent border-b lg:border-0 border-gray-100 p-4 lg:p-6 relative z-10">
           <div className="flex items-center justify-center">
             <h1 className="text-xl font-medium text-gray-900">
               {userInfo ? `${(userInfo as any).firstName} ${(userInfo as any).lastName}` : 'My Account'}
@@ -97,10 +97,10 @@ export default function Account() {
         </div>
 
         {/* Content */}
-        <div className="container mx-auto px-3 py-4 relative z-10 max-w-sm">
+        <div className="container mx-auto px-3 lg:px-6 py-4 lg:py-6 relative z-10 max-w-sm lg:max-w-4xl">
         
         {/* User Profile Card */}
-        <Card className="bg-gradient-to-br from-purple-400 via-purple-500 to-pink-500 text-white mb-4 shadow-lg border-0 rounded-2xl overflow-hidden">
+        <Card className="bg-gradient-to-br from-purple-400 via-purple-500 to-pink-500 text-white mb-4 shadow-lg border-0 rounded-2xl overflow-hidden lg:max-w-2xl lg:mx-auto">
           <CardContent className="p-4">
             <button 
               onClick={() => navigateTo("/profile")}
