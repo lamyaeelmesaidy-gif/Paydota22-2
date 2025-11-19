@@ -3661,8 +3661,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Generate internal payment link (our own checkout page)
-      const domain = process.env.REPLIT_DEV_DOMAIN || 'http://localhost:5000';
-      const fullDomain = domain.startsWith('http') ? domain : `https://${domain}`;
+      // Use published domain if available, otherwise dev domain
+      const domain = process.env.REPLIT_DOMAINS || process.env.REPLIT_DEV_DOMAIN || 'http://localhost:5000';
+      // REPLIT_DOMAINS may contain multiple domains separated by commas, use the first one
+      const primaryDomain = domain.split(',')[0].trim();
+      const fullDomain = primaryDomain.startsWith('http') ? primaryDomain : `https://${primaryDomain}`;
       const internalPaymentLink = `${fullDomain}/pay/${txRef}`;
 
       const paymentLink = await storage.createPaymentLink({

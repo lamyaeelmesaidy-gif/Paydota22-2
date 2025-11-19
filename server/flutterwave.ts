@@ -166,10 +166,14 @@ class FlutterwaveService {
     try {
       // Build a valid redirect URL
       let defaultRedirectUrl = 'http://localhost:5000/payment/verify';
-      if (process.env.REPLIT_DEV_DOMAIN) {
-        const domain = process.env.REPLIT_DEV_DOMAIN;
+      
+      // Use published domain if available, otherwise dev domain
+      const domain = process.env.REPLIT_DOMAINS || process.env.REPLIT_DEV_DOMAIN;
+      if (domain) {
+        // REPLIT_DOMAINS may contain multiple domains separated by commas, use the first one
+        const primaryDomain = domain.split(',')[0].trim();
         // Ensure domain has protocol
-        const fullDomain = domain.startsWith('http') ? domain : `https://${domain}`;
+        const fullDomain = primaryDomain.startsWith('http') ? primaryDomain : `https://${primaryDomain}`;
         defaultRedirectUrl = `${fullDomain}/payment/verify`;
       }
       
