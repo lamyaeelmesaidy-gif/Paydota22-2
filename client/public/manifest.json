@@ -1,0 +1,57 @@
+{
+  "name": "PayDota - Payment Platform",
+  "short_name": "PayDota",
+  "description": "Complete payment solution with virtual cards and payment links",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/pwa-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/pwa-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["finance", "business", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Payment Links",
+      "short_name": "Links",
+      "description": "Create payment links",
+      "url": "/payment-links",
+      "icons": [
+        {
+          "src": "/pwa-icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Cards",
+      "short_name": "Cards",
+      "description": "Manage virtual cards",
+      "url": "/cards",
+      "icons": [
+        {
+          "src": "/pwa-icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}
