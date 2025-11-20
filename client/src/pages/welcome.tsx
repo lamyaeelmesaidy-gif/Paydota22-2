@@ -10,13 +10,13 @@ export default function Welcome() {
   const { t, language } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-background relative overflow-hidden">
       {/* Mobile safe area for status bar */}
       <div className="mobile-safe-area" />
       
       {/* Simplified background decorative elements - responsive sizing */}
-      <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-purple-200/10 to-pink-200/10 rounded-full blur-xl"></div>
-      <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-32 sm:h-32 lg:w-48 lg:h-48 bg-gradient-to-tr from-blue-200/8 to-purple-200/8 rounded-full blur-xl"></div>
+      <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-purple-200/10 to-pink-200/10 dark:from-purple-500/10 dark:to-pink-500/10 rounded-full blur-xl"></div>
+      <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-32 sm:h-32 lg:w-48 lg:h-48 bg-gradient-to-tr from-blue-200/8 to-purple-200/8 dark:from-blue-500/10 dark:to-purple-500/10 rounded-full blur-xl"></div>
       
       {/* Mobile Layout - optimized for all screen sizes */}
       <div className="lg:hidden px-3 sm:px-4 md:px-6 flex flex-col justify-between min-h-screen relative z-10 max-w-sm sm:max-w-md mx-auto safe-area-inset">
@@ -28,10 +28,10 @@ export default function Welcome() {
         
         {/* Header Content - optimized for all mobile screens */}
         <div className="text-center">
-          <h1 className="text-gray-600 text-base sm:text-lg mb-1 font-light tracking-wide">
+          <h1 className="text-gray-600 dark:text-gray-400 text-base sm:text-lg mb-1 font-light tracking-wide">
             Banking account
           </h1>
-          <h2 className="text-gray-900 text-xl sm:text-2xl font-bold mb-1 sm:mb-2 tracking-tight">
+          <h2 className="text-gray-900 dark:text-white text-xl sm:text-2xl font-bold mb-1 sm:mb-2 tracking-tight">
             fully <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">online</span>
           </h2>
         </div>
@@ -105,9 +105,9 @@ export default function Welcome() {
           <Link href="/register">
             <Button 
               variant="outline" 
-              className="w-full h-12 sm:h-14 border-2 border-purple-300 hover:border-purple-400 text-purple-700 hover:text-purple-800 text-sm sm:text-base font-bold rounded-xl sm:rounded-2xl bg-white hover:bg-purple-50 shadow-lg hover:shadow-xl transition-all duration-200 relative overflow-hidden group"
+              className="w-full h-12 sm:h-14 border-2 border-purple-300 dark:border-purple-600 hover:border-purple-400 dark:hover:border-purple-500 text-purple-700 dark:text-purple-300 hover:text-purple-800 dark:hover:text-purple-200 text-sm sm:text-base font-bold rounded-xl sm:rounded-2xl bg-white dark:bg-background hover:bg-purple-50 dark:hover:bg-muted shadow-lg hover:shadow-xl transition-all duration-200 relative overflow-hidden group"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-50/30 to-transparent dark:from-purple-500/10 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
               <span className="relative z-10 tracking-wide text-center leading-tight">OPEN A DIGITAL ACCOUNT</span>
             </Button>
           </Link>
@@ -120,7 +120,7 @@ export default function Welcome() {
       </div>
 
       {/* Desktop Layout (lg and above) - simplified and responsive */}
-      <div className="hidden lg:flex min-h-screen relative z-10 bg-white">
+      <div className="hidden lg:flex min-h-screen relative z-10 bg-white dark:bg-background">
         {/* Elegant Left Panel - Content */}
         <div className="flex-1 flex flex-col justify-center px-16 xl:px-24 2xl:px-40 relative">
           {/* Decorative Elements */}
