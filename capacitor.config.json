@@ -3,7 +3,7 @@
   "appName": "PayDota",
   "webDir": "dist/public",
   "server": {
-    "url": "https://paydota22.onrender.com",
+    "url": "https://judicial-leesa-londonpay-9a29e0f0.koyeb.app/",
     "cleartext": false,
     "androidScheme": "https"
   },
