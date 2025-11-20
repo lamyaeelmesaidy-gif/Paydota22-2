@@ -24,7 +24,6 @@ import Support from "@/pages/support";
 import Account from "@/pages/account";
 import Deposit from "@/pages/deposit";
 import DepositOptions from "@/pages/deposit-options";
-import AccountSettings from "@/pages/account-settings";
 import SecurityPrivacy from "@/pages/security-privacy";
 import Notifications from "@/pages/notifications";
 import LanguageSettings from "@/pages/account/language";
@@ -144,7 +143,6 @@ function Router() {
             <Route path="/admin-panel/whatsapp" component={AdminWhatsAppSettings} />
 
             {/* Account routes */}
-            <Route path="/account/settings" component={AccountSettings} />
             <Route path="/account/security" component={SecurityPrivacy} />
             <Route path="/account/notifications" component={Notifications} />
             <Route path="/account/language" component={LanguageSettings} />
