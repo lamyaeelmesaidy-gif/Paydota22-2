@@ -77,13 +77,16 @@ function Router() {
   const { isOnline, isLoading: networkLoading, checkNetwork } = useNetwork();
   const [location] = useLocation();
 
-  // صفحات التحقق من الهوية التي يجب إخفاء الشريط السفلي منها
+  // صفحات التي يجب إخفاء الشريط السفلي منها
   const kycPages = [
     '/kyc-verification',
     '/choose-card'
   ];
 
-  const shouldHideBottomNav = kycPages.includes(location);
+  // إخفاء الشريط السفلي في صفحات روابط الدفع وصفحات KYC
+  const shouldHideBottomNav = kycPages.includes(location) || 
+                               location.startsWith('/pay/') || 
+                               location.startsWith('/checkout/');
 
   // Show offline screen when not connected to internet
   if (!isOnline) {
