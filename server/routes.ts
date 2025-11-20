@@ -2865,12 +2865,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Add amount to user's wallet
       await db
-        .update(schema.wallets)
+        .update(schema.users)
         .set({
-          balance: sql`${schema.wallets.balance} + ${request.amount}`,
+          walletBalance: sql`${schema.users.walletBalance} + ${request.amount}`,
           updatedAt: new Date(),
         })
-        .where(eq(schema.wallets.userId, request.userId));
+        .where(eq(schema.users.id, request.userId));
 
       // Create transaction record
       await db.insert(schema.transactions).values({

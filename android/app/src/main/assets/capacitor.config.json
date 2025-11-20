@@ -3,7 +3,7 @@
 	"appName": "PayDota",
 	"webDir": "dist/public",
 	"server": {
-		"url": "https://paydota.replit.app",
+		"url": "https://paydota22.onrender.com",
 		"cleartext": false,
 		"androidScheme": "https"
 	},
@@ -28,9 +28,10 @@
 			"navigationBarColor": "#FFFFFF"
 		},
 		"Keyboard": {
-			"resize": "body",
+			"resize": "ionic",
 			"style": "dark",
-			"resizeOnFullScreen": true
+			"resizeOnFullScreen": true,
+			"disableScroll": true
 		},
 		"Haptics": {
 			"impact": {
