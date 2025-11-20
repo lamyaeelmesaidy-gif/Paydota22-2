@@ -21,7 +21,7 @@ export const getPlatform = () => Capacitor.getPlatform();
 export const setupStatusBar = async () => {
   if (isNativePlatform) {
     try {
-      await StatusBar.setStyle({ style: Style.Light });
+      await StatusBar.setStyle({ style: Style.Dark });
       await StatusBar.setBackgroundColor({ color: '#ffffff' });
       await StatusBar.setOverlaysWebView({ overlay: false });
       
