@@ -78,9 +78,9 @@ export default function Dashboard() {
       <PullToRefresh onRefresh={handleRefresh}>
         <div className="h-full flex flex-col max-w-md lg:max-w-none mx-auto lg:p-6 overflow-hidden lg:overflow-visible">
           {/* Fixed Header Area */}
-          <div className="flex-shrink-0 bg-white lg:bg-transparent lg:rounded-xl lg:p-4">
+          <div className="flex-shrink-0 bg-white dark:bg-gray-800 lg:bg-transparent lg:rounded-xl lg:p-4">
             {/* User Greeting - Fixed */}
-            <div className="flex items-center justify-between px-4 lg:px-6 py-4 lg:bg-white lg:rounded-xl lg:shadow-sm">
+            <div className="flex items-center justify-between px-4 lg:px-6 py-4 lg:bg-white lg:dark:bg-gray-800 lg:rounded-xl lg:shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full flex items-center justify-center">
                   <span className="text-white font-bold text-lg">
@@ -113,13 +113,13 @@ export default function Dashboard() {
 
             {/* Account/Card Toggle - Fixed */}
             <div className="px-4 lg:px-6 mb-2 lg:mb-0 lg:mt-4">
-              <div className="bg-gray-200 rounded-full p-1 flex lg:max-w-md lg:mx-auto">
+              <div className="bg-gray-200 dark:bg-gray-700 rounded-full p-1 flex lg:max-w-md lg:mx-auto">
                 <Button className="flex-1 rounded-full py-2 px-4 text-sm font-medium bg-purple-500 text-white">
                   ACCOUNT
                 </Button>
                 <Button 
                   variant="ghost"
-                  className="flex-1 rounded-full py-2 px-4 text-sm font-medium text-gray-600 hover:bg-gray-300"
+                  className="flex-1 rounded-full py-2 px-4 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
                 >
                   CARD
                 </Button>
@@ -127,7 +127,7 @@ export default function Dashboard() {
             </div>
 
             {/* Balance Section - Fixed */}
-            <div className="mb-2 py-4 border-b border-gray-50 lg:border-0 lg:py-6 lg:bg-white lg:rounded-xl lg:shadow-sm lg:mt-4 lg:mx-4">
+            <div className="mb-2 py-4 border-b border-gray-50 dark:border-gray-700 lg:border-0 lg:py-6 lg:bg-white lg:dark:bg-gray-800 lg:rounded-xl lg:shadow-sm lg:mt-4 lg:mx-4">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <p className="text-gray-600 dark:text-gray-400 text-sm">Total Balance</p>
                 <Button 
@@ -180,42 +180,42 @@ export default function Dashboard() {
             )}
 
             {/* Quick Actions - Fixed */}
-            <div className="mb-6 lg:bg-white lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
+            <div className="mb-6 lg:bg-white lg:dark:bg-gray-800 lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
               <h3 className="hidden lg:block text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
               <div className="grid grid-cols-4 lg:grid-cols-8 gap-4">
                 <Link href={kycStatus?.isVerified ? "/send" : "#"}>
                   <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <ArrowUpRight className="h-6 w-6 text-purple-600" />
+                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-900/40 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
+                      <ArrowUpRight className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                     </div>
-                    <span className="text-xs text-gray-700 font-medium block">Send</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">Send</span>
                   </div>
                 </Link>
 
                 <Link href={kycStatus?.isVerified ? "/deposit" : "#"}>
                   <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <ArrowDownLeft className="h-6 w-6 text-purple-600" />
+                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-900/40 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
+                      <ArrowDownLeft className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                     </div>
-                    <span className="text-xs text-gray-700 font-medium block">Deposit</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">Deposit</span>
                   </div>
                 </Link>
 
                 <Link href={kycStatus?.isVerified ? "/withdraw" : "#"}>
                   <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <Banknote className="h-6 w-6 text-purple-600" />
+                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-900/40 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
+                      <Banknote className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                     </div>
-                    <span className="text-xs text-gray-700 font-medium block">Withdraw</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">Withdraw</span>
                   </div>
                 </Link>
 
                 <Link href={kycStatus?.isVerified ? "/services" : "#"}>
                   <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <Grid3X3 className="h-6 w-6 text-purple-600" />
+                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-900/40 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
+                      <Grid3X3 className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                     </div>
-                    <span className="text-xs text-gray-700 font-medium block">More</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">More</span>
                   </div>
                 </Link>
               </div>
@@ -223,7 +223,7 @@ export default function Dashboard() {
 
             {/* Pending Balances Section */}
             {pendingBalances.length > 0 && (
-              <div className="mb-6 lg:bg-white lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
+              <div className="mb-6 lg:bg-white lg:dark:bg-gray-800 lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <Clock className="h-5 w-5 text-purple-600" />
@@ -286,7 +286,7 @@ export default function Dashboard() {
             )}
 
             {/* Recent Transactions - Fixed */}
-            <div className="pb-3 lg:bg-white lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
+            <div className="pb-3 lg:bg-white lg:dark:bg-gray-800 lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white">Recent transactions</h3>
                 <Link href="/transactions">
