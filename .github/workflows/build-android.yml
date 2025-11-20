@@ -59,29 +59,28 @@ jobs:
         name: paydota-release-apk
         path: android/app/build/outputs/apk/release/app-release.apk
         
-    - name: Create Release
+    - name: Create Release with APK
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: ncipollo/release-action@v1
       with:
-        tag_name: v${{ github.run_number }}
-        release_name: PayDota Mobile v${{ github.run_number }}
+        tag: v${{ github.run_number }}
+        name: PayDota Mobile v${{ github.run_number }}
         body: |
-          تطبيق PayDota المحمول - الإصدار التلقائي
-          - APK موقع جاهز للنشر
-          - جميع الميزات المحمولة مفعلة
-          - keystore للتوقيع الآمن
+          🎉 **تطبيق PayDota المحمول - إصدار تلقائي**
+          
+          📱 **المميزات:**
+          - ✅ APK موقع جاهز للتحميل والتثبيت
+          - ✅ جميع الميزات المحمولة مفعلة
+          - ✅ keystore للتوقيع الآمن
+          - ✅ تم البناء والاختبار تلقائياً
+          
+          📥 **التثبيت:**
+          قم بتحميل ملف APK أدناه وتثبيته على جهاز Android
+          
+          🏗️ **Build #${{ github.run_number }}**
+        artifacts: android/app/build/outputs/apk/release/app-release.apk
+        artifactContentType: application/vnd.android.package-archive
         draft: false
         prerelease: false
-        
-    - name: Upload Release Asset
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: android/app/build/outputs/apk/release/app-release.apk
-        asset_name: PayDota-v${{ github.run_number }}.apk
-        asset_content_type: application/vnd.android.package-archive
+        allowUpdates: true
+        token: ${{ secrets.GITHUB_TOKEN }}
