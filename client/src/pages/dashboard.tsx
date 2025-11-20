@@ -185,8 +185,8 @@ export default function Dashboard() {
               <div className="grid grid-cols-4 lg:grid-cols-8 gap-4">
                 <Link href={kycStatus?.isVerified ? "/send" : "#"}>
                   <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-900/40 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <ArrowUpRight className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-500/20 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
+                      <ArrowUpRight className="h-6 w-6 text-purple-600 dark:text-purple-300" />
                     </div>
                     <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">Send</span>
                   </div>
@@ -194,8 +194,8 @@ export default function Dashboard() {
 
                 <Link href={kycStatus?.isVerified ? "/deposit" : "#"}>
                   <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-900/40 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <ArrowDownLeft className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-500/20 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
+                      <ArrowDownLeft className="h-6 w-6 text-purple-600 dark:text-purple-300" />
                     </div>
                     <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">Deposit</span>
                   </div>
@@ -203,8 +203,8 @@ export default function Dashboard() {
 
                 <Link href={kycStatus?.isVerified ? "/withdraw" : "#"}>
                   <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-900/40 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <Banknote className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-500/20 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
+                      <Banknote className="h-6 w-6 text-purple-600 dark:text-purple-300" />
                     </div>
                     <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">Withdraw</span>
                   </div>
@@ -212,8 +212,8 @@ export default function Dashboard() {
 
                 <Link href={kycStatus?.isVerified ? "/services" : "#"}>
                   <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-900/40 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <Grid3X3 className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-500/20 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
+                      <Grid3X3 className="h-6 w-6 text-purple-600 dark:text-purple-300" />
                     </div>
                     <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">More</span>
                   </div>
