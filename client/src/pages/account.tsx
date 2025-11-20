@@ -85,12 +85,12 @@ export default function Account() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 w-full">
+    <div className="min-h-screen bg-gray-50 dark:bg-background w-full">
       <PullToRefresh onRefresh={handleRefresh}>
         {/* Header */}
-        <div className="bg-white lg:bg-transparent border-b lg:border-0 border-gray-100 p-4 lg:p-6 relative z-10">
+        <div className="bg-white dark:bg-background lg:bg-transparent border-b lg:border-0 border-gray-100 dark:border-border p-4 lg:p-6 relative z-10">
           <div className="flex items-center justify-center">
-            <h1 className="text-xl font-medium text-gray-900">
+            <h1 className="text-xl font-medium text-gray-900 dark:text-white">
               {userInfo ? `${(userInfo as any).firstName} ${(userInfo as any).lastName}` : 'My Account'}
             </h1>
           </div>
@@ -122,7 +122,7 @@ export default function Account() {
 
         {/* Menu Items */}
         {/* Settings Group */}
-        <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-purple-200/30 dark:border-purple-700/30 shadow-lg mb-3 rounded-xl overflow-hidden">
+        <Card className="bg-white/80 dark:bg-background backdrop-blur-sm border-purple-200/30 dark:border-border shadow-lg mb-3 rounded-xl overflow-hidden">
           <CardContent className="p-0">
             <button 
               onClick={() => navigateTo("/account/language")} 
@@ -172,7 +172,7 @@ export default function Account() {
         </Card>
 
         {/* Support Group */}
-        <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-purple-200/30 dark:border-purple-700/30 shadow-lg mb-3 rounded-xl overflow-hidden">
+        <Card className="bg-white/80 dark:bg-background backdrop-blur-sm border-purple-200/30 dark:border-border shadow-lg mb-3 rounded-xl overflow-hidden">
           <CardContent className="p-0">
             <button 
               onClick={() => navigateTo("/customer-service")} 
@@ -207,7 +207,7 @@ export default function Account() {
         </Card>
 
         {/* Cards & Services Group */}
-        <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-purple-200/30 dark:border-purple-700/30 shadow-lg mb-3 rounded-xl overflow-hidden">
+        <Card className="bg-white/80 dark:bg-background backdrop-blur-sm border-purple-200/30 dark:border-border shadow-lg mb-3 rounded-xl overflow-hidden">
           <CardContent className="p-0">
             <button 
               onClick={() => navigateTo("/card-purchase-record")} 
@@ -287,7 +287,7 @@ export default function Account() {
         )}
 
         {/* Logout */}
-        <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-purple-200/30 dark:border-purple-700/30 shadow-lg rounded-xl overflow-hidden">
+        <Card className="bg-white/80 dark:bg-background backdrop-blur-sm border-purple-200/30 dark:border-border shadow-lg rounded-xl overflow-hidden">
           <CardContent className="p-0">
             <button 
               onClick={handleLogout}
