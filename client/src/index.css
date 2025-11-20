@@ -128,23 +128,23 @@ html {
 }
 
 .dark {
-  --background: 0 0% 100%; /* Pure white for dark mode too */
-  --foreground: 222 84% 4.9%; /* Dark text */
-  --muted: 210 40% 96%; /* Light muted */
-  --muted-foreground: 215 16% 46.9%; /* Medium gray */
-  --popover: 0 0% 100%; /* White popover */
-  --popover-foreground: 222 84% 4.9%; /* Dark text */
-  --card: 0 0% 100%; /* White cards */
-  --card-foreground: 222 84% 4.9%; /* Dark text */
-  --border: 214 32% 91%; /* Light border */
-  --input: 0 0% 100%; /* White inputs */
+  --background: 222 47% 11%; /* #0f172a - Dark slate background */
+  --foreground: 210 40% 98%; /* #f8fafc - Light text */
+  --muted: 217 33% 17%; /* #1e293b - Dark muted */
+  --muted-foreground: 215 20% 65%; /* #94a3b8 - Light gray */
+  --popover: 222 47% 11%; /* #0f172a - Dark popover */
+  --popover-foreground: 210 40% 98%; /* Light text */
+  --card: 217 33% 17%; /* #1e293b - Dark card */
+  --card-foreground: 210 40% 98%; /* Light text */
+  --border: 217 33% 23%; /* #334155 - Dark border */
+  --input: 217 33% 17%; /* #1e293b - Dark input */
   --primary: 265 85% 60%; /* Purple primary */
   --primary-foreground: 0 0% 100%; /* Pure white */
   --secondary: 160 84% 39%; /* Keep secondary green */
   --secondary-foreground: 0 0% 100%; /* Pure white */
   --accent: 265 85% 70%; /* Purple accent */
   --accent-foreground: 0 0% 100%; /* Pure white */
-  --destructive: 0 62.8% 30.6%; /* Keep destructive red */
+  --destructive: 0 84% 60%; /* Red */
   --destructive-foreground: 0 0% 100%; /* Pure white */
   --ring: 265 85% 60%; /* Purple ring */
 }

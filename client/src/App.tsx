@@ -13,6 +13,7 @@ import BottomNavigation from "@/components/bottom-navigation";
 import SidebarNavigation from "@/components/sidebar-navigation";
 import { AppLoadingSkeleton } from "@/components/skeletons";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import Welcome from "@/pages/welcome";
 import Login from "@/pages/login";
@@ -217,14 +218,16 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <LanguageProvider>
-        <TooltipProvider>
-          <div className="min-h-screen bg-background app-container native-scroll">
-            <Toaster />
-            <Router />
-          </div>
-        </TooltipProvider>
-      </LanguageProvider>
+      <ThemeProvider defaultTheme="system">
+        <LanguageProvider>
+          <TooltipProvider>
+            <div className="min-h-screen bg-background app-container native-scroll">
+              <Toaster />
+              <Router />
+            </div>
+          </TooltipProvider>
+        </LanguageProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
