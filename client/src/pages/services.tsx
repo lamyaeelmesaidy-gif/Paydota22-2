@@ -96,11 +96,11 @@ export default function Services() {
     
     return (
       <Link href={service.href}>
-        <div className="text-center cursor-pointer hover:opacity-80 transition-opacity">
-          <div className="w-16 h-16 bg-purple-100/80 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-            <Icon className="h-6 w-6 text-purple-600" />
+        <div className="text-center cursor-pointer group">
+          <div className="w-16 h-16 lg:w-24 lg:h-24 bg-purple-100/80 dark:bg-purple-900/40 rounded-full flex items-center justify-center mb-2 lg:mb-4 shadow-sm mx-auto group-hover:shadow-md group-hover:bg-purple-200/80 dark:group-hover:bg-purple-800/60 transition-all duration-300 transform group-hover:scale-110">
+            <Icon className="h-6 w-6 lg:h-8 lg:w-8 text-purple-600 dark:text-purple-400" />
           </div>
-          <span className="text-xs text-gray-700 font-medium block">
+          <span className="text-xs lg:text-sm text-gray-700 dark:text-gray-300 font-medium block group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors">
             {service.title}
           </span>
         </div>
@@ -110,68 +110,76 @@ export default function Services() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
-      <div className="max-w-md lg:max-w-5xl mx-auto px-4 lg:px-6 py-6 pb-20">
+      <div className="max-w-md lg:max-w-6xl mx-auto px-4 lg:px-8 py-6 lg:py-10 pb-20">
         
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8 lg:mb-10">
+        <div className="flex items-center gap-4 mb-8 lg:mb-12">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setLocation("/dashboard")}
-            className="p-2 hover:bg-purple-100 text-gray-700 dark:text-gray-300"
+            className="p-2 hover:bg-purple-100 dark:hover:bg-purple-900/30 text-gray-700 dark:text-gray-300"
           >
             <ArrowLeft className="h-6 w-6" />
           </Button>
-          <h1 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 dark:text-white">
             Services Hub
           </h1>
         </div>
         
         {/* Popular Services */}
-        <div className="mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+        <div className="mb-10 lg:mb-14">
+          <h2 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white mb-4 lg:mb-6 px-2 lg:px-0">
             Popular
           </h2>
-          <div className="grid grid-cols-3 gap-4">
-            {popularServices.map((service, index) => (
-              <ServiceCard key={index} service={service} />
-            ))}
+          <div className="bg-gradient-to-br from-purple-50/50 to-blue-50/50 dark:from-purple-900/10 dark:to-blue-900/10 rounded-2xl lg:rounded-3xl p-6 lg:p-10">
+            <div className="grid grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-8">
+              {popularServices.map((service, index) => (
+                <ServiceCard key={index} service={service} />
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Card Services */}
-        <div className="mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+        <div className="mb-10 lg:mb-14">
+          <h2 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white mb-4 lg:mb-6 px-2 lg:px-0">
             Card
           </h2>
-          <div className="grid grid-cols-2 gap-4">
-            {cardServices.map((service, index) => (
-              <ServiceCard key={index} service={service} />
-            ))}
+          <div className="bg-gradient-to-br from-blue-50/50 to-green-50/50 dark:from-blue-900/10 dark:to-green-900/10 rounded-2xl lg:rounded-3xl p-6 lg:p-10">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+              {cardServices.map((service, index) => (
+                <ServiceCard key={index} service={service} />
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Transaction Services */}
-        <div className="mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+        <div className="mb-10 lg:mb-14">
+          <h2 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white mb-4 lg:mb-6 px-2 lg:px-0">
             Transaction
           </h2>
-          <div className="grid grid-cols-3 gap-4">
-            {transactionServices.map((service, index) => (
-              <ServiceCard key={index} service={service} />
-            ))}
+          <div className="bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/10 dark:to-emerald-900/10 rounded-2xl lg:rounded-3xl p-6 lg:p-10">
+            <div className="grid grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-8">
+              {transactionServices.map((service, index) => (
+                <ServiceCard key={index} service={service} />
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Support Services */}
         <div className="mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white mb-4 lg:mb-6 px-2 lg:px-0">
             Support
           </h2>
-          <div className="grid grid-cols-3 gap-4">
-            {supportServices.map((service, index) => (
-              <ServiceCard key={index} service={service} />
-            ))}
+          <div className="bg-gradient-to-br from-orange-50/50 to-rose-50/50 dark:from-orange-900/10 dark:to-rose-900/10 rounded-2xl lg:rounded-3xl p-6 lg:p-10">
+            <div className="grid grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-8">
+              {supportServices.map((service, index) => (
+                <ServiceCard key={index} service={service} />
+              ))}
+            </div>
           </div>
         </div>
 
