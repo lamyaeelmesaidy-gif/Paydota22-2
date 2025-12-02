@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CreditCard, Phone, Smartphone } from "lucide-react";
+import { CreditCard, Phone, Smartphone, Shield, Info } from "lucide-react";
 import { Link } from "wouter";
 import { useLanguage } from "@/hooks/useLanguage";
 import { LanguageToggle } from "@/components/language-toggle";
@@ -115,6 +115,19 @@ export default function Welcome() {
           {/* Bottom indicator */}
           <div className="flex justify-center pt-2 sm:pt-3">
             <div className="w-12 h-1 sm:w-16 sm:h-1.5 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full shadow-md"></div>
+          </div>
+
+          {/* Legal Links */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap text-xs sm:text-sm text-gray-600 dark:text-gray-400 pt-3">
+            <Link href="/about" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-1">
+              <Info className="w-3 h-3" />
+              About
+            </Link>
+            <span className="text-gray-400">•</span>
+            <Link href="/privacy-policy" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-1">
+              <Shield className="w-3 h-3" />
+              Privacy
+            </Link>
           </div>
         </div>
       </div>
@@ -258,6 +271,19 @@ export default function Welcome() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Footer with Legal Links */}
+            <div className="absolute bottom-8 left-0 right-0 flex items-center justify-center gap-6 z-20">
+              <Link href="/about" className="text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-2 group">
+                <Info className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span>About</span>
+              </Link>
+              <div className="w-1 h-1 rounded-full bg-gray-400"></div>
+              <Link href="/privacy-policy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-2 group">
+                <Shield className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span>Privacy Policy</span>
+              </Link>
             </div>
 
             {/* Compact Secondary Card */}
