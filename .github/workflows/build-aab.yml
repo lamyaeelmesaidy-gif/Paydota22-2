@@ -1,0 +1,197 @@
+name: Build Android AAB
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build Type'
+        required: true
+        default: 'release'
+        type: choice
+        options:
+          - release
+          - debug
+
+env:
+  NODE_VERSION: '20'
+  JAVA_VERSION: '17'
+
+jobs:
+  build-aab:
+    name: Build Android App Bundle
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: ${{ env.JAVA_VERSION }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build web app
+        run: npm run build
+      
+      - name: Capacitor sync
+        run: npx cap sync android
+      
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+      
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      
+      - name: Build Debug AAB
+        if: github.event.inputs.build_type == 'debug' || github.event_name == 'pull_request'
+        run: |
+          cd android
+          ./gradlew bundleDebug --stacktrace
+      
+      - name: Build Release AAB (unsigned)
+        if: github.event.inputs.build_type != 'debug' && github.event_name != 'pull_request'
+        run: |
+          cd android
+          ./gradlew bundleRelease --stacktrace
+      
+      - name: Extract Android signing key from secrets
+        if: github.event.inputs.build_type != 'debug' && github.event_name != 'pull_request' && github.event_name != 'workflow_dispatch' || (github.event_name == 'workflow_dispatch' && github.event.inputs.build_type == 'release')
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+        run: |
+          if [ -n "$RELEASE_KEYSTORE" ]; then
+            echo "$RELEASE_KEYSTORE" > android/release.jks.base64
+            base64 -d android/release.jks.base64 > android/release.decrypted.jks
+            echo "KEYSTORE_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "KEYSTORE_EXISTS=false" >> $GITHUB_ENV
+            echo "⚠️ No keystore found. AAB will be unsigned."
+          fi
+      
+      - name: Sign AAB
+        if: env.KEYSTORE_EXISTS == 'true'
+        env:
+          RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run: |
+          KEY_ALIAS="${RELEASE_KEY_ALIAS:-release}"
+          KEY_PASSWORD="${RELEASE_KEY_PASSWORD:-$RELEASE_KEYSTORE_PASSWORD}"
+          
+          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
+            -keystore android/release.decrypted.jks \
+            -storepass "$RELEASE_KEYSTORE_PASSWORD" \
+            -keypass "$KEY_PASSWORD" \
+            -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab \
+            ./android/app/build/outputs/bundle/release/app-release.aab \
+            "$KEY_ALIAS"
+          
+          echo "✅ AAB signed successfully!"
+      
+      - name: Upload Debug AAB
+        if: github.event.inputs.build_type == 'debug' || github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: paydota-debug-aab
+          path: ./android/app/build/outputs/bundle/debug/app-debug.aab
+          retention-days: 14
+      
+      - name: Upload Unsigned Release AAB
+        if: env.KEYSTORE_EXISTS != 'true' && github.event.inputs.build_type != 'debug' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: paydota-release-unsigned-aab
+          path: ./android/app/build/outputs/bundle/release/app-release.aab
+          retention-days: 14
+      
+      - name: Upload Signed Release AAB
+        if: env.KEYSTORE_EXISTS == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: paydota-release-signed-aab
+          path: ./android/app/build/outputs/bundle/release/app-release-signed.aab
+          retention-days: 30
+      
+      - name: Clean up keystore
+        if: always()
+        run: |
+          rm -f android/release.jks.base64
+          rm -f android/release.decrypted.jks
+
+  create-release:
+    name: Create GitHub Release
+    needs: build-aab
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Download AAB artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: paydota-release-signed-aab
+          path: ./aab
+        continue-on-error: true
+      
+      - name: Download unsigned AAB if signed not available
+        if: failure()
+        uses: actions/download-artifact@v4
+        with:
+          name: paydota-release-unsigned-aab
+          path: ./aab
+      
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      
+      - name: Rename AAB file
+        run: |
+          cd aab
+          for f in *.aab; do
+            mv "$f" "PayDota-${{ steps.version.outputs.VERSION }}.aab"
+          done
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: PayDota ${{ steps.version.outputs.VERSION }}
+          body: |
+            ## PayDota Release ${{ steps.version.outputs.VERSION }}
+            
+            ### ملفات التحميل
+            - **AAB**: للرفع إلى Google Play Store
+            
+            ### ملاحظات
+            - تم البناء تلقائياً عبر GitHub Actions
+            - AAB جاهز للرفع إلى متجر Google Play
+          files: ./aab/*.aab
+          draft: false
+          prerelease: ${{ contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
