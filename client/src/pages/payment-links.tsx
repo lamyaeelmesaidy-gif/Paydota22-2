@@ -164,8 +164,8 @@ export default function PaymentLinksPage() {
                 Create Payment Link
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
+            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto p-4 md:p-6">
+              <DialogHeader className="mb-4">
                 <DialogTitle>Create New Payment Link</DialogTitle>
                 <DialogDescription>
                   Generate a new payment link for your customers
@@ -173,15 +173,15 @@ export default function PaymentLinksPage() {
               </DialogHeader>
 
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                   <FormField
                     control={form.control}
                     name="title"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Title</FormLabel>
+                      <FormItem className="mb-3">
+                        <FormLabel className="text-sm font-medium mb-1.5 block">Title</FormLabel>
                         <FormControl>
-                          <Input placeholder="Product Purchase" {...field} data-testid="input-title" />
+                          <Input placeholder="Product Purchase" {...field} data-testid="input-title" className="h-9" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -192,25 +192,25 @@ export default function PaymentLinksPage() {
                     control={form.control}
                     name="description"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
+                      <FormItem className="mb-3">
+                        <FormLabel className="text-sm font-medium mb-1.5 block">Description</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Payment for services rendered" {...field} data-testid="input-description" />
+                          <Textarea placeholder="Payment for services rendered" {...field} data-testid="input-description" className="min-h-[80px]" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <FormField
                       control={form.control}
                       name="amount"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Amount</FormLabel>
+                        <FormItem className="mb-0">
+                          <FormLabel className="text-sm font-medium mb-1.5 block">Amount</FormLabel>
                           <FormControl>
-                            <Input type="number" placeholder="1000" {...field} data-testid="input-amount" />
+                            <Input type="number" placeholder="1000" {...field} data-testid="input-amount" className="h-9" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -221,11 +221,11 @@ export default function PaymentLinksPage() {
                       control={form.control}
                       name="currency"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Currency</FormLabel>
+                        <FormItem className="mb-0">
+                          <FormLabel className="text-sm font-medium mb-1.5 block">Currency</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger data-testid="select-currency">
+                              <SelectTrigger data-testid="select-currency" className="h-9">
                                 <SelectValue placeholder="Select currency" />
                               </SelectTrigger>
                             </FormControl>
@@ -249,10 +249,10 @@ export default function PaymentLinksPage() {
                     control={form.control}
                     name="customerEmail"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Customer Email</FormLabel>
+                      <FormItem className="mb-3">
+                        <FormLabel className="text-sm font-medium mb-1.5 block">Customer Email</FormLabel>
                         <FormControl>
-                          <Input type="email" placeholder="[email protected]" {...field} data-testid="input-email" />
+                          <Input type="email" placeholder="[email protected]" {...field} data-testid="input-email" className="h-9" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -263,10 +263,10 @@ export default function PaymentLinksPage() {
                     control={form.control}
                     name="customerName"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Customer Name (Optional)</FormLabel>
+                      <FormItem className="mb-3">
+                        <FormLabel className="text-sm font-medium mb-1.5 block">Customer Name (Optional)</FormLabel>
                         <FormControl>
-                          <Input placeholder="John Doe" {...field} data-testid="input-customer-name" />
+                          <Input placeholder="John Doe" {...field} data-testid="input-customer-name" className="h-9" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -277,10 +277,10 @@ export default function PaymentLinksPage() {
                     control={form.control}
                     name="customerPhone"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Customer Phone (Optional)</FormLabel>
+                      <FormItem className="mb-3">
+                        <FormLabel className="text-sm font-medium mb-1.5 block">Customer Phone (Optional)</FormLabel>
                         <FormControl>
-                          <Input placeholder="+234800000000" {...field} data-testid="input-phone" />
+                          <Input placeholder="+234800000000" {...field} data-testid="input-phone" className="h-9" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -291,11 +291,11 @@ export default function PaymentLinksPage() {
                     control={form.control}
                     name="paymentOptions"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Payment Options</FormLabel>
+                      <FormItem className="mb-4">
+                        <FormLabel className="text-sm font-medium mb-1.5 block">Payment Options</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger data-testid="select-payment-options">
+                            <SelectTrigger data-testid="select-payment-options" className="h-9">
                               <SelectValue placeholder="Select payment method" />
                             </SelectTrigger>
                           </FormControl>
@@ -306,7 +306,7 @@ export default function PaymentLinksPage() {
                             <SelectItem value="card,mobilemoney">Card & Mobile Money</SelectItem>
                           </SelectContent>
                         </Select>
-                        <FormDescription>Choose payment methods to accept</FormDescription>
+                        <FormDescription className="text-xs mt-1">Choose payment methods to accept</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -314,7 +314,7 @@ export default function PaymentLinksPage() {
 
                   <Button 
                     type="submit" 
-                    className="w-full" 
+                    className="w-full mt-2" 
                     disabled={createLinkMutation.isPending}
                     data-testid="button-create-link"
                   >
