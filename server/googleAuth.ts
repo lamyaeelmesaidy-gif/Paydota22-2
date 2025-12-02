@@ -12,7 +12,7 @@ export function setupGoogleAuth(app: Express) {
 
   // Configure Google OAuth strategy
   const callbackURL = process.env.NODE_ENV === 'production' 
-    ? `https://${process.env.REPLIT_SLUG}.replit.app/api/auth/google/callback`
+    ? 'https://probrandify.org/api/auth/google/callback'
     : 'http://localhost:5000/api/auth/google/callback';
     
   passport.use(new GoogleStrategy({
