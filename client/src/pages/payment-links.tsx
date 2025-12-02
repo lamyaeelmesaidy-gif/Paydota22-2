@@ -9,9 +9,10 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Link2, Copy, CheckCircle2, XCircle, Clock, ExternalLink, CreditCard } from "lucide-react";
+import { Link2, Copy, CheckCircle2, XCircle, Clock, ExternalLink, CreditCard, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import KycWarning from "@/components/kyc-warning";
 
@@ -33,6 +34,7 @@ type PaymentLinkFormValues = z.infer<typeof paymentLinkFormSchema>;
 export default function PaymentLinksPage() {
   const { toast } = useToast();
   const [copied, setCopied] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const { data: paymentLinks, isLoading } = useQuery({
     queryKey: ["/api/payment-links"],
@@ -57,6 +59,7 @@ export default function PaymentLinksPage() {
         description: "Payment link created successfully",
       });
       form.reset();
+      setDialogOpen(false);
     },
     onError: (error: any) => {
       toast({
@@ -135,19 +138,27 @@ export default function PaymentLinksPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-3 pt-0 pb-3 lg:p-6 max-w-7xl">
-      <div className="mb-4 lg:mb-8 pt-3 lg:pt-0">
-        <h1 className="text-xl lg:text-3xl font-bold mb-1 lg:mb-2" data-testid="heading-payment-links">Payment Links</h1>
-        <p className="text-xs lg:text-sm text-muted-foreground">Create and manage payment links</p>
-      </div>
+        <div className="mb-4 lg:mb-8 pt-3 lg:pt-0 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl lg:text-3xl font-bold mb-1 lg:mb-2" data-testid="heading-payment-links">Payment Links</h1>
+            <p className="text-xs lg:text-sm text-muted-foreground">Create and manage payment links</p>
+          </div>
+          
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Payment Link
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Create New Payment Link</DialogTitle>
+                <DialogDescription>
+                  Generate a new payment link for your customers
+                </DialogDescription>
+              </DialogHeader>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1">
-          <Card>
-            <CardHeader className="p-4 lg:p-6">
-              <CardTitle className="text-base lg:text-lg" data-testid="heading-create-link">Create Payment Link</CardTitle>
-              <CardDescription className="text-xs lg:text-sm">Generate a new payment link</CardDescription>
-            </CardHeader>
-            <CardContent>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <FormField
@@ -299,11 +310,11 @@ export default function PaymentLinksPage() {
                   </Button>
                 </form>
               </Form>
-            </CardContent>
-          </Card>
+            </DialogContent>
+          </Dialog>
         </div>
 
-        <div className="lg:col-span-2 space-y-4 lg:space-y-6">
+        <div className="space-y-4 lg:space-y-6">
           <Card>
             <CardHeader className="p-4 lg:p-6">
               <CardTitle className="text-base lg:text-lg" data-testid="heading-your-links">Your Payment Links</CardTitle>
@@ -437,7 +448,6 @@ export default function PaymentLinksPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
       </div>
     </div>
   );
