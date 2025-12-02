@@ -183,13 +183,22 @@ export default function PrivacyPolicy() {
           {/* Contact Us */}
           <section>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">13. Contact Us</h2>
-            <p className="text-sm leading-relaxed mb-2">
+            <p className="text-sm leading-relaxed mb-4">
               If you have questions about this Privacy Policy or our privacy practices, please contact us at:
             </p>
-            <div className="bg-purple-50/50 dark:bg-purple-900/20 border border-purple-200/50 dark:border-purple-700/50 rounded-lg p-4 text-sm mt-3">
-              <p><strong>Email:</strong> Support@probrandify.org</p>
-              <p><strong>Phone:</strong> +19138024746</p>
-              <p><strong>Address:</strong> PROBRANDIFY LLC</p>
+            <div className="bg-purple-50/50 dark:bg-purple-900/20 border border-purple-200/50 dark:border-purple-700/50 rounded-lg p-4 text-sm mt-3 space-y-3">
+              <div className="flex flex-col gap-1">
+                <strong className="text-gray-900 dark:text-white">Email:</strong>
+                <p className="text-gray-700 dark:text-gray-300 ml-2">Support@probrandify.org</p>
+              </div>
+              <div className="flex flex-col gap-1">
+                <strong className="text-gray-900 dark:text-white">Phone:</strong>
+                <p className="text-gray-700 dark:text-gray-300 ml-2">+19138024746</p>
+              </div>
+              <div className="flex flex-col gap-1">
+                <strong className="text-gray-900 dark:text-white">Address:</strong>
+                <p className="text-gray-700 dark:text-gray-300 ml-2">PROBRANDIFY LLC</p>
+              </div>
             </div>
           </section>
 
