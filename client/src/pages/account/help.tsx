@@ -87,7 +87,7 @@ export default function Help() {
       <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-gradient-to-tr from-purple-200/20 to-pink-200/20 rounded-full blur-3xl"></div>
       
-      <div className="px-4 sm:px-6 lg:px-8 py-6 pb-20 relative z-10">
+      <div className="px-4 sm:px-6 lg:px-8 py-6 pb-6 relative z-10">
         
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">

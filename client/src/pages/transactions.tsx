@@ -149,7 +149,7 @@ export default function Transactions() {
           </div>
 
           {/* Scrollable Transactions List Only */}
-          <div className="flex-1 overflow-y-auto pb-20" data-scrollable>
+          <div className="flex-1 overflow-y-auto pb-6" data-scrollable>
             <div className="p-4">
               <div className="space-y-3">
               {isLoading ? (

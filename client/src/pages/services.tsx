@@ -110,7 +110,7 @@ export default function Services() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
-      <div className="max-w-md lg:max-w-6xl mx-auto px-4 lg:px-8 py-6 lg:py-10 pb-20">
+      <div className="max-w-md lg:max-w-6xl mx-auto px-4 lg:px-8 py-6 lg:py-10 pb-6">
         
         {/* Header */}
         <div className="flex items-center gap-4 mb-8 lg:mb-12">

@@ -205,7 +205,7 @@ export default function KYCVerificationNew() {
   }
 
   return (
-    <div className="min-h-screen bg-white pt-2 px-3 pb-20">
+    <div className="min-h-screen bg-white pt-2 px-3 pb-6">
       <div className="max-w-md mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">

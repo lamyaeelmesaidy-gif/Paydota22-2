@@ -343,7 +343,7 @@ export default function Register() {
       </div>
 
       {/* Register Form */}
-      <div className="flex-1 px-4 sm:px-6 md:px-8 pb-6 overflow-y-auto scroll-smooth relative z-10">
+      <div className="px-4 sm:px-6 md:px-8 py-6 overflow-y-auto scroll-smooth relative z-10">
         <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6 min-h-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 lg:p-10 shadow-xl dark:shadow-2xl">
                 
