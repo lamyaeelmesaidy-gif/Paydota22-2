@@ -19,6 +19,14 @@ export default function Register() {
   const { t } = useLanguage();
   const queryClient = useQueryClient();
   const { isKeyboardOpen, keyboardHeight } = useKeyboard();
+
+  // Reset scroll position on page load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',

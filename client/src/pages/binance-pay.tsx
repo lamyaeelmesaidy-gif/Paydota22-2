@@ -154,7 +154,7 @@ export default function BinancePay() {
         </div>
 
         {/* Main Content */}
-        <div className="px-3 sm:px-4 pb-6 space-y-4 sm:space-y-6 max-w-md mx-auto">
+        <div className="px-3 sm:px-4 pb-20 space-y-4 sm:space-y-6 max-w-md mx-auto">
 
           {!paymentOrder ? (
             /* Payment Form */

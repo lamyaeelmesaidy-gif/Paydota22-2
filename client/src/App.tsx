@@ -78,6 +78,13 @@ function Router() {
   const { isOnline, isLoading: networkLoading, checkNetwork } = useNetwork();
   const [location] = useLocation();
 
+  // Reset scroll position on location change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [location]);
+
   // صفحات التي يجب إخفاء الشريط السفلي منها
   const kycPages = [
     '/kyc-verification',

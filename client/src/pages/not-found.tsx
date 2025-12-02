@@ -16,7 +16,7 @@ export default function NotFound() {
       <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-purple-200/20 to-pink-200/20 rounded-full blur-3xl"></div>
       
       <Card className="w-full max-w-md bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border border-white/30 shadow-xl rounded-3xl relative z-10">
-        <CardContent className="pt-8 pb-6 px-6 text-center">
+        <CardContent className="pt-8 pb-20 px-6 text-center">
           
           {/* 404 Number */}
           <div className="text-8xl font-bold text-purple-600 dark:text-purple-400 mb-4 opacity-20">

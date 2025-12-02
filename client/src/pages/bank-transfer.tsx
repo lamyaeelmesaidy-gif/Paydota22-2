@@ -79,7 +79,7 @@ export default function BankTransfer() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="px-4 py-6 pb-6">
+      <div className="px-4 py-6 pb-20">
         
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">

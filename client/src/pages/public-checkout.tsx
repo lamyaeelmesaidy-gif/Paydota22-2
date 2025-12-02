@@ -144,7 +144,7 @@ export default function PublicCheckoutPage() {
       <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-40 sm:h-40 bg-gradient-to-tr from-blue-200/10 to-purple-200/10 rounded-full blur-xl"></div>
       
       <Card className="w-full max-w-md sm:max-w-lg shadow-xl border border-gray-200 relative z-10">
-        <CardHeader className="text-center space-y-3 pt-8 pb-6 px-6 sm:px-8">
+        <CardHeader className="text-center space-y-3 pt-8 pb-20 px-6 sm:px-8">
           {paymentLink.logo && (
             <div className="flex justify-center mb-2">
               <img src={paymentLink.logo} alt="Logo" className="h-16 sm:h-20 w-auto" />

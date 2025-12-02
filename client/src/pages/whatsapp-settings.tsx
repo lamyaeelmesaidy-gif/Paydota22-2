@@ -229,7 +229,7 @@ export default function WhatsAppSettings() {
         </div>
 
         {/* Main Content */}
-        <div className="px-3 sm:px-4 pb-6 space-y-4 max-w-md mx-auto">
+        <div className="px-3 sm:px-4 pb-20 space-y-4 max-w-md mx-auto">
           
           {/* OTP Statistics */}
           {otpStats && (

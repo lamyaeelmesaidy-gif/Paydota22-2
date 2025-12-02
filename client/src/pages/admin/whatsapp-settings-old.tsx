@@ -158,7 +158,7 @@ export default function WhatsAppSettings() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50/80 via-pink-50/80 to-purple-100/80">
-      <div className="px-4 sm:px-6 lg:px-8 py-6 pb-6 max-w-6xl mx-auto">
+      <div className="px-4 sm:px-6 lg:px-8 py-6 pb-20 max-w-6xl mx-auto">
         <div className="mb-6 text-center">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="w-12 h-12 bg-gradient-to-r from-purple-500/80 to-pink-500/80 rounded-xl flex items-center justify-center shadow-lg">
