@@ -1,4 +1,4 @@
-import { ArrowLeft, Info, Shield, Zap, Globe, Users, Heart } from "lucide-react";
+import { ArrowLeft, Info, Shield, Zap, Globe, Users, Heart, CreditCard } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +13,11 @@ export default function About() {
       icon: Shield,
       title: "Secure wallet",
       description: "Bank-level security with 256-bit encryption"
+    },
+    {
+      icon: CreditCard,
+      title: "Payment Link Acceptance",
+      description: "Accept payments easily via bank card payment links"
     },
     {
       icon: Zap,
