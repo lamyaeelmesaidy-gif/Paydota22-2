@@ -181,7 +181,7 @@ export default function PaymentLinksPage() {
                       <FormItem className="mb-3">
                         <FormLabel className="text-sm font-medium mb-1.5 block">Title</FormLabel>
                         <FormControl>
-                          <Input placeholder="Product Purchase" {...field} data-testid="input-title" className="h-9 border border-input bg-background" />
+                          <Input placeholder="Product Purchase" {...field} data-testid="input-title" className="h-9 border border-input bg-background dark:bg-gray-800 dark:border-gray-600" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -195,7 +195,7 @@ export default function PaymentLinksPage() {
                       <FormItem className="mb-3">
                         <FormLabel className="text-sm font-medium mb-1.5 block">Description</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Payment for services rendered" {...field} data-testid="input-description" className="min-h-[80px] border border-input bg-background" />
+                          <Textarea placeholder="Payment for services rendered" {...field} data-testid="input-description" className="min-h-[80px] border border-input bg-background dark:bg-gray-800 dark:border-gray-600" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -210,7 +210,7 @@ export default function PaymentLinksPage() {
                         <FormItem className="mb-0">
                           <FormLabel className="text-sm font-medium mb-1.5 block">Amount</FormLabel>
                           <FormControl>
-                            <Input type="number" placeholder="1000" {...field} data-testid="input-amount" className="h-9 border border-input bg-background" />
+                            <Input type="number" placeholder="1000" {...field} data-testid="input-amount" className="h-9 border border-input bg-background dark:bg-gray-800 dark:border-gray-600" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -225,7 +225,7 @@ export default function PaymentLinksPage() {
                           <FormLabel className="text-sm font-medium mb-1.5 block">Currency</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger data-testid="select-currency" className="h-9 border border-input bg-background">
+                              <SelectTrigger data-testid="select-currency" className="h-9 border border-input bg-background dark:bg-gray-800 dark:border-gray-600">
                                 <SelectValue placeholder="Select currency" />
                               </SelectTrigger>
                             </FormControl>
@@ -252,7 +252,7 @@ export default function PaymentLinksPage() {
                       <FormItem className="mb-3">
                         <FormLabel className="text-sm font-medium mb-1.5 block">Customer Email</FormLabel>
                         <FormControl>
-                          <Input type="email" placeholder="[email protected]" {...field} data-testid="input-email" className="h-9 border border-input bg-background" />
+                          <Input type="email" placeholder="[email protected]" {...field} data-testid="input-email" className="h-9 border border-input bg-background dark:bg-gray-800 dark:border-gray-600" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -266,7 +266,7 @@ export default function PaymentLinksPage() {
                       <FormItem className="mb-3">
                         <FormLabel className="text-sm font-medium mb-1.5 block">Customer Name (Optional)</FormLabel>
                         <FormControl>
-                          <Input placeholder="John Doe" {...field} data-testid="input-customer-name" className="h-9 border border-input bg-background" />
+                          <Input placeholder="John Doe" {...field} data-testid="input-customer-name" className="h-9 border border-input bg-background dark:bg-gray-800 dark:border-gray-600" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -280,7 +280,7 @@ export default function PaymentLinksPage() {
                       <FormItem className="mb-3">
                         <FormLabel className="text-sm font-medium mb-1.5 block">Customer Phone (Optional)</FormLabel>
                         <FormControl>
-                          <Input placeholder="+234800000000" {...field} data-testid="input-phone" className="h-9 border border-input bg-background" />
+                          <Input placeholder="+234800000000" {...field} data-testid="input-phone" className="h-9 border border-input bg-background dark:bg-gray-800 dark:border-gray-600" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -295,7 +295,7 @@ export default function PaymentLinksPage() {
                         <FormLabel className="text-sm font-medium mb-1.5 block">Payment Options</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger data-testid="select-payment-options" className="h-9 border border-input bg-background">
+                            <SelectTrigger data-testid="select-payment-options" className="h-9 border border-input bg-background dark:bg-gray-800 dark:border-gray-600">
                               <SelectValue placeholder="Select payment method" />
                             </SelectTrigger>
                           </FormControl>
