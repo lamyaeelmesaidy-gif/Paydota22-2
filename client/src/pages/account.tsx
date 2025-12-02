@@ -241,7 +241,7 @@ export default function Account() {
             
             <button 
               onClick={() => navigateTo("/about")} 
-              className="w-full p-3 flex items-center justify-between hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-colors"
+              className="w-full p-3 flex items-center justify-between hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-colors border-b border-purple-100/30 dark:border-purple-700/30"
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
@@ -253,6 +253,21 @@ export default function Account() {
                   </span>
                 </div>
                 <span className="text-gray-400 text-xs mr-2">v2.0.21</span>
+              </div>
+              <ChevronRight className="h-4 w-4 text-gray-400" />
+            </button>
+
+            <button 
+              onClick={() => navigateTo("/privacy-policy")} 
+              className="w-full p-3 flex items-center justify-between hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-colors"
+            >
+              <div className="flex items-center space-x-3">
+                <div className="rounded-lg p-1.5">
+                  <Shield className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                </div>
+                <span className="text-gray-900 dark:text-white font-medium text-sm">
+                  Privacy Policy
+                </span>
               </div>
               <ChevronRight className="h-4 w-4 text-gray-400" />
             </button>
