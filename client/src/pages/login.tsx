@@ -170,7 +170,7 @@ export default function Login() {
                 <Button
                   type="submit"
                   disabled={loginMutation.isPending}
-                  className="w-full h-11 sm:h-12 md:h-14 lg:h-16 banking-gradient hover:opacity-90 text-white font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base md:text-lg"
+                  className="w-full h-11 sm:h-12 md:h-14 lg:h-16 wallet-gradient hover:opacity-90 text-white font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base md:text-lg"
                 >
                   {loginMutation.isPending ? t('signingIn') : t('signInTitle')}
                 </Button>

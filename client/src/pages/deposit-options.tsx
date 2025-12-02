@@ -179,7 +179,7 @@ export default function DepositOptions() {
           <div className="space-y-2 text-sm text-gray-600 dark:text-muted-foreground">
             <p>• All deposits are secured with bank-level encryption</p>
             <p>• Your funds are protected by insurance coverage</p>
-            <p>• We never store your banking credentials</p>
+            <p>• We never store your wallet credentials</p>
             <p>• 24/7 monitoring for suspicious activity</p>
           </div>
         </div>

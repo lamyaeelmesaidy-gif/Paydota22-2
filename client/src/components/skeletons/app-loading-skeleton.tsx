@@ -13,7 +13,7 @@ export function AppLoadingSkeleton() {
             </h1>
             <div className="absolute -top-2 -right-2 w-3 h-3 bg-purple-500 rounded-full animate-ping"></div>
           </div>
-          <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Digital Banking Platform</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Digital Wallet Platform</p>
         </div>
 
         {/* Beautiful Loading Animation */}
@@ -46,7 +46,7 @@ export function AppLoadingSkeleton() {
           <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-600 dark:from-purple-400 dark:via-pink-400 dark:to-indigo-400 bg-clip-text text-transparent">
             Getting ready...
           </h3>
-          <p className="text-gray-600 dark:text-gray-400 text-sm">Setting up your secure banking experience</p>
+          <p className="text-gray-600 dark:text-gray-400 text-sm">Setting up your secure wallet experience</p>
         </div>
 
         {/* Progress dots */}

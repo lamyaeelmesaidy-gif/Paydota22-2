@@ -152,7 +152,7 @@ export default function AdminCommunity() {
                     id="title"
                     value={newEvent.title}
                     onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
-                    placeholder="Virtual Banking Workshop"
+                    placeholder="Virtual wallet Workshop"
                   />
                 </div>
                 <div>
@@ -161,7 +161,7 @@ export default function AdminCommunity() {
                     id="description"
                     value={newEvent.description}
                     onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
-                    placeholder="Learn about digital banking features..."
+                    placeholder="Learn about digital wallet features..."
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">

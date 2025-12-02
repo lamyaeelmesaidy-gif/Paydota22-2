@@ -29,7 +29,7 @@ export default function Welcome() {
         {/* Header Content - optimized for all mobile screens */}
         <div className="text-center">
           <h1 className="text-gray-600 dark:text-gray-400 text-base sm:text-lg mb-1 font-light tracking-wide">
-            Banking account
+            Wallet account
           </h1>
           <h2 className="text-gray-900 dark:text-white text-xl sm:text-2xl font-bold mb-1 sm:mb-2 tracking-tight">
             fully <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">online</span>
@@ -132,7 +132,7 @@ export default function Welcome() {
             <div className="mb-12">
               <div className="mb-4">
                 <span className="inline-block px-4 py-1 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 text-purple-700 dark:text-purple-300 text-xs font-semibold rounded-full border border-purple-200/50 dark:border-purple-400/30 backdrop-blur-sm">
-                  ✨ Next Generation Banking
+                  ✨ Next Generation Wallet
                 </span>
               </div>
               
@@ -143,7 +143,7 @@ export default function Welcome() {
                 fully <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 bg-clip-text text-transparent">online</span>
               </h2>
               <p className="text-gray-600 dark:text-gray-300 text-sm xl:text-base leading-relaxed font-medium max-w-md">
-                Experience the <span className="font-semibold text-purple-600 dark:text-purple-400">future of banking</span> with our cutting-edge digital platform. 
+                Experience the <span className="font-semibold text-purple-600 dark:text-purple-400">future of wallet</span> with our cutting-edge digital platform. 
                 Manage your finances with complete <span className="font-semibold text-blue-600 dark:text-blue-400">freedom</span> and <span className="font-semibold text-green-600 dark:text-green-400">security</span>.
               </p>
             </div>

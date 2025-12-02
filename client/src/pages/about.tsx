@@ -11,7 +11,7 @@ export default function About() {
   const features = [
     {
       icon: Shield,
-      title: "Secure Banking",
+      title: "Secure wallet",
       description: "Bank-level security with 256-bit encryption"
     },
     {
@@ -68,7 +68,7 @@ export default function About() {
               PROBRANDIFY LLC v2.0.21
             </CardTitle>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Your trusted digital banking companion
+              Your trusted digital wallet companion
             </p>
           </CardHeader>
         </Card>
@@ -111,7 +111,7 @@ export default function About() {
             <div>
               <h4 className="font-medium text-gray-900 dark:text-white text-sm">Mission</h4>
               <p className="text-xs text-gray-600 dark:text-gray-400">
-                To provide secure, fast, and accessible digital banking services for everyone.
+                To provide secure, fast, and accessible digital wallet services for everyone.
               </p>
             </div>
             <div>

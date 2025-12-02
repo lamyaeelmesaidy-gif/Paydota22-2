@@ -42,7 +42,7 @@ export default function Help() {
       ]
     },
     {
-      title: "Cards & Banking",
+      title: "Cards & wallet",
       icon: Book,
       articles: [
         "Applying for a card",

@@ -42,11 +42,11 @@ export default function Referral() {
   };
 
   const shareReferral = () => {
-    const shareText = `Join me on this amazing banking platform! Use my referral code: ${referralCode}`;
+    const shareText = `Join me on this amazing wallet platform! Use my referral code: ${referralCode}`;
     
     if (navigator.share) {
       navigator.share({
-        title: "Join My Banking Platform",
+        title: "Join My wallet Platform",
         text: shareText,
         url: window.location.origin,
       });

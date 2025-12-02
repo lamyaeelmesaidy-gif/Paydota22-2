@@ -138,7 +138,7 @@ export default function Support() {
             </CardContent>
           </Card>
 
-          <Card className="banking-shadow hover:banking-shadow-lg transition-all text-center">
+          <Card className="wallet-shadow hover:wallet-shadow-lg transition-all text-center">
             <CardContent className="p-8">
               <div className="w-16 h-16 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Mail className="h-8 w-8 text-accent" />
@@ -158,7 +158,7 @@ export default function Support() {
 
         {/* Ticket Form */}
         {showTicketForm && (
-          <Card className="banking-shadow mb-8">
+          <Card className="wallet-shadow mb-8">
             <CardHeader>
               <CardTitle>إنشاء تذكرة دعم جديدة</CardTitle>
             </CardHeader>
@@ -206,7 +206,7 @@ export default function Support() {
         {/* Main Content */}
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            <Card className="banking-shadow">
+            <Card className="wallet-shadow">
               <CardHeader>
                 <CardTitle>الأسئلة الشائعة</CardTitle>
               </CardHeader>
@@ -245,7 +245,7 @@ export default function Support() {
 
           <div className="space-y-6">
             {/* Contact Info */}
-            <Card className="banking-shadow">
+            <Card className="wallet-shadow">
               <CardHeader>
                 <CardTitle>معلومات الاتصال</CardTitle>
               </CardHeader>
@@ -275,7 +275,7 @@ export default function Support() {
             </Card>
 
             {/* Resources */}
-            <Card className="banking-shadow">
+            <Card className="wallet-shadow">
               <CardHeader>
                 <CardTitle>مصادر مفيدة</CardTitle>
               </CardHeader>
@@ -313,7 +313,7 @@ export default function Support() {
             </Card>
 
             {/* System Status */}
-            <Card className="banking-shadow">
+            <Card className="wallet-shadow">
               <CardHeader>
                 <CardTitle>حالة النظام</CardTitle>
               </CardHeader>

@@ -61,7 +61,7 @@ export default function PriorityCards() {
       icon: Shield,
       features: [
         "Everything in Platinum",
-        "Private Banking Services",
+        "Private wallet Services",
         "Custom Card Design",
         "Personal Finance Advisor",
         "Exclusive Events Access",
@@ -112,8 +112,8 @@ export default function PriorityCards() {
         <Card className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white mb-8 border-0">
           <CardContent className="p-6 text-center">
             <Crown className="h-12 w-12 mx-auto mb-4 text-yellow-300" />
-            <h2 className="text-2xl font-bold mb-2">Unlock Premium Banking</h2>
-            <p className="text-purple-100">Experience elevated banking with priority support, exclusive benefits, and enhanced limits.</p>
+            <h2 className="text-2xl font-bold mb-2">Unlock Premium wallet</h2>
+            <p className="text-purple-100">Experience elevated wallet with priority support, exclusive benefits, and enhanced limits.</p>
           </CardContent>
         </Card>
 

@@ -162,7 +162,7 @@ export default function PublicCheckoutPage() {
 
         <CardContent className="space-y-6 pb-8 px-6 sm:px-8">
           {/* Amount Display */}
-          <div className="banking-gradient rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg">
+          <div className="wallet-gradient rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg">
             <p className="text-sm sm:text-base text-white/90 mb-2 font-medium">Amount to Pay</p>
             <p className="text-4xl sm:text-5xl font-bold text-white">
               {paymentLink.currency} {parseFloat(paymentLink.amount).toLocaleString()}
@@ -223,7 +223,7 @@ export default function PublicCheckoutPage() {
             <Button
               onClick={handlePayment}
               disabled={!isFlutterwaveLoaded}
-              className="w-full h-14 sm:h-16 text-lg sm:text-xl font-semibold banking-gradient hover:opacity-90 transition-opacity shadow-lg rounded-xl"
+              className="w-full h-14 sm:h-16 text-lg sm:text-xl font-semibold wallet-gradient hover:opacity-90 transition-opacity shadow-lg rounded-xl"
               data-testid="button-pay-now"
             >
               {!isFlutterwaveLoaded ? (
@@ -254,7 +254,7 @@ export default function PublicCheckoutPage() {
           {paymentStatus === 'success' && paymentLink.redirectUrl && (
             <Button
               onClick={() => window.location.href = paymentLink.redirectUrl!}
-              className="w-full h-14 sm:h-16 text-lg sm:text-xl font-semibold banking-gradient hover:opacity-90 transition-opacity shadow-lg rounded-xl"
+              className="w-full h-14 sm:h-16 text-lg sm:text-xl font-semibold wallet-gradient hover:opacity-90 transition-opacity shadow-lg rounded-xl"
               data-testid="button-continue"
             >
               Continue

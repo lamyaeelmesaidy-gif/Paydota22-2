@@ -458,7 +458,7 @@ export default function Register() {
               <Button
                 type="submit"
                 disabled={registerMutation.isPending}
-                className="w-full h-11 sm:h-12 md:h-14 lg:h-16 banking-gradient hover:opacity-90 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base md:text-lg"
+                className="w-full h-11 sm:h-12 md:h-14 lg:h-16 wallet-gradient hover:opacity-90 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base md:text-lg"
               >
                 {registerMutation.isPending ? t('creatingAccount') : t('createAccount')}
               </Button>

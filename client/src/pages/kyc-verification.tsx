@@ -713,7 +713,7 @@ Select the country where you currently reside to start the verification process
               ✅ Verification Completed
             </p>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Your identity has been successfully verified! You now have full access to all banking features.
+              Your identity has been successfully verified! You now have full access to all wallet features.
             </p>
             <Link href="/dashboard">
               <Button className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800">
