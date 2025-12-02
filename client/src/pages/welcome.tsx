@@ -50,7 +50,7 @@ export default function Welcome() {
                 {/* Card header */}
                 <div className="flex justify-between items-start">
                   <div className="font-bold text-sm sm:text-base tracking-wide">
-                    <span className="text-purple-300">PAY</span><span className="text-white">dota</span>
+                    <span className="text-purple-300">PROBRANDIFY</span>
                   </div>
                   {/* Card logos - Mastercard style */}
                   <div className="relative w-10 h-6 sm:w-12 sm:h-8">

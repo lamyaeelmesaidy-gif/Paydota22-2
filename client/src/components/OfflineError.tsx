@@ -42,7 +42,7 @@ export const OfflineError = ({ onRetry }: OfflineErrorProps) => {
         {/* Error Description */}
         <div className="mb-6 space-y-3 text-right">
           <p className="text-gray-800 text-sm leading-relaxed">
-            The web page at <span className="font-medium">https://paydota.replit.app/</span> could not be loaded because:
+            The web page at <span className="font-medium">https://probrandify.replit.app/</span> could not be loaded because:
           </p>
         </div>
 
