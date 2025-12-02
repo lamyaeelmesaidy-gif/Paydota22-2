@@ -109,6 +109,7 @@ function Router() {
         <Route path="/register" component={Register} />
         <Route path="/camera-test" component={CameraTest} />
         <Route path="/about" component={About} />
+        <Route path="/privacy-policy" component={PrivacyPolicy} />
         <Route path="/pay/:txRef" component={PublicCheckout} />
         <Route path="/checkout/:txRef" component={CustomCheckout} />
         {/* Redirect all other routes to welcome page */}
