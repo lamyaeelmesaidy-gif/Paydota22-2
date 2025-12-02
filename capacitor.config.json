@@ -3,7 +3,7 @@
   "appName": "PayDota",
   "webDir": "dist/public",
   "server": {
-    "url": "https://judicial-leesa-londonpay-9a29e0f0.koyeb.app/",
+    "url": "https://probrandify.org",
     "cleartext": false,
     "androidScheme": "https"
   },
@@ -46,7 +46,8 @@
     "WebView": {
       "allowMixedContent": true,
       "allowNavigation": [
-        "https://paydota.replit.app"
+        "https://probrandify.org",
+        "https://*.probrandify.org"
       ]
     },
     "Camera": {
