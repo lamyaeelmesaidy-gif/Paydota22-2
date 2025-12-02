@@ -187,8 +187,8 @@ export default function PrivacyPolicy() {
               If you have questions about this Privacy Policy or our privacy practices, please contact us at:
             </p>
             <div className="bg-purple-50/50 dark:bg-purple-900/20 border border-purple-200/50 dark:border-purple-700/50 rounded-lg p-4 text-sm mt-3">
-              <p><strong>Email:</strong> privacy@probrandify.com</p>
-              <p><strong>Phone:</strong> +212 5XX XXX XXX</p>
+              <p><strong>Email:</strong> Support@probrandify.org</p>
+              <p><strong>Phone:</strong> +19138024746</p>
               <p><strong>Address:</strong> PROBRANDIFY LLC</p>
             </div>
           </section>
