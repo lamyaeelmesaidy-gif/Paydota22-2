@@ -9,6 +9,9 @@ export function setupGoogleAuth(app: Express) {
     console.warn("Google OAuth credentials not configured. Google authentication will be disabled.");
     return;
   }
+  
+  console.log("✅ Google OAuth credentials found. Setting up Google authentication...");
+  console.log(`📍 Callback URL: ${process.env.NODE_ENV === 'production' ? 'https://probrandify.org/api/auth/google/callback' : 'http://localhost:5000/api/auth/google/callback'}`);
 
   // Configure Google OAuth strategy
   const callbackURL = process.env.NODE_ENV === 'production' 
