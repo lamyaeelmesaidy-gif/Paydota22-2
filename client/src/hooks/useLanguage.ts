@@ -143,6 +143,12 @@ const translations = {
     selectLanguage: "Select Language",
     selectAppLanguage: "Choose your preferred app language",
     
+    // 404 Page
+    pageNotFound: "Page Not Found",
+    pageNotFoundDescription: "Sorry, the page you are looking for does not exist or has been moved",
+    goHome: "Go Home",
+    goBack: "Go Back",
+    
     // Error messages
     internetConnection: "Please check your internet connection",
     serverError: "Server error",
@@ -416,6 +422,12 @@ const translations = {
     selectLanguage: "اختر اللغة",
     selectAppLanguage: "اختر لغة التطبيق المفضلة",
     languageChanged: "تم تغيير اللغة بنجاح",
+    
+    // 404 Page
+    pageNotFound: "الصفحة غير موجودة",
+    pageNotFoundDescription: "عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها",
+    goHome: "العودة للرئيسية",
+    goBack: "العودة للخلف",
     
     // Error messages
     internetConnection: "يرجى التحقق من اتصال الإنترنت",
