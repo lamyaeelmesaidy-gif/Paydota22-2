@@ -85,7 +85,7 @@ export default function Account() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-background w-full">
+    <div className="min-h-screen bg-gray-50 dark:bg-background w-full pb-24 lg:pb-6">
       <PullToRefresh onRefresh={handleRefresh}>
         {/* Header */}
         <div className="bg-white dark:bg-background lg:bg-transparent border-b lg:border-0 border-gray-100 dark:border-border p-4 lg:p-6 relative z-10">
