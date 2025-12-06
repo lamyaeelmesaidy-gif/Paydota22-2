@@ -3754,6 +3754,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public API endpoint to get Flutterwave public key (for checkout)
+  app.get('/api/public/flutterwave-config', async (req, res) => {
+    try {
+      const publicKey = flutterwaveService.getPublicKey();
+      if (!publicKey) {
+        return res.status(500).json({ message: 'Flutterwave public key not configured' });
+      }
+      res.json({ publicKey });
+    } catch (error: any) {
+      console.error('Error getting Flutterwave config:', error);
+      res.status(500).json({ message: 'Failed to get Flutterwave config' });
+    }
+  });
+
   // Public API endpoint to get payment link details (no auth required)
   app.get('/api/public/payment-link/:txRef', async (req, res) => {
     try {

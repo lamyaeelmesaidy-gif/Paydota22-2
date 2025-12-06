@@ -17,11 +17,24 @@ export default function PublicCheckoutPage() {
   const [, params] = useRoute("/pay/:txRef");
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'failed'>('idle');
   const [isFlutterwaveLoaded, setIsFlutterwaveLoaded] = useState(false);
+  const [flutterwavePublicKey, setFlutterwavePublicKey] = useState<string>('');
 
   const { data: paymentLink, isLoading, error } = useQuery<PaymentLink>({
     queryKey: [`/api/public/payment-link/${params?.txRef}`],
     enabled: !!params?.txRef,
   });
+
+  // Fetch Flutterwave public key from backend
+  useEffect(() => {
+    fetch('/api/public/flutterwave-config')
+      .then(res => res.json())
+      .then(data => {
+        if (data.publicKey) {
+          setFlutterwavePublicKey(data.publicKey);
+        }
+      })
+      .catch(err => console.error('Failed to fetch Flutterwave config:', err));
+  }, []);
 
   // Load Flutterwave script
   useEffect(() => {
@@ -37,12 +50,12 @@ export default function PublicCheckoutPage() {
   }, []);
 
   const handlePayment = () => {
-    if (!paymentLink || !isFlutterwaveLoaded) return;
+    if (!paymentLink || !isFlutterwaveLoaded || !flutterwavePublicKey) return;
 
     setPaymentStatus('processing');
 
     const modal = window.FlutterwaveCheckout({
-      public_key: import.meta.env.VITE_FLW_PUBLIC_KEY || '',
+      public_key: flutterwavePublicKey,
       tx_ref: paymentLink.txRef,
       amount: parseFloat(paymentLink.amount),
       currency: paymentLink.currency || 'NGN',
@@ -222,11 +235,11 @@ export default function PublicCheckoutPage() {
           {paymentStatus === 'idle' && (
             <Button
               onClick={handlePayment}
-              disabled={!isFlutterwaveLoaded}
+              disabled={!isFlutterwaveLoaded || !flutterwavePublicKey}
               className="w-full h-14 sm:h-16 text-lg sm:text-xl font-semibold wallet-gradient hover:opacity-90 transition-opacity shadow-lg rounded-xl"
               data-testid="button-pay-now"
             >
-              {!isFlutterwaveLoaded ? (
+              {(!isFlutterwaveLoaded || !flutterwavePublicKey) ? (
                 <>
                   <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 mr-2 animate-spin" />
                   Loading...
