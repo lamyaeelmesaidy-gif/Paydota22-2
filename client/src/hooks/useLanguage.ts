@@ -168,6 +168,17 @@ const translations = {
     enterRecipient: "Please enter recipient",
     enterValidEmailOrPhone: "Please enter a valid email or phone number",
     
+    // Withdraw Page
+    withdrawMethod: "Withdrawal Method",
+    workingDays13: "1-3 working days",
+    workingDays35: "3-5 working days",
+    withdrawSuccess: "Withdrawal Successful",
+    withdrawError: "Withdrawal Error",
+    insufficientFunds: "Insufficient Funds",
+    amountTooSmall: "Amount Too Small",
+    processingWithdraw: "Processing...",
+    withdrawButton: "Withdraw",
+    
     // Error messages
     internetConnection: "Please check your internet connection",
     serverError: "Server error",
@@ -466,6 +477,17 @@ const translations = {
     insufficientBalanceDesc: "الرصيد المتاح غير كافي لهذه العملية",
     enterRecipient: "يرجى إدخال المستلم",
     enterValidEmailOrPhone: "يجب إدخال بريد إلكتروني أو رقم هاتف صحيح",
+    
+    // Withdraw Page
+    withdrawMethod: "طريقة السحب",
+    workingDays13: "١-٣ أيام عمل",
+    workingDays35: "٣-٥ أيام عمل",
+    withdrawSuccess: "تم السحب بنجاح",
+    withdrawError: "خطأ في السحب",
+    insufficientFunds: "رصيد غير كافي",
+    amountTooSmall: "المبلغ صغير جداً",
+    processingWithdraw: "جاري المعالجة...",
+    withdrawButton: "سحب",
     
     // Error messages
     internetConnection: "يرجى التحقق من اتصال الإنترنت",
