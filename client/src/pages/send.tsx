@@ -37,8 +37,8 @@ export default function SendMoney() {
       queryClient.invalidateQueries({ queryKey: ["/api/wallet/balance"] });
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
       toast({
-        title: "تم الإرسال بنجاح",
-        description: `تم إرسال $${amount} بنجاح`,
+        title: t('sentSuccessfully'),
+        description: `$${amount}`,
       });
       setAmount("");
       setRecipient("");
@@ -47,8 +47,7 @@ export default function SendMoney() {
     },
     onError: () => {
       toast({
-        title: "خطأ في الإرسال",
-        description: "حدث خطأ أثناء عملية الإرسال",
+        title: t('sendError'),
         variant: "destructive",
       });
     },
@@ -58,8 +57,8 @@ export default function SendMoney() {
     const sendAmount = parseFloat(amount);
     if (!sendAmount || sendAmount <= 0) {
       toast({
-        title: "مبلغ غير صحيح",
-        description: "يرجى إدخال مبلغ صحيح",
+        title: t('invalidAmount'),
+        description: t('enterValidAmount'),
         variant: "destructive",
       });
       return;
@@ -67,8 +66,8 @@ export default function SendMoney() {
 
     if (sendAmount > ((balance as any)?.balance || 0)) {
       toast({
-        title: "رصيد غير كافي",
-        description: "الرصيد المتاح غير كافي لهذه العملية",
+        title: t('insufficientBalance'),
+        description: t('insufficientBalanceDesc'),
         variant: "destructive",
       });
       return;
@@ -76,8 +75,8 @@ export default function SendMoney() {
 
     if (!recipient.trim()) {
       toast({
-        title: "يرجى إدخال المستلم",
-        description: "يجب إدخال بريد إلكتروني أو رقم هاتف صحيح",
+        title: t('enterRecipient'),
+        description: t('enterValidEmailOrPhone'),
         variant: "destructive",
       });
       return;
@@ -242,7 +241,7 @@ export default function SendMoney() {
           className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium py-4 rounded-2xl text-lg shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200"
         >
           <Send className="h-5 w-5 mr-2" />
-          {sendMutation.isPending ? "جاري الإرسال..." : `إرسال $${amount || "0.00"}`}
+          {sendMutation.isPending ? t('sending') : `${t('sendAmount')} $${amount || "0.00"}`}
         </Button>
       </div>
     </div>

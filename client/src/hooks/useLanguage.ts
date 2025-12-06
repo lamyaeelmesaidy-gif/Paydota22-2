@@ -149,6 +149,25 @@ const translations = {
     goHome: "Go Home",
     goBack: "Go Back",
     
+    // Send Money Page
+    sendMoney: "Send Money",
+    sendTo: "Send To",
+    emailAddress: "Email Address",
+    amount: "Amount",
+    amountInDollars: "Amount in Dollars",
+    optionalNote: "Note (Optional)",
+    addNote: "Add a note...",
+    sending: "Sending...",
+    sendAmount: "Send",
+    sentSuccessfully: "Sent Successfully",
+    sendError: "Send Error",
+    invalidAmount: "Invalid Amount",
+    enterValidAmount: "Please enter a valid amount",
+    insufficientBalance: "Insufficient Balance",
+    insufficientBalanceDesc: "Your balance is not enough for this transaction",
+    enterRecipient: "Please enter recipient",
+    enterValidEmailOrPhone: "Please enter a valid email or phone number",
+    
     // Error messages
     internetConnection: "Please check your internet connection",
     serverError: "Server error",
@@ -428,6 +447,25 @@ const translations = {
     pageNotFoundDescription: "عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها",
     goHome: "العودة للرئيسية",
     goBack: "العودة للخلف",
+    
+    // Send Money Page
+    sendMoney: "إرسال المال",
+    sendTo: "إرسال إلى",
+    emailAddress: "البريد الإلكتروني",
+    amount: "المبلغ",
+    amountInDollars: "المبلغ بالدولار",
+    optionalNote: "ملاحظة (اختياري)",
+    addNote: "أضف ملاحظة...",
+    sending: "جاري الإرسال...",
+    sendAmount: "إرسال",
+    sentSuccessfully: "تم الإرسال بنجاح",
+    sendError: "خطأ في الإرسال",
+    invalidAmount: "مبلغ غير صحيح",
+    enterValidAmount: "يرجى إدخال مبلغ صحيح",
+    insufficientBalance: "رصيد غير كافي",
+    insufficientBalanceDesc: "الرصيد المتاح غير كافي لهذه العملية",
+    enterRecipient: "يرجى إدخال المستلم",
+    enterValidEmailOrPhone: "يجب إدخال بريد إلكتروني أو رقم هاتف صحيح",
     
     // Error messages
     internetConnection: "يرجى التحقق من اتصال الإنترنت",
