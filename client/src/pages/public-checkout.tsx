@@ -3,217 +3,103 @@ import { useRoute } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { CreditCard, Loader2, CheckCircle2, XCircle, Lock, Shield } from "lucide-react";
+import { CreditCard, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { PaymentLink } from "@shared/schema";
 
+declare global {
+  interface Window {
+    FlutterwaveCheckout: any;
+  }
+}
+
 export default function PublicCheckoutPage() {
   const [, params] = useRoute("/pay/:txRef");
-  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'card_input' | 'processing' | 'pin_required' | 'otp_required' | 'redirect_required' | 'success' | 'failed'>('idle');
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryMonth, setExpiryMonth] = useState('');
-  const [expiryYear, setExpiryYear] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [pin, setPin] = useState('');
-  const [otp, setOtp] = useState('');
-  const [flwRef, setFlwRef] = useState('');
-  const [redirectUrl, setRedirectUrl] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'failed'>('idle');
+  const [isFlutterwaveLoaded, setIsFlutterwaveLoaded] = useState(false);
+  const [flutterwavePublicKey, setFlutterwavePublicKey] = useState<string>('');
 
   const { data: paymentLink, isLoading, error } = useQuery<PaymentLink>({
     queryKey: [`/api/public/payment-link/${params?.txRef}`],
     enabled: !!params?.txRef,
   });
 
-  const formatCardNumber = (value: string) => {
-    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-    const matches = v.match(/\d{4,16}/g);
-    const match = (matches && matches[0]) || '';
-    const parts = [];
-    for (let i = 0, len = match.length; i < len; i += 4) {
-      parts.push(match.substring(i, i + 4));
-    }
-    if (parts.length) {
-      return parts.join(' ');
-    } else {
-      return value;
-    }
-  };
+  // Fetch Flutterwave public key from backend
+  useEffect(() => {
+    fetch('/api/public/flutterwave-config')
+      .then(res => res.json())
+      .then(data => {
+        if (data.publicKey) {
+          setFlutterwavePublicKey(data.publicKey);
+        }
+      })
+      .catch(err => console.error('Failed to fetch Flutterwave config:', err));
+  }, []);
 
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatCardNumber(e.target.value);
-    if (formatted.replace(/\s/g, '').length <= 16) {
-      setCardNumber(formatted);
-    }
-  };
+  // Load Flutterwave script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.flutterwave.com/v3.js';
+    script.async = true;
+    script.onload = () => setIsFlutterwaveLoaded(true);
+    document.body.appendChild(script);
 
-  const getCardType = (number: string) => {
-    const cleanNumber = number.replace(/\s/g, '');
-    if (/^4/.test(cleanNumber)) return 'visa';
-    if (/^5[1-5]/.test(cleanNumber)) return 'mastercard';
-    if (/^3[47]/.test(cleanNumber)) return 'amex';
-    if (/^6(?:011|5)/.test(cleanNumber)) return 'discover';
-    return 'unknown';
-  };
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
-  const handlePayment = async () => {
-    if (!paymentLink) return;
-    
+  const handlePayment = () => {
+    if (!paymentLink || !isFlutterwaveLoaded || !flutterwavePublicKey) return;
+
     setPaymentStatus('processing');
-    setErrorMessage('');
 
-    try {
-      const response = await fetch('/api/public/charge-card', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          txRef: paymentLink.txRef,
-          cardNumber: cardNumber.replace(/\s/g, ''),
-          cvv,
-          expiryMonth,
-          expiryYear,
-          amount: paymentLink.amount,
-          currency: paymentLink.currency || 'USD',
-          customer: {
-            email: paymentLink.customerEmail,
-            name: paymentLink.customerName || '',
-            phonenumber: paymentLink.customerPhone || '',
-          },
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Payment failed');
-      }
-
-      handleChargeResponse(data);
-    } catch (err: any) {
-      setPaymentStatus('failed');
-      setErrorMessage(err.message || 'Payment failed. Please try again.');
-    }
+    const modal = window.FlutterwaveCheckout({
+      public_key: flutterwavePublicKey,
+      tx_ref: paymentLink.txRef,
+      amount: parseFloat(paymentLink.amount),
+      currency: paymentLink.currency || 'NGN',
+      payment_options: paymentLink.paymentOptions || 'card',
+      customer: {
+        email: paymentLink.customerEmail,
+        name: paymentLink.customerName || '',
+        phone_number: paymentLink.customerPhone || '',
+      },
+      customizations: {
+        title: paymentLink.title,
+        description: paymentLink.description || '',
+        logo: paymentLink.logo || '',
+      },
+      callback: function(data: any) {
+        console.log('Payment callback:', data);
+        if (data.status === 'successful') {
+          setPaymentStatus('success');
+          // Verify payment on backend
+          fetch(`/api/public/payment-verify/${data.transaction_id}`, {
+            method: 'POST',
+          }).catch(console.error);
+        } else {
+          setPaymentStatus('failed');
+        }
+        modal.close();
+      },
+      onclose: function() {
+        if (paymentStatus === 'processing') {
+          setPaymentStatus('idle');
+        }
+      },
+    });
   };
-
-  const handleChargeResponse = (data: any) => {
-    if (data.status === 'success' && data.data?.status === 'successful') {
-      setPaymentStatus('success');
-      fetch(`/api/public/payment-verify/${data.data.id}`, { method: 'POST' }).catch(console.error);
-      return;
-    }
-
-    if (data.data?.meta?.authorization) {
-      const auth = data.data.meta.authorization;
-      setFlwRef(data.data.flw_ref);
-
-      if (auth.mode === 'pin') {
-        setPaymentStatus('pin_required');
-      } else if (auth.mode === 'redirect') {
-        setRedirectUrl(auth.redirect);
-        setPaymentStatus('redirect_required');
-      } else if (auth.mode === 'otp') {
-        setPaymentStatus('otp_required');
-      } else if (auth.mode === 'avs_noauth') {
-        setPaymentStatus('success');
-        fetch(`/api/public/payment-verify/${data.data.id}`, { method: 'POST' }).catch(console.error);
-      }
-    } else if (data.status === 'pending' || data.data?.status === 'pending') {
-      setPaymentStatus('otp_required');
-      setFlwRef(data.data?.flw_ref || '');
-    } else {
-      setPaymentStatus('failed');
-      setErrorMessage(data.message || data.data?.processor_response || 'Payment failed');
-    }
-  };
-
-  const handlePinSubmit = async () => {
-    if (!paymentLink) return;
-    
-    setPaymentStatus('processing');
-    setErrorMessage('');
-
-    try {
-      const response = await fetch('/api/public/charge-card', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          txRef: paymentLink.txRef,
-          cardNumber: cardNumber.replace(/\s/g, ''),
-          cvv,
-          expiryMonth,
-          expiryYear,
-          amount: paymentLink.amount,
-          currency: paymentLink.currency || 'USD',
-          customer: {
-            email: paymentLink.customerEmail,
-            name: paymentLink.customerName || '',
-            phonenumber: paymentLink.customerPhone || '',
-          },
-          authorization: {
-            mode: 'pin',
-            pin: pin,
-          },
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Payment failed');
-      }
-
-      handleChargeResponse(data);
-    } catch (err: any) {
-      setPaymentStatus('failed');
-      setErrorMessage(err.message || 'Payment failed. Please try again.');
-    }
-  };
-
-  const handleOtpSubmit = async () => {
-    setPaymentStatus('processing');
-    setErrorMessage('');
-
-    try {
-      const response = await fetch('/api/public/validate-charge', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          flwRef,
-          otp,
-          txRef: paymentLink?.txRef,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'OTP validation failed');
-      }
-
-      if (data.status === 'successful' || data.data?.status === 'successful') {
-        setPaymentStatus('success');
-      } else {
-        setPaymentStatus('failed');
-        setErrorMessage(data.message || 'Payment verification failed');
-      }
-    } catch (err: any) {
-      setPaymentStatus('failed');
-      setErrorMessage(err.message || 'OTP validation failed. Please try again.');
-    }
-  };
-
-  const cardType = getCardType(cardNumber);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-white/10 backdrop-blur-xl border-white/20 shadow-2xl">
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-200/15 to-pink-200/15 dark:from-purple-800/20 dark:to-pink-800/20 rounded-full blur-xl"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-blue-200/10 to-purple-200/10 dark:from-blue-800/15 dark:to-purple-800/15 rounded-full blur-xl"></div>
+        <Card className="w-full max-w-md sm:max-w-lg relative z-10 shadow-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-800">
           <CardContent className="pt-8 pb-8">
             <div className="flex items-center justify-center">
-              <Loader2 className="w-8 h-8 animate-spin text-purple-400" />
+              <Loader2 className="w-8 h-8 animate-spin text-purple-600 dark:text-purple-400" />
             </div>
           </CardContent>
         </Card>
@@ -223,16 +109,18 @@ export default function PublicCheckoutPage() {
 
   if (error || !paymentLink) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-white/10 backdrop-blur-xl border-red-500/30 shadow-2xl">
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-200/15 to-pink-200/15 dark:from-purple-800/20 dark:to-pink-800/20 rounded-full blur-xl"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-blue-200/10 to-purple-200/10 dark:from-blue-800/15 dark:to-purple-800/15 rounded-full blur-xl"></div>
+        <Card className="w-full max-w-md sm:max-w-lg border-red-200 dark:border-red-800 shadow-lg relative z-10 dark:bg-gray-800">
           <CardHeader className="text-center space-y-3 pt-8">
             <div className="flex justify-center">
-              <div className="p-3 bg-red-500/20 rounded-full">
-                <XCircle className="w-8 h-8 text-red-400" />
+              <div className="p-3 bg-red-50 dark:bg-red-900/30 rounded-full">
+                <XCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
               </div>
             </div>
-            <CardTitle className="text-2xl text-white">Payment Link Not Found</CardTitle>
-            <CardDescription className="text-gray-300">
+            <CardTitle className="text-2xl text-gray-900 dark:text-white">Payment Link Not Found</CardTitle>
+            <CardDescription className="text-base text-gray-600 dark:text-gray-400">
               This payment link is invalid or has expired.
             </CardDescription>
           </CardHeader>
@@ -243,16 +131,18 @@ export default function PublicCheckoutPage() {
 
   if (paymentLink.status !== 'active') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-white/10 backdrop-blur-xl border-orange-500/30 shadow-2xl">
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-200/15 to-pink-200/15 dark:from-purple-800/20 dark:to-pink-800/20 rounded-full blur-xl"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-blue-200/10 to-purple-200/10 dark:from-blue-800/15 dark:to-purple-800/15 rounded-full blur-xl"></div>
+        <Card className="w-full max-w-md sm:max-w-lg border-orange-200 dark:border-orange-800 shadow-lg relative z-10 dark:bg-gray-800">
           <CardHeader className="text-center space-y-3 pt-8">
             <div className="flex justify-center">
-              <div className="p-3 bg-orange-500/20 rounded-full">
-                <XCircle className="w-8 h-8 text-orange-400" />
+              <div className="p-3 bg-orange-50 dark:bg-orange-900/30 rounded-full">
+                <XCircle className="w-8 h-8 text-orange-600 dark:text-orange-400" />
               </div>
             </div>
-            <CardTitle className="text-2xl text-white">Payment Link Inactive</CardTitle>
-            <CardDescription className="text-gray-300">
+            <CardTitle className="text-2xl text-gray-900 dark:text-white">Payment Link Inactive</CardTitle>
+            <CardDescription className="text-base text-gray-600 dark:text-gray-400">
               This payment link has been disabled or expired.
             </CardDescription>
           </CardHeader>
@@ -262,277 +152,150 @@ export default function PublicCheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4 sm:p-6 md:p-8">
-      <div className="w-full max-w-md space-y-6">
-        {/* Amount Card */}
-        <Card className="bg-gradient-to-r from-purple-600 to-pink-600 border-0 shadow-2xl overflow-hidden">
-          <CardContent className="p-6 text-center">
-            {paymentLink.logo && (
-              <img src={paymentLink.logo} alt="Logo" className="h-12 w-auto mx-auto mb-4" />
-            )}
-            <h2 className="text-white/80 text-sm font-medium mb-1">{paymentLink.title}</h2>
-            <p className="text-4xl font-bold text-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4 sm:p-6 md:p-8 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-purple-200/15 to-pink-200/15 dark:from-purple-800/20 dark:to-pink-800/20 rounded-full blur-xl"></div>
+      <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-40 sm:h-40 bg-gradient-to-tr from-blue-200/10 to-purple-200/10 dark:from-blue-800/15 dark:to-purple-800/15 rounded-full blur-xl"></div>
+      
+      <Card className="w-full max-w-md sm:max-w-lg shadow-xl border border-gray-200 dark:border-gray-700 relative z-10 dark:bg-gray-800">
+        <CardHeader className="text-center space-y-3 pt-8 pb-20 px-6 sm:px-8">
+          {paymentLink.logo && (
+            <div className="flex justify-center mb-2">
+              <img src={paymentLink.logo} alt="Logo" className="h-16 sm:h-20 w-auto" />
+            </div>
+          )}
+          <CardTitle className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            {paymentLink.title}
+          </CardTitle>
+          {paymentLink.description && (
+            <CardDescription className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
+              {paymentLink.description}
+            </CardDescription>
+          )}
+        </CardHeader>
+
+        <CardContent className="space-y-6 pb-8 px-6 sm:px-8">
+          {/* Amount Display */}
+          <div className="wallet-gradient rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg">
+            <p className="text-sm sm:text-base text-white/90 mb-2 font-medium">Amount to Pay</p>
+            <p className="text-4xl sm:text-5xl font-bold text-white">
               {paymentLink.currency} {parseFloat(paymentLink.amount).toLocaleString()}
             </p>
-            {paymentLink.description && (
-              <p className="text-white/70 text-sm mt-2">{paymentLink.description}</p>
-            )}
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Main Payment Card */}
-        <Card className="bg-white/10 backdrop-blur-xl border-white/20 shadow-2xl">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-xl text-white flex items-center gap-2">
-              <CreditCard className="w-5 h-5" />
-              Card Details
-            </CardTitle>
-            <CardDescription className="text-gray-300">
-              Enter your card information securely
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent className="space-y-6">
-            {/* Success State */}
-            {paymentStatus === 'success' && (
-              <div className="text-center py-8 space-y-4">
-                <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-10 h-10 text-green-400" />
-                </div>
-                <h3 className="text-2xl font-bold text-white">Payment Successful!</h3>
-                <p className="text-gray-300">Thank you for your payment.</p>
-                {paymentLink.redirectUrl && (
-                  <Button
-                    onClick={() => window.location.href = paymentLink.redirectUrl!}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
-                  >
-                    Continue
-                  </Button>
-                )}
+          {/* Customer Information */}
+          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-5 sm:p-6 space-y-3">
+            <div className="flex justify-between items-center py-2 sm:py-3">
+              <span className="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">Email</span>
+              <span className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white break-all ml-4 text-right">{paymentLink.customerEmail}</span>
+            </div>
+            {paymentLink.customerName && (
+              <div className="flex justify-between items-center py-2 sm:py-3 border-t border-gray-200 dark:border-gray-600">
+                <span className="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">Name</span>
+                <span className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white">{paymentLink.customerName}</span>
               </div>
             )}
-
-            {/* Failed State */}
-            {paymentStatus === 'failed' && (
-              <div className="text-center py-8 space-y-4">
-                <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto">
-                  <XCircle className="w-10 h-10 text-red-400" />
-                </div>
-                <h3 className="text-2xl font-bold text-white">Payment Failed</h3>
-                <p className="text-red-300">{errorMessage || 'Your payment was not successful.'}</p>
-                <Button
-                  onClick={() => {
-                    setPaymentStatus('idle');
-                    setErrorMessage('');
-                    setPin('');
-                    setOtp('');
-                  }}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
-                >
-                  Try Again
-                </Button>
+            {paymentLink.customerPhone && (
+              <div className="flex justify-between items-center py-2 sm:py-3 border-t border-gray-200 dark:border-gray-600">
+                <span className="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">Phone</span>
+                <span className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white">{paymentLink.customerPhone}</span>
               </div>
             )}
+          </div>
 
-            {/* Redirect Required */}
-            {paymentStatus === 'redirect_required' && (
-              <div className="text-center py-8 space-y-4">
-                <div className="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto">
-                  <Shield className="w-10 h-10 text-blue-400" />
+          {/* Payment Status Messages */}
+          {paymentStatus === 'success' && (
+            <div className="bg-green-50 dark:bg-green-900/30 border-2 border-green-200 dark:border-green-700 rounded-xl p-5 sm:p-6">
+              <div className="flex items-center gap-3 text-green-800 dark:text-green-300 mb-3">
+                <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-full">
+                  <CheckCircle2 className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-white">3D Secure Verification Required</h3>
-                <p className="text-gray-300">You will be redirected to your bank for verification.</p>
-                <Button
-                  onClick={() => window.location.href = redirectUrl}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
-                >
-                  Continue to Verification
-                </Button>
+                <p className="text-lg font-bold">Payment Successful!</p>
               </div>
-            )}
+              <p className="text-sm sm:text-base text-green-700 dark:text-green-400">
+                Thank you for your payment. You will receive a confirmation email shortly.
+              </p>
+            </div>
+          )}
 
-            {/* PIN Required */}
-            {paymentStatus === 'pin_required' && (
-              <div className="space-y-4">
-                <div className="text-center mb-4">
-                  <Lock className="w-12 h-12 text-purple-400 mx-auto mb-2" />
-                  <h3 className="text-lg font-semibold text-white">Enter Your Card PIN</h3>
-                  <p className="text-gray-400 text-sm">Your card requires PIN verification</p>
+          {paymentStatus === 'failed' && (
+            <div className="bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-700 rounded-xl p-5 sm:p-6">
+              <div className="flex items-center gap-3 text-red-800 dark:text-red-300 mb-3">
+                <div className="p-2 bg-red-100 dark:bg-red-900/50 rounded-full">
+                  <XCircle className="w-6 h-6" />
                 </div>
-                <div>
-                  <Label htmlFor="pin" className="text-gray-300">PIN</Label>
-                  <Input
-                    id="pin"
-                    type="password"
-                    maxLength={4}
-                    value={pin}
-                    onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
-                    className="bg-white/10 border-white/20 text-white text-center text-2xl tracking-widest"
-                    placeholder="••••"
-                    data-testid="input-pin"
-                  />
-                </div>
-                <Button
-                  onClick={handlePinSubmit}
-                  disabled={pin.length < 4}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white h-12"
-                  data-testid="button-submit-pin"
-                >
-                  Verify PIN
-                </Button>
+                <p className="text-lg font-bold">Payment Failed</p>
               </div>
-            )}
+              <p className="text-sm sm:text-base text-red-700 dark:text-red-400">
+                Your payment was not successful. Please try again.
+              </p>
+            </div>
+          )}
 
-            {/* OTP Required */}
-            {paymentStatus === 'otp_required' && (
-              <div className="space-y-4">
-                <div className="text-center mb-4">
-                  <Shield className="w-12 h-12 text-purple-400 mx-auto mb-2" />
-                  <h3 className="text-lg font-semibold text-white">Enter OTP Code</h3>
-                  <p className="text-gray-400 text-sm">A verification code was sent to your phone/email</p>
-                </div>
-                <div>
-                  <Label htmlFor="otp" className="text-gray-300">OTP Code</Label>
-                  <Input
-                    id="otp"
-                    type="text"
-                    maxLength={6}
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                    className="bg-white/10 border-white/20 text-white text-center text-2xl tracking-widest"
-                    placeholder="••••••"
-                    data-testid="input-otp"
-                  />
-                </div>
-                <Button
-                  onClick={handleOtpSubmit}
-                  disabled={otp.length < 4}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white h-12"
-                  data-testid="button-submit-otp"
-                >
-                  Verify OTP
-                </Button>
-              </div>
-            )}
+          {/* Payment Button */}
+          {paymentStatus === 'idle' && (
+            <Button
+              onClick={handlePayment}
+              disabled={!isFlutterwaveLoaded || !flutterwavePublicKey}
+              className="w-full h-14 sm:h-16 text-lg sm:text-xl font-semibold wallet-gradient hover:opacity-90 transition-opacity shadow-lg rounded-xl"
+              data-testid="button-pay-now"
+            >
+              {(!isFlutterwaveLoaded || !flutterwavePublicKey) ? (
+                <>
+                  <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 mr-2 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
+                  Pay Now
+                </>
+              )}
+            </Button>
+          )}
 
-            {/* Processing State */}
-            {paymentStatus === 'processing' && (
-              <div className="text-center py-8 space-y-4">
-                <Loader2 className="w-12 h-12 animate-spin text-purple-400 mx-auto" />
-                <h3 className="text-xl font-semibold text-white">Processing Payment...</h3>
-                <p className="text-gray-400">Please wait while we process your payment</p>
-              </div>
-            )}
+          {paymentStatus === 'processing' && (
+            <Button
+              disabled
+              className="w-full h-14 sm:h-16 text-lg sm:text-xl font-semibold rounded-xl"
+              data-testid="button-processing"
+            >
+              <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 mr-2 animate-spin" />
+              Processing Payment...
+            </Button>
+          )}
 
-            {/* Card Input Form */}
-            {paymentStatus === 'idle' && (
-              <div className="space-y-4">
-                {/* Card Number */}
-                <div className="space-y-2">
-                  <Label htmlFor="cardNumber" className="text-gray-300">Card Number</Label>
-                  <div className="relative">
-                    <Input
-                      id="cardNumber"
-                      type="text"
-                      value={cardNumber}
-                      onChange={handleCardNumberChange}
-                      className="bg-white/10 border-white/20 text-white pl-12 h-12 text-lg"
-                      placeholder="1234 5678 9012 3456"
-                      data-testid="input-card-number"
-                    />
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                      {cardType === 'visa' && <span className="text-blue-400 font-bold text-sm">VISA</span>}
-                      {cardType === 'mastercard' && <span className="text-orange-400 font-bold text-sm">MC</span>}
-                      {cardType === 'amex' && <span className="text-blue-300 font-bold text-sm">AMEX</span>}
-                      {cardType === 'discover' && <span className="text-orange-300 font-bold text-sm">DISC</span>}
-                      {cardType === 'unknown' && <CreditCard className="w-5 h-5 text-gray-400" />}
-                    </div>
-                  </div>
-                </div>
+          {paymentStatus === 'success' && paymentLink.redirectUrl && (
+            <Button
+              onClick={() => window.location.href = paymentLink.redirectUrl!}
+              className="w-full h-14 sm:h-16 text-lg sm:text-xl font-semibold wallet-gradient hover:opacity-90 transition-opacity shadow-lg rounded-xl"
+              data-testid="button-continue"
+            >
+              Continue
+            </Button>
+          )}
 
-                {/* Expiry and CVV */}
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="expiryMonth" className="text-gray-300">Month</Label>
-                    <Input
-                      id="expiryMonth"
-                      type="text"
-                      maxLength={2}
-                      value={expiryMonth}
-                      onChange={(e) => setExpiryMonth(e.target.value.replace(/\D/g, ''))}
-                      className="bg-white/10 border-white/20 text-white text-center h-12"
-                      placeholder="MM"
-                      data-testid="input-expiry-month"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="expiryYear" className="text-gray-300">Year</Label>
-                    <Input
-                      id="expiryYear"
-                      type="text"
-                      maxLength={2}
-                      value={expiryYear}
-                      onChange={(e) => setExpiryYear(e.target.value.replace(/\D/g, ''))}
-                      className="bg-white/10 border-white/20 text-white text-center h-12"
-                      placeholder="YY"
-                      data-testid="input-expiry-year"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="cvv" className="text-gray-300">CVV</Label>
-                    <Input
-                      id="cvv"
-                      type="password"
-                      maxLength={4}
-                      value={cvv}
-                      onChange={(e) => setCvv(e.target.value.replace(/\D/g, ''))}
-                      className="bg-white/10 border-white/20 text-white text-center h-12"
-                      placeholder="•••"
-                      data-testid="input-cvv"
-                    />
-                  </div>
-                </div>
+          {paymentStatus === 'failed' && (
+            <Button
+              onClick={() => setPaymentStatus('idle')}
+              className="w-full h-14 sm:h-16 text-lg sm:text-xl font-semibold rounded-xl border-2"
+              variant="outline"
+              data-testid="button-try-again"
+            >
+              Try Again
+            </Button>
+          )}
 
-                {/* Customer Info */}
-                <div className="bg-white/5 rounded-lg p-4 space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Email</span>
-                    <span className="text-white">{paymentLink.customerEmail}</span>
-                  </div>
-                  {paymentLink.customerName && (
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Name</span>
-                      <span className="text-white">{paymentLink.customerName}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Pay Button */}
-                <Button
-                  onClick={handlePayment}
-                  disabled={cardNumber.replace(/\s/g, '').length < 15 || !expiryMonth || !expiryYear || cvv.length < 3}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white h-14 text-lg font-semibold"
-                  data-testid="button-pay"
-                >
-                  <Lock className="w-5 h-5 mr-2" />
-                  Pay {paymentLink.currency} {parseFloat(paymentLink.amount).toLocaleString()}
-                </Button>
-
-                {/* Security Badge */}
-                <div className="flex items-center justify-center gap-2 text-gray-400 text-sm pt-2">
-                  <Shield className="w-4 h-4" />
-                  <span>Secured by 256-bit SSL encryption</span>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Footer */}
-        <div className="text-center text-gray-400 text-xs">
-          <p>Powered by Flutterwave</p>
-        </div>
-      </div>
+          {/* Security Badge */}
+          <div className="flex items-center justify-center gap-3 text-xs sm:text-sm text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-gray-600">
+            <Badge variant="outline" className="text-xs sm:text-sm px-3 py-1 dark:border-gray-600 dark:text-gray-300">
+              <CreditCard className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5" />
+              Secure Payment
+            </Badge>
+            <span className="text-gray-400 dark:text-gray-500">•</span>
+            <span className="font-medium dark:text-gray-300">Powered by Flutterwave</span>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
