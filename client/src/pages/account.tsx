@@ -302,11 +302,12 @@ export default function Account() {
         )}
 
         {/* Logout */}
-        <Card className="bg-white/80 dark:bg-background backdrop-blur-sm border-purple-200/30 dark:border-border shadow-lg rounded-xl overflow-hidden">
+        <Card className="bg-white/80 dark:bg-background backdrop-blur-sm border-purple-200/30 dark:border-border shadow-lg rounded-xl overflow-hidden mb-24 lg:mb-6">
           <CardContent className="p-0">
             <button 
               onClick={handleLogout}
               className="w-full p-3 flex items-center justify-between hover:bg-red-50/50 dark:hover:bg-red-900/20 transition-colors"
+              data-testid="button-logout"
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
