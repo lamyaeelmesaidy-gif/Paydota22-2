@@ -9,7 +9,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { useLanguage } from '@/hooks/useLanguage';
 import { LanguageToggle } from '@/components/language-toggle';
-import { ThemeToggle } from '@/components/theme-toggle';
 import { useKeyboard } from '@/hooks/useKeyboard';
 
 
@@ -327,32 +326,34 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 relative overflow-hidden flex flex-col safe-area-inset keyboard-adjust">
+    <div className="min-h-screen bg-white dark:bg-background relative overflow-hidden flex flex-col safe-area-inset keyboard-adjust">
+      {/* Mobile safe area for status bar */}
+      <div className="mobile-safe-area" />
+      
       {/* Background decorative elements */}
       <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 bg-gradient-to-br from-purple-200/15 to-pink-200/15 dark:from-purple-500/5 dark:to-pink-500/5 rounded-full blur-xl"></div>
       
       {/* Header */}
-      <div className="flex-none pt-2 pb-3 px-4 sm:px-6 md:px-8 relative z-10">
-        {/* Language and Theme Toggle */}
+      <div className="flex-none pt-1 pb-1 sm:pt-2 sm:pb-2 md:pt-4 md:pb-3 px-3 sm:px-4 md:px-6 lg:px-8 relative z-10">
+        {/* Language Toggle */}
         <div className="flex justify-end items-center gap-2 mb-1">
-          <ThemeToggle className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800" />
-          <LanguageToggle />
+          <LanguageToggle className="bg-white/90 dark:bg-background/90 backdrop-blur-sm shadow-sm border-gray-200/30 dark:border-border scale-90 sm:scale-100" />
         </div>
         
         <div className="text-center">
-          <h1 className="text-gray-600 dark:text-gray-400 text-base sm:text-lg md:text-xl mb-1 font-medium">
+          <h1 className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-lg mb-1 font-medium tracking-wide">
             {t('joinUs')}
           </h1>
-          <h2 className="text-gray-900 dark:text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
+          <h2 className="text-gray-900 dark:text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-1 tracking-tight">
             {t('createNewAccount')}
           </h2>
         </div>
       </div>
 
       {/* Register Form */}
-      <div className="px-4 sm:px-6 md:px-8 py-6 overflow-y-auto scroll-smooth relative z-10">
+      <div className="flex-1 px-3 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-4 overflow-y-auto scroll-smooth relative z-10">
         <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6 min-h-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 lg:p-10 shadow-xl dark:shadow-2xl">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6 min-h-0 bg-white dark:bg-background border border-gray-200 dark:border-border rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 lg:p-10 shadow-xl">
                 
             {/* First Name Field */}
             <div>
@@ -364,7 +365,7 @@ export default function Register() {
                 type="text"
                 value={formData.firstName}
                 onChange={(e) => handleInputChange('firstName', e.target.value)}
-                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-xl border-gray-200 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-1 focus:ring-purple-500 dark:focus:ring-purple-400 bg-white dark:bg-gray-700 dark:text-white text-base md:text-lg"
+                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-lg sm:rounded-xl border-gray-200 dark:border-border focus:border-purple-500 focus:ring-purple-500 bg-white dark:bg-background text-base md:text-lg"
                 placeholder={t('enterFirstName')}
                 required
               />
@@ -380,7 +381,7 @@ export default function Register() {
                 type="text"
                 value={formData.lastName}
                 onChange={(e) => handleInputChange('lastName', e.target.value)}
-                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-xl border-gray-200 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-1 focus:ring-purple-500 dark:focus:ring-purple-400 bg-white dark:bg-gray-700 dark:text-white text-base md:text-lg"
+                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-lg sm:rounded-xl border-gray-200 dark:border-border focus:border-purple-500 focus:ring-purple-500 bg-white dark:bg-background text-base md:text-lg"
                 placeholder={t('enterLastName')}
                 required
               />
@@ -396,7 +397,7 @@ export default function Register() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
-                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-xl border-gray-200 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-1 focus:ring-purple-500 dark:focus:ring-purple-400 bg-white dark:bg-gray-700 dark:text-white text-base md:text-lg"
+                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-lg sm:rounded-xl border-gray-200 dark:border-border focus:border-purple-500 focus:ring-purple-500 bg-white dark:bg-background text-base md:text-lg"
                 placeholder={t('enterEmail')}
                 required
               />
@@ -407,7 +408,7 @@ export default function Register() {
               <Label htmlFor="phone" className="text-gray-700 dark:text-gray-300 font-medium text-sm sm:text-base md:text-lg">
                 {t('phoneNumber')}
               </Label>
-              <div className="flex rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 overflow-hidden h-11 sm:h-12 md:h-14 mt-2">
+              <div className="flex rounded-lg sm:rounded-xl border border-gray-200 dark:border-border bg-white dark:bg-background overflow-hidden h-11 sm:h-12 md:h-14 mt-2">
                 {/* Country Code Selector */}
                 <div className="relative">
                   <select
@@ -416,7 +417,7 @@ export default function Register() {
                       const country = countries.find(c => c.code === e.target.value);
                       if (country) setSelectedCountry(country);
                     }}
-                    className="h-11 sm:h-12 md:h-14 pl-3 pr-8 bg-gray-50 dark:bg-gray-600 border-r border-gray-200 dark:border-gray-600 dark:text-white text-sm md:text-base font-medium appearance-none cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500 transition-colors"
+                    className="h-11 sm:h-12 md:h-14 pl-3 pr-8 bg-gray-50 dark:bg-muted border-r border-gray-200 dark:border-border text-sm md:text-base font-medium appearance-none cursor-pointer hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors"
                   >
                     {countries.map((country, index) => (
                       <option key={`${country.code}-${country.name}-${index}`} value={country.code}>
@@ -454,35 +455,35 @@ export default function Register() {
                 type="password"
                 value={formData.password}
                 onChange={(e) => handleInputChange('password', e.target.value)}
-                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-xl border-gray-200 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-1 focus:ring-purple-500 dark:focus:ring-purple-400 bg-white dark:bg-gray-700 dark:text-white text-base md:text-lg"
+                className="w-full h-11 sm:h-12 md:h-14 mt-2 rounded-lg sm:rounded-xl border-gray-200 dark:border-border focus:border-purple-500 focus:ring-purple-500 bg-white dark:bg-background text-base md:text-lg"
                 placeholder={t('enterPassword')}
                 required
               />
             </div>
 
             {/* Submit Button */}
-            <div className="pt-3 md:pt-4">
-              <Button
-                type="submit"
-                disabled={registerMutation.isPending}
-                className="w-full h-11 sm:h-12 md:h-14 lg:h-16 wallet-gradient hover:opacity-90 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base md:text-lg"
-              >
-                {registerMutation.isPending ? t('creatingAccount') : t('createAccount')}
-              </Button>
-            </div>
+            <Button
+              type="submit"
+              disabled={registerMutation.isPending}
+              className="w-full h-11 sm:h-12 md:h-14 lg:h-16 wallet-gradient hover:opacity-90 text-white font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base md:text-lg"
+            >
+              {registerMutation.isPending ? t('creatingAccount') : t('createAccount')}
+            </Button>
 
             {/* Divider */}
-            <div className="flex items-center justify-center pt-4 sm:pt-5 md:pt-6">
-              <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
-              <span className="px-3 text-gray-500 dark:text-gray-400 text-xs sm:text-sm md:text-base">or</span>
-              <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
+            <div className="flex items-center justify-center pt-3 sm:pt-4 md:pt-5">
+              <div className="w-full flex items-center">
+                <div className="flex-1 h-px bg-gray-200 dark:bg-border"></div>
+                <span className="px-2 sm:px-3 md:px-4 text-gray-500 dark:text-gray-400 text-xs sm:text-sm md:text-base">or</span>
+                <div className="flex-1 h-px bg-gray-200 dark:bg-border"></div>
+              </div>
             </div>
 
             {/* Google Register Button */}
             <Button
               type="button"
               onClick={() => window.location.href = '/api/auth/google'}
-              className="w-full h-11 sm:h-12 md:h-14 lg:h-16 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center space-x-2 sm:space-x-3 text-sm sm:text-base md:text-lg"
+              className="w-full h-11 sm:h-12 md:h-14 lg:h-16 bg-white dark:bg-background hover:bg-gray-50 dark:hover:bg-muted text-gray-700 dark:text-gray-300 font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border-2 border-gray-300 dark:border-border flex items-center justify-center space-x-2 sm:space-x-3 text-sm sm:text-base md:text-lg"
             >
               <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -494,8 +495,8 @@ export default function Register() {
             </Button>
 
             {/* Login Link */}
-            <div className="text-center pt-4 sm:pt-5 md:pt-6">
-              <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-lg">
+            <div className="text-center pt-1.5 sm:pt-2 md:pt-3">
+              <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm md:text-base">
                 {t('alreadyHaveAccount')}{' '}
                 <Link href="/login">
                   <span className="text-purple-600 dark:text-purple-400 font-semibold hover:underline cursor-pointer">
