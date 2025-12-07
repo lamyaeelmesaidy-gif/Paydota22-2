@@ -97,7 +97,7 @@ export default function Transactions() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-background lg:h-auto h-screen lg:overflow-auto overflow-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-background lg:h-auto lg:overflow-auto overflow-y-auto pb-24 lg:pb-6">
       <PullToRefresh onRefresh={handleRefresh}>
         <div className="h-full flex flex-col max-w-md lg:max-w-4xl mx-auto lg:p-6">
           
