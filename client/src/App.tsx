@@ -65,6 +65,7 @@ import AirwallexTest from "@/pages/admin/airwallex-test";
 import AirwallexTestPage from "@/pages/AirwallexTest";
 import BinancePay from "@/pages/binance-pay";
 import BankTransfer from "@/pages/bank-transfer";
+import CardDeposit from "@/pages/deposit/card";
 import CameraTest from "@/pages/camera-test";
 import AdminAddUser from "@/pages/admin-add-user";
 import PasswordDemo from "@/pages/password-demo";
@@ -172,6 +173,7 @@ function Router() {
             <Route path="/profile" component={Profile} />
 
             {/* Deposit routes */}
+            <Route path="/deposit/card" component={CardDeposit} />
             <Route path="/deposit/options" component={DepositOptions} />
             <Route path="/deposit" component={Deposit} />
 

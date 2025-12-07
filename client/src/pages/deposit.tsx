@@ -1,14 +1,10 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CreditCard, Building } from "lucide-react";
 import { useLocation } from "wouter";
-import { useToast } from "@/hooks/use-toast";
 import binanceIcon from "@assets/pngwing.com.png";
 
 export default function Deposit() {
   const [, setLocation] = useLocation();
-  const { toast } = useToast();
-  const [selectedMethod, setSelectedMethod] = useState("card");
 
   return (
     <div className="min-h-screen bg-[#0f0f23] text-white">
@@ -38,18 +34,9 @@ export default function Deposit() {
           <div className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
             {/* Credit Card Option */}
             <div 
-              className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                selectedMethod === "card" 
-                  ? "border-purple-500 bg-[#1a1a35] shadow-lg shadow-purple-500/20" 
-                  : "border-[#2a2a45] bg-[#1a1a35]/80 hover:border-purple-400/50"
-              }`}
-              onClick={() => {
-                setSelectedMethod("card");
-                toast({
-                  title: "Credit Card",
-                  description: "Credit card payment will be available soon",
-                });
-              }}
+              className="p-4 rounded-xl border-2 cursor-pointer transition-all border-purple-500 bg-[#1a1a35] shadow-lg shadow-purple-500/20"
+              onClick={() => setLocation("/deposit/card")}
+              data-testid="button-deposit-card"
             >
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
@@ -64,12 +51,9 @@ export default function Deposit() {
 
             {/* Bank Transfer Option */}
             <div 
-              className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                selectedMethod === "bank" 
-                  ? "border-purple-500 bg-[#1a1a35] shadow-lg shadow-purple-500/20" 
-                  : "border-[#2a2a45] bg-[#1a1a35]/80 hover:border-purple-400/50"
-              }`}
+              className="p-4 rounded-xl border-2 cursor-pointer transition-all border-[#2a2a45] bg-[#1a1a35]/80 hover:border-purple-400/50"
               onClick={() => setLocation("/bank-transfer")}
+              data-testid="button-deposit-bank"
             >
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
@@ -84,12 +68,9 @@ export default function Deposit() {
 
             {/* Binance Pay Option */}
             <div 
-              className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                selectedMethod === "binance" 
-                  ? "border-purple-500 bg-[#1a1a35] shadow-lg shadow-purple-500/20" 
-                  : "border-[#2a2a45] bg-[#1a1a35]/80 hover:border-purple-400/50"
-              }`}
+              className="p-4 rounded-xl border-2 cursor-pointer transition-all border-[#2a2a45] bg-[#1a1a35]/80 hover:border-purple-400/50"
               onClick={() => setLocation("/binance-pay")}
+              data-testid="button-deposit-binance"
             >
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center">

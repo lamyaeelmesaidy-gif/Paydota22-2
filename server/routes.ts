@@ -4281,6 +4281,147 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post('/api/deposit/card/init', requireAuth, async (req: any, res) => {
+    try {
+      const userId = req.session?.userId;
+      if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      const { amount } = req.body;
+      
+      if (!amount || parseFloat(amount) < 1) {
+        return res.status(400).json({ message: 'Invalid amount. Minimum is $1' });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      const txRef = flutterwaveService.generateTxRef(userId);
+
+      await storage.createPaymentTransaction({
+        userId,
+        txRef,
+        amount: amount.toString(),
+        currency: 'USD',
+        customerEmail: user.email || '',
+        customerName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email || '',
+        paymentMethod: 'card',
+        status: 'pending',
+      });
+
+      console.log(`💳 Card deposit initiated: txRef=${txRef}, amount=$${amount}, userId=${userId}`);
+
+      res.json({ txRef, amount });
+    } catch (error: any) {
+      console.error('Error initializing card deposit:', error);
+      res.status(500).json({ message: error.message || 'Failed to initialize deposit' });
+    }
+  });
+
+  app.post('/api/deposit/card/verify/:transactionId', requireAuth, async (req: any, res) => {
+    try {
+      const userId = req.session?.userId;
+      if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      const { transactionId } = req.params;
+      const { txRef, amount } = req.body;
+
+      const existingTransaction = await storage.getPaymentTransactionByTxRef(txRef);
+      
+      if (!existingTransaction) {
+        return res.status(400).json({ message: 'Transaction not found. Please initiate deposit first.' });
+      }
+
+      if (existingTransaction.userId !== userId) {
+        console.warn(`⚠️ Security: User ${userId} tried to verify transaction belonging to ${existingTransaction.userId}`);
+        return res.status(403).json({ message: 'Transaction does not belong to this user' });
+      }
+
+      if (existingTransaction.status === 'successful') {
+        console.log(`ℹ️ Transaction ${txRef} already verified and credited`);
+        return res.json({
+          message: 'Deposit already processed',
+          amount: parseFloat(existingTransaction.amount),
+          alreadyProcessed: true,
+        });
+      }
+
+      const verification = await flutterwaveService.verifyTransaction(transactionId);
+
+      if (verification.status !== 'success') {
+        await storage.updatePaymentTransaction(existingTransaction.id, {
+          status: 'failed',
+          transactionId: transactionId,
+        });
+        return res.status(400).json({
+          message: 'Transaction verification failed',
+          data: verification,
+        });
+      }
+
+      const txData = verification.data;
+
+      if (txData.tx_ref !== txRef) {
+        console.warn(`⚠️ Security: txRef mismatch. Expected: ${txRef}, Got: ${txData.tx_ref}`);
+        return res.status(400).json({ message: 'Transaction reference mismatch' });
+      }
+
+      if (txData.status !== 'successful') {
+        await storage.updatePaymentTransaction(existingTransaction.id, {
+          status: 'failed',
+          flutterwaveRef: txData.flw_ref,
+          transactionId: txData.id.toString(),
+        });
+        return res.status(400).json({
+          message: 'Payment was not successful',
+          status: txData.status,
+        });
+      }
+
+      if (parseFloat(txData.amount.toString()) !== parseFloat(amount)) {
+        return res.status(400).json({ message: 'Amount mismatch' });
+      }
+
+      await storage.updatePaymentTransaction(existingTransaction.id, {
+        status: 'successful',
+        flutterwaveRef: txData.flw_ref,
+        transactionId: txData.id.toString(),
+        cardNumber: txData.card ? `${txData.card.first_6digits}****${txData.card.last_4digits}` : undefined,
+        cardType: txData.card?.type,
+        cardCountry: txData.card?.country,
+        chargedAmount: txData.charged_amount?.toString(),
+        metadata: txData as any,
+        verifiedAt: new Date(),
+      });
+
+      const currentBalance = await storage.getWalletBalance(userId);
+      const depositAmount = parseFloat(txData.amount.toString());
+      const newBalance = currentBalance + depositAmount;
+      
+      await storage.updateWalletBalance(userId, newBalance);
+
+      console.log(`💳 Card deposit verified: Added $${depositAmount} to user ${userId} wallet. New balance: $${newBalance}`);
+
+      res.json({
+        message: 'Deposit successful',
+        amount: depositAmount,
+        newBalance: newBalance,
+        transactionId: txData.id,
+        flwRef: txData.flw_ref,
+      });
+    } catch (error: any) {
+      console.error('Error verifying card deposit:', error);
+      res.status(500).json({
+        message: error.message || 'Failed to verify deposit',
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
