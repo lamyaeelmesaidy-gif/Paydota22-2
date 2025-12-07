@@ -1,11 +1,11 @@
 {
-  "name": "PayDota - Payment Platform",
-  "short_name": "PayDota",
-  "description": "Complete payment solution with virtual cards and payment links",
+  "name": "PROBRANDIFY - Virtual Cards & Payments",
+  "short_name": "PROBRANDIFY",
+  "description": "Secure virtual cards, instant payment links, and seamless money transfers. Create virtual Visa/Mastercard cards for online shopping worldwide.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "theme_color": "#9333ea",
   "orientation": "portrait-primary",
   "icons": [
     {
