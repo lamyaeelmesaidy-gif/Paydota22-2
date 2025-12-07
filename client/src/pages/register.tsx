@@ -329,8 +329,7 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 relative overflow-hidden flex flex-col safe-area-inset keyboard-adjust">
       {/* Background decorative elements */}
-      <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 bg-gradient-to-br from-purple-200/15 to-pink-200/15 dark:from-purple-500/10 dark:to-pink-500/10 rounded-full blur-xl"></div>
-      <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-gradient-to-tr from-blue-200/10 to-purple-200/10 dark:from-blue-500/10 dark:to-purple-500/10 rounded-full blur-xl"></div>
+      <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 bg-gradient-to-br from-purple-200/15 to-pink-200/15 dark:from-purple-500/5 dark:to-pink-500/5 rounded-full blur-xl"></div>
       
       {/* Header */}
       <div className="flex-none pt-2 pb-3 px-4 sm:px-6 md:px-8 relative z-10">

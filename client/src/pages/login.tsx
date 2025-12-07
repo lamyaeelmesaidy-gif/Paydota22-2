@@ -76,8 +76,7 @@ export default function Login() {
       <div className="mobile-safe-area" />
       
       {/* Background decorative elements - responsive sizing */}
-      <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 bg-gradient-to-br from-purple-200/15 to-pink-200/15 dark:from-purple-500/10 dark:to-pink-500/10 rounded-full blur-xl"></div>
-      <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-gradient-to-tr from-blue-200/10 to-purple-200/10 dark:from-blue-500/10 dark:to-purple-500/10 rounded-full blur-xl"></div>
+      <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 bg-gradient-to-br from-purple-200/15 to-pink-200/15 dark:from-purple-500/5 dark:to-pink-500/5 rounded-full blur-xl"></div>
       
       <div className="px-3 sm:px-4 md:px-6 lg:px-8 flex flex-col justify-between min-h-screen relative z-10 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto safe-area-inset">
         
