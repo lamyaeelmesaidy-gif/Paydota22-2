@@ -118,13 +118,13 @@ export default function Welcome() {
           </div>
 
           {/* Legal Links */}
-          <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap text-xs sm:text-sm text-gray-600 dark:text-gray-400 pt-3">
-            <Link href="/about" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-1">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap text-xs sm:text-sm text-purple-600 dark:text-purple-400 pt-3">
+            <Link href="/about" className="hover:text-purple-800 dark:hover:text-purple-300 transition-colors flex items-center gap-1">
               <Info className="w-3 h-3" />
               About
             </Link>
-            <span className="text-gray-400">•</span>
-            <Link href="/privacy-policy" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-1">
+            <span className="text-purple-400 dark:text-purple-500">•</span>
+            <Link href="/privacy-policy" className="hover:text-purple-800 dark:hover:text-purple-300 transition-colors flex items-center gap-1">
               <Shield className="w-3 h-3" />
               Privacy
             </Link>
@@ -275,12 +275,12 @@ export default function Welcome() {
 
             {/* Footer with Legal Links */}
             <div className="absolute bottom-8 left-0 right-0 flex items-center justify-center gap-6 z-20">
-              <Link href="/about" className="text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-2 group">
+              <Link href="/about" className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors flex items-center gap-2 group">
                 <Info className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 <span>About</span>
               </Link>
-              <div className="w-1 h-1 rounded-full bg-gray-400"></div>
-              <Link href="/privacy-policy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-2 group">
+              <div className="w-1 h-1 rounded-full bg-purple-400 dark:bg-purple-500"></div>
+              <Link href="/privacy-policy" className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors flex items-center gap-2 group">
                 <Shield className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 <span>Privacy Policy</span>
               </Link>
