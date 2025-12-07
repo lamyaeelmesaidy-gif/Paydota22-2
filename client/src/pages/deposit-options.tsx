@@ -54,7 +54,7 @@ export default function DepositOptions() {
     switch (iconType) {
       case "card":
         return (
-          <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
             <div className="flex flex-col items-center justify-center">
               <div className="w-6 h-4 bg-blue-500 rounded-sm flex items-center justify-center">
                 <div className="w-4 h-0.5 bg-blue-300 rounded"></div>
@@ -65,7 +65,7 @@ export default function DepositOptions() {
         );
       case "bank":
         return (
-          <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
             <div className="grid grid-cols-3 gap-0.5">
               {[...Array(9)].map((_, i) => (
                 <div key={i} className="w-2 h-2 bg-green-500 rounded-sm"></div>
@@ -75,7 +75,7 @@ export default function DepositOptions() {
         );
       case "binance":
         return (
-          <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center">
             <SiBinance className="w-6 h-6 text-yellow-500" />
           </div>
         );
@@ -106,15 +106,15 @@ export default function DepositOptions() {
               onClick={() => handleMethodSelect(method)}
               className={`w-full p-4 rounded-xl transition-all duration-200 flex items-center space-x-4 ${
                 selectedMethod === method.id
-                  ? "bg-white border-2 border-purple-500 shadow-lg shadow-purple-500/20"
-                  : "bg-white/95 border-2 border-transparent hover:border-gray-200"
+                  ? "bg-[#1a1a35] border-2 border-purple-500 shadow-lg shadow-purple-500/20"
+                  : "bg-[#1a1a35]/80 border-2 border-[#2a2a45] hover:border-purple-400/50"
               }`}
               data-testid={`button-method-${method.id}`}
             >
               {renderIcon(method.icon)}
               <div className="text-left">
-                <h3 className="font-semibold text-gray-900 text-base">{method.title}</h3>
-                <p className="text-gray-500 text-sm">{method.subtitle}</p>
+                <h3 className="font-semibold text-white text-base">{method.title}</h3>
+                <p className="text-gray-400 text-sm">{method.subtitle}</p>
               </div>
             </button>
           ))}
