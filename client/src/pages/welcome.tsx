@@ -105,7 +105,7 @@ export default function Welcome() {
           <Link href="/register">
             <Button 
               variant="outline" 
-              className="w-full h-12 sm:h-14 border-2 border-purple-300 dark:border-purple-600 hover:border-purple-400 dark:hover:border-purple-500 text-purple-700 dark:text-purple-300 hover:text-purple-800 dark:hover:text-purple-200 text-sm sm:text-base font-bold rounded-xl sm:rounded-2xl bg-white dark:bg-background hover:bg-purple-50 dark:hover:bg-muted shadow-lg hover:shadow-xl transition-all duration-200 relative overflow-hidden group"
+              className="w-full h-12 sm:h-14 border-2 border-purple-400 dark:border-purple-500 hover:border-purple-500 dark:hover:border-purple-400 text-purple-700 dark:text-purple-300 hover:text-purple-800 dark:hover:text-purple-200 text-sm sm:text-base font-bold rounded-xl sm:rounded-2xl bg-white dark:bg-transparent hover:bg-purple-50 dark:hover:bg-purple-900/20 shadow-lg hover:shadow-xl transition-all duration-200 relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-purple-50/30 to-transparent dark:from-purple-500/10 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
               <span className="relative z-10 tracking-wide text-center leading-tight">OPEN A DIGITAL ACCOUNT</span>
@@ -176,7 +176,7 @@ export default function Welcome() {
               <Link href="/register">
                 <Button 
                   variant="outline" 
-                  className="group w-full max-w-xs h-11 border-2 border-purple-300/70 dark:border-purple-400/70 text-purple-700 dark:text-purple-300 text-sm font-semibold rounded-xl bg-white/95 dark:bg-gray-800/95 hover:bg-gradient-to-r hover:from-white hover:to-purple-50 dark:hover:from-gray-700 dark:hover:to-purple-900/50 shadow-lg hover:shadow-purple-500/20 transform hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm relative overflow-hidden"
+                  className="group w-full max-w-xs h-11 border-2 border-purple-400 dark:border-purple-500 text-purple-700 dark:text-purple-300 text-sm font-semibold rounded-xl bg-white/95 dark:bg-transparent hover:bg-gradient-to-r hover:from-white hover:to-purple-50 dark:hover:from-purple-900/20 dark:hover:to-purple-800/20 shadow-lg hover:shadow-purple-500/20 transform hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-100/20 via-pink-100/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="relative z-10 tracking-wide">OPEN A DIGITAL ACCOUNT</span>
