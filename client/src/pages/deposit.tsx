@@ -43,13 +43,8 @@ export default function Deposit() {
                   ? "border-purple-500 bg-purple-50" 
                   : "border-gray-200 bg-white"
               }`}
-              onClick={() => {
-                setSelectedMethod("card");
-                toast({
-                  title: "Credit Card",
-                  description: "Credit card payment will be available soon",
-                });
-              }}
+              onClick={() => setLocation("/deposit/card")}
+              data-testid="button-method-card"
             >
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
