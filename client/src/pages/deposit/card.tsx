@@ -29,7 +29,7 @@ export default function CardDeposit() {
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'failed'>('idle');
 
   const { data: user, isLoading: isUserLoading } = useQuery<User>({
-    queryKey: ['/api/auth/me'],
+    queryKey: ['/api/auth/user'],
   });
 
   useEffect(() => {
