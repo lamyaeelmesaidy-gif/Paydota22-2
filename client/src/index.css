@@ -80,6 +80,19 @@ body::-webkit-scrollbar {
   box-sizing: border-box;
 }
 
+/* Global bottom padding for all pages - ensures content is not hidden behind bottom navigation */
+/* Applied on mobile only (lg:pb-6 equivalent handled by media query) */
+#root > div:first-child {
+  padding-bottom: 6rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1024px) {
+  #root > div:first-child {
+    padding-bottom: 1.5rem;
+  }
+}
+
 /* Ensure all content has proper spacing from bottom nav */
 .page-content {
   padding-bottom: 1.25rem;
