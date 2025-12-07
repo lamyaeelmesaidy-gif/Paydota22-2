@@ -33,6 +33,9 @@ export default function Welcome() {
           <h2 className="text-gray-900 dark:text-white text-xl sm:text-2xl font-bold mb-1 sm:mb-2 tracking-tight">
             fully <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">online</span>
           </h2>
+          <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-1">
+            We support receiving payments via credit cards
+          </p>
         </div>
 
         {/* Center Visual Content - responsive card design */}
@@ -157,6 +160,9 @@ export default function Welcome() {
               <p className="text-gray-600 dark:text-gray-300 text-sm xl:text-base leading-relaxed font-medium max-w-md">
                 Experience the <span className="font-semibold text-purple-600 dark:text-purple-400">future of wallet</span> with our cutting-edge digital platform. 
                 Manage your finances with complete <span className="font-semibold text-blue-600 dark:text-blue-400">freedom</span> and <span className="font-semibold text-green-600 dark:text-green-400">security</span>.
+              </p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm mt-3">
+                We support receiving payments via credit cards
               </p>
             </div>
 
