@@ -38,6 +38,7 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useNativeInteractions } from "@/hooks/useNativeInteractions";
 import PullToRefresh from "@/components/pull-to-refresh";
 import { AccountSkeleton } from "@/components/skeletons";
+import { Input } from "@/components/ui/input";
 
 export default function Account() {
   const { user } = useAuth();
@@ -47,6 +48,7 @@ export default function Account() {
   const queryClient = useQueryClient();
   const { triggerHaptic } = useNativeInteractions();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [confirmEmail, setConfirmEmail] = useState("");
   
   // Fetch user info
   const { data: userInfo, isLoading } = useQuery({
@@ -61,23 +63,42 @@ export default function Account() {
     },
     onSuccess: () => {
       toast({
-        title: "تم حذف الحساب",
-        description: "تم حذف حسابك بنجاح",
+        title: "Account Deleted",
+        description: "Your account has been successfully deleted",
       });
       window.location.href = "/login";
     },
     onError: (error: any) => {
       toast({
-        title: t("error"),
-        description: "فشل في حذف الحساب",
+        title: "Error",
+        description: "Failed to delete account",
         variant: "destructive",
       });
     },
   });
 
+  const userEmail = (userInfo as any)?.email || "";
+  const isEmailMatch = confirmEmail.toLowerCase() === userEmail.toLowerCase();
+
   const handleDeleteAccount = () => {
+    if (!isEmailMatch) {
+      toast({
+        title: "Email Mismatch",
+        description: "Please enter your email address correctly to confirm deletion",
+        variant: "destructive",
+      });
+      return;
+    }
     deleteAccountMutation.mutate();
     setShowDeleteDialog(false);
+    setConfirmEmail("");
+  };
+
+  const handleCloseDeleteDialog = (open: boolean) => {
+    setShowDeleteDialog(open);
+    if (!open) {
+      setConfirmEmail("");
+    }
   };
 
   const handleLogout = async () => {
@@ -370,7 +391,7 @@ export default function Account() {
                   <Trash2 className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <span className="text-red-600 dark:text-red-400 font-medium text-sm">
-                  مسح الحساب
+                  Delete Account
                 </span>
               </div>
               <ChevronRight className="h-4 w-4 text-gray-400" />
@@ -381,22 +402,36 @@ export default function Account() {
       </PullToRefresh>
 
       {/* Delete Account Confirmation Dialog */}
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+      <AlertDialog open={showDeleteDialog} onOpenChange={handleCloseDeleteDialog}>
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-red-600">تأكيد حذف الحساب</AlertDialogTitle>
-            <AlertDialogDescription className="text-right">
-              هل أنت متأكد من رغبتك في حذف حسابك؟ سيتم حذف جميع بياناتك بشكل نهائي ولا يمكن استرجاعها.
+            <AlertDialogTitle className="text-red-600">Confirm Account Deletion</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete your account? All your data will be permanently deleted and cannot be recovered.
+              <div className="mt-4">
+                <p className="text-sm font-medium mb-2">Enter your email to confirm:</p>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={confirmEmail}
+                  onChange={(e) => setConfirmEmail(e.target.value)}
+                  className="w-full"
+                  data-testid="input-confirm-email"
+                />
+                {userEmail && (
+                  <p className="text-xs text-gray-500 mt-1">Your email: {userEmail}</p>
+                )}
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="flex-row-reverse gap-2">
-            <AlertDialogCancel className="flex-1">إلغاء</AlertDialogCancel>
+          <AlertDialogFooter className="gap-2">
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDeleteAccount}
-              className="flex-1 bg-red-600 hover:bg-red-700 text-white"
-              disabled={deleteAccountMutation.isPending}
+              className="bg-red-600 hover:bg-red-700 text-white"
+              disabled={deleteAccountMutation.isPending || !isEmailMatch}
             >
-              {deleteAccountMutation.isPending ? "جاري الحذف..." : "حذف الحساب"}
+              {deleteAccountMutation.isPending ? "Deleting..." : "Delete Account"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
