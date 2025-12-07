@@ -28,7 +28,7 @@ export default function CardDeposit() {
   const [flutterwavePublicKey, setFlutterwavePublicKey] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'failed'>('idle');
 
-  const { data: user } = useQuery<User>({
+  const { data: user, isLoading: isUserLoading } = useQuery<User>({
     queryKey: ['/api/auth/me'],
   });
 
@@ -80,12 +80,22 @@ export default function CardDeposit() {
       return;
     }
 
+    if (isUserLoading) {
+      toast({
+        title: "جاري التحميل",
+        description: "الرجاء الانتظار...",
+        variant: "default",
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         title: "خطأ",
         description: "يجب تسجيل الدخول أولاً",
         variant: "destructive",
       });
+      setLocation('/login');
       return;
     }
 
@@ -300,7 +310,7 @@ export default function CardDeposit() {
 
         <Button
           onClick={handleDeposit}
-          disabled={!amount || paymentStatus === 'processing' || !isFlutterwaveLoaded || !flutterwavePublicKey}
+          disabled={!amount || paymentStatus === 'processing' || !isFlutterwaveLoaded || !flutterwavePublicKey || isUserLoading}
           className="w-full py-6 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl text-lg"
           data-testid="button-deposit"
         >
@@ -309,7 +319,7 @@ export default function CardDeposit() {
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />
               جاري المعالجة...
             </>
-          ) : !isFlutterwaveLoaded || !flutterwavePublicKey ? (
+          ) : isUserLoading || !isFlutterwaveLoaded || !flutterwavePublicKey ? (
             <>
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />
               جاري التحميل...
