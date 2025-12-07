@@ -15,8 +15,7 @@ export default function Welcome() {
       <div className="mobile-safe-area" />
       
       {/* Simplified background decorative elements - responsive sizing */}
-      <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-purple-200/10 to-pink-200/10 dark:from-purple-500/10 dark:to-pink-500/10 rounded-full blur-xl"></div>
-      <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-32 sm:h-32 lg:w-48 lg:h-48 bg-gradient-to-tr from-blue-200/8 to-purple-200/8 dark:from-blue-500/10 dark:to-purple-500/10 rounded-full blur-xl"></div>
+      <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-purple-200/10 to-pink-200/10 dark:from-purple-500/5 dark:to-pink-500/5 rounded-full blur-xl"></div>
       
       {/* Mobile Layout - optimized for all screen sizes */}
       <div className="lg:hidden px-3 sm:px-4 md:px-6 flex flex-col justify-between min-h-screen relative z-10 max-w-sm sm:max-w-md mx-auto safe-area-inset">
