@@ -48,6 +48,7 @@ export interface IStorage {
   createGoogleUser(user: any): Promise<User>;
   linkGoogleAccount(userId: string, googleId: string): Promise<void>;
   updateUserProfile(userId: string, updates: Partial<User>): Promise<User>;
+  deleteUser(userId: string): Promise<void>;
   
   // Card operations
   getCardsByUserId(userId: string): Promise<Card[]>;
@@ -204,6 +205,47 @@ export class DatabaseStorage implements IStorage {
         stack: dbError?.stack
       });
       throw new Error(`Database update failed: ${dbError?.message || 'Unknown error'}`);
+    }
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    console.log("🗑️ [STORAGE] deleteUser called for:", userId);
+    
+    try {
+      // Delete all related data first (in order of dependencies)
+      await db.delete(notifications).where(eq(notifications.userId, userId));
+      await db.delete(notificationSettings).where(eq(notificationSettings.userId, userId));
+      await db.delete(supportTickets).where(eq(supportTickets.userId, userId));
+      await db.delete(pendingBalances).where(eq(pendingBalances.userId, userId));
+      
+      // Delete KYC documents and verifications
+      const kycVerification = await this.getKycVerificationByUserId(userId);
+      if (kycVerification) {
+        await db.delete(kycDocuments).where(eq(kycDocuments.kycVerificationId, kycVerification.id));
+        await db.delete(kycVerifications).where(eq(kycVerifications.userId, userId));
+      }
+      
+      // Delete payment links and transactions
+      const userPaymentLinks = await this.getPaymentLinksByUserId(userId);
+      for (const link of userPaymentLinks) {
+        await db.delete(paymentTransactions).where(eq(paymentTransactions.paymentLinkId, link.id));
+      }
+      await db.delete(paymentLinks).where(eq(paymentLinks.userId, userId));
+      
+      // Delete cards and their transactions
+      const userCards = await this.getCardsByUserId(userId);
+      for (const card of userCards) {
+        await db.delete(transactions).where(eq(transactions.cardId, card.id));
+      }
+      await db.delete(cards).where(eq(cards.userId, userId));
+      
+      // Finally delete the user
+      await db.delete(users).where(eq(users.id, userId));
+      
+      console.log("✅ [STORAGE] User and all related data deleted successfully:", userId);
+    } catch (error: any) {
+      console.error("❌ [STORAGE] Error deleting user:", error);
+      throw new Error(`Failed to delete user: ${error?.message || 'Unknown error'}`);
     }
   }
 

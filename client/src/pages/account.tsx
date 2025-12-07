@@ -1,5 +1,16 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { 
   Settings, 
   Shield, 
@@ -14,7 +25,8 @@ import {
   Phone,
   Crown,
   FileCheck,
-  MessageCircle
+  MessageCircle,
+  Trash2
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -22,7 +34,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useLocation } from "wouter";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useNativeInteractions } from "@/hooks/useNativeInteractions";
 import PullToRefresh from "@/components/pull-to-refresh";
 import { AccountSkeleton } from "@/components/skeletons";
@@ -34,11 +46,39 @@ export default function Account() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
   const { triggerHaptic } = useNativeInteractions();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   
   // Fetch user info
   const { data: userInfo, isLoading } = useQuery({
     queryKey: ["/api/auth/user"],
   });
+
+  // Delete account mutation
+  const deleteAccountMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiRequest("DELETE", "/api/user/account");
+      return response;
+    },
+    onSuccess: () => {
+      toast({
+        title: "تم حذف الحساب",
+        description: "تم حذف حسابك بنجاح",
+      });
+      window.location.href = "/login";
+    },
+    onError: (error: any) => {
+      toast({
+        title: t("error"),
+        description: "فشل في حذف الحساب",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleDeleteAccount = () => {
+    deleteAccountMutation.mutate();
+    setShowDeleteDialog(false);
+  };
 
   const handleLogout = async () => {
     try {
@@ -301,12 +341,12 @@ export default function Account() {
           </Card>
         )}
 
-        {/* Logout */}
+        {/* Logout & Delete Account */}
         <Card className="bg-white/80 dark:bg-background backdrop-blur-sm border-purple-200/30 dark:border-border shadow-lg rounded-xl overflow-hidden mb-24 lg:mb-6">
           <CardContent className="p-0">
             <button 
               onClick={handleLogout}
-              className="w-full p-3 flex items-center justify-between hover:bg-red-50/50 dark:hover:bg-red-900/20 transition-colors"
+              className="w-full p-3 flex items-center justify-between hover:bg-red-50/50 dark:hover:bg-red-900/20 transition-colors border-b border-purple-100/30 dark:border-purple-700/30"
               data-testid="button-logout"
             >
               <div className="flex items-center space-x-3">
@@ -319,10 +359,48 @@ export default function Account() {
               </div>
               <ChevronRight className="h-4 w-4 text-gray-400" />
             </button>
+            
+            <button 
+              onClick={() => setShowDeleteDialog(true)}
+              className="w-full p-3 flex items-center justify-between hover:bg-red-50/50 dark:hover:bg-red-900/20 transition-colors"
+              data-testid="button-delete-account"
+            >
+              <div className="flex items-center space-x-3">
+                <div className="rounded-lg p-1.5">
+                  <Trash2 className="h-5 w-5 text-red-600 dark:text-red-400" />
+                </div>
+                <span className="text-red-600 dark:text-red-400 font-medium text-sm">
+                  مسح الحساب
+                </span>
+              </div>
+              <ChevronRight className="h-4 w-4 text-gray-400" />
+            </button>
           </CardContent>
         </Card>
         </div>
       </PullToRefresh>
+
+      {/* Delete Account Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-red-600">تأكيد حذف الحساب</AlertDialogTitle>
+            <AlertDialogDescription className="text-right">
+              هل أنت متأكد من رغبتك في حذف حسابك؟ سيتم حذف جميع بياناتك بشكل نهائي ولا يمكن استرجاعها.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-row-reverse gap-2">
+            <AlertDialogCancel className="flex-1">إلغاء</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDeleteAccount}
+              className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+              disabled={deleteAccountMutation.isPending}
+            >
+              {deleteAccountMutation.isPending ? "جاري الحذف..." : "حذف الحساب"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

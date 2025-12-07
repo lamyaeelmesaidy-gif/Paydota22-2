@@ -1817,6 +1817,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Delete account endpoint
+  app.delete("/api/user/account", requireAuth, async (req: any, res) => {
+    try {
+      const userId = req.session?.userId;
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      console.log(`🗑️ User ${userId} requested account deletion`);
+      
+      // Delete the user and all associated data
+      await storage.deleteUser(userId);
+      
+      // Destroy the session
+      req.session.destroy((err: any) => {
+        if (err) {
+          console.error("Error destroying session:", err);
+        }
+      });
+      
+      console.log(`✅ Account deleted successfully for user ${userId}`);
+      res.json({ message: "Account deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      res.status(500).json({ message: "Failed to delete account" });
+    }
+  });
+
   // KYC verification status endpoint
   app.get("/api/user/kyc-status", requireAuth, async (req: any, res) => {
     try {
