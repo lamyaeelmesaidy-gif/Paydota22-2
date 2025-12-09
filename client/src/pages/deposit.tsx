@@ -7,8 +7,8 @@ export default function Deposit() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen bg-[#0f0f23] text-white">
-      <div className="max-w-4xl mx-auto px-4 lg:px-6 py-6 pb-20">
+    <div className="min-h-screen bg-[#0f0f23] text-white flex flex-col">
+      <div className="flex-1 max-w-4xl mx-auto px-4 lg:px-6 py-6 pb-24 w-full">
         
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
