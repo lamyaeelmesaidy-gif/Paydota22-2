@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CreditCard, Building } from "lucide-react";
+import { ArrowLeft, CreditCard, Building, Clock } from "lucide-react";
 import { useLocation } from "wouter";
 import binanceIcon from "@assets/pngwing.com.png";
 
@@ -66,12 +66,15 @@ export default function Deposit() {
               </div>
             </div>
 
-            {/* Binance Pay Option */}
+            {/* Binance Pay Option - Coming Soon */}
             <div 
-              className="p-4 rounded-xl border-2 cursor-pointer transition-all border-[#2a2a45] bg-[#1a1a35]/80 hover:border-purple-400/50"
-              onClick={() => setLocation("/binance-pay")}
+              className="p-4 rounded-xl border-2 transition-all border-[#2a2a45] bg-[#1a1a35]/50 opacity-70 cursor-not-allowed relative"
               data-testid="button-deposit-binance"
             >
+              <div className="absolute top-2 right-2 flex items-center gap-1 bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full">
+                <Clock className="h-3 w-3" />
+                <span>Coming Soon</span>
+              </div>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center">
                   <img 
