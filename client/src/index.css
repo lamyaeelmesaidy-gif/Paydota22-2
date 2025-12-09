@@ -141,16 +141,16 @@ html {
 }
 
 .dark {
-  --background: 222 47% 11%; /* #0f172a - Dark slate background */
+  --background: 240 40% 10%; /* #0f0f23 - Dark purple background */
   --foreground: 210 40% 98%; /* #f8fafc - Light text */
-  --muted: 222 47% 14%; /* #1a2332 - Slightly lighter for subtle contrast */
+  --muted: 240 40% 13%; /* #1a1a35 - Slightly lighter for subtle contrast */
   --muted-foreground: 215 20% 65%; /* #94a3b8 - Light gray */
-  --popover: 222 47% 11%; /* #0f172a - Same as background */
+  --popover: 240 40% 10%; /* #0f0f23 - Same as background */
   --popover-foreground: 210 40% 98%; /* Light text */
-  --card: 222 47% 11%; /* #0f172a - Same as background for uniform look */
+  --card: 240 40% 13%; /* #1a1a35 - Slightly lighter for cards */
   --card-foreground: 210 40% 98%; /* Light text */
-  --border: 222 47% 18%; /* #1e2a3a - Subtle border */
-  --input: 222 47% 11%; /* #0f172a - Same as background */
+  --border: 240 30% 20%; /* #2a2a45 - Subtle border */
+  --input: 240 40% 13%; /* #1a1a35 - Slightly lighter for inputs */
   --primary: 265 85% 60%; /* Purple primary */
   --primary-foreground: 0 0% 100%; /* Pure white */
   --secondary: 160 84% 39%; /* Keep secondary green */

@@ -136,7 +136,7 @@ export default function PaymentLinksPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-24 lg:pb-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-background pb-24 lg:pb-6">
       <div className="container mx-auto px-3 pt-0 pb-3 lg:p-6 max-w-7xl">
         {/* Info Banner */}
         <div className="mb-4 lg:mb-6 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple-200 dark:border-purple-700/50 rounded-lg p-3 lg:p-4">

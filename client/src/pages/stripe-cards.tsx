@@ -5,7 +5,7 @@ export default function AirwallexCards() {
   const { t, language } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0f0f23] flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center">
         {/* Icon */}
         <div className="mb-8 flex justify-center">
@@ -14,7 +14,7 @@ export default function AirwallexCards() {
               <CreditCard className="h-16 w-16 text-white" />
             </div>
             {/* Animated clock icon */}
-            <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg border-4 border-gray-50 dark:border-gray-900">
+            <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-white dark:bg-[#1a1a35] rounded-full flex items-center justify-center shadow-lg border-4 border-gray-50 dark:border-[#0f0f23]">
               <Clock className="h-6 w-6 text-purple-600 dark:text-purple-400 animate-pulse" />
             </div>
           </div>
