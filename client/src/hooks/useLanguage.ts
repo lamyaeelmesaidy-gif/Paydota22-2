@@ -177,7 +177,6 @@ const translations = {
     insufficientFunds: "Insufficient Funds",
     amountTooSmall: "Amount Too Small",
     processingWithdraw: "Processing...",
-    withdrawButton: "Withdraw",
     
     // Support Page
     supportCenter: "Support Center",
@@ -202,7 +201,6 @@ const translations = {
     ticketCreatedDesc: "We will respond as soon as possible",
     ticketError: "Error",
     ticketErrorDesc: "Failed to create support ticket",
-    faq: "Frequently Asked Questions",
     faqQuestion1: "How can I create a new card?",
     faqAnswer1: "You can create a new card from the dashboard by clicking the 'Create New Card' button and following the simple steps.",
     faqQuestion2: "What are the daily spending limits?",
