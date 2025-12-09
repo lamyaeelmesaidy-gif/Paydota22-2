@@ -74,9 +74,9 @@ export default function Dashboard() {
   // Remove skeleton loading - show dashboard immediately
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-background lg:h-auto lg:overflow-auto overflow-y-auto pb-24 lg:pb-6">
+    <div className="h-screen bg-gray-50 dark:bg-background lg:h-auto lg:overflow-auto overflow-hidden pb-24 lg:pb-6">
       <PullToRefresh onRefresh={handleRefresh}>
-        <div className="h-full flex flex-col max-w-md lg:max-w-none mx-auto lg:p-6 overflow-hidden lg:overflow-visible">
+        <div className="h-full flex flex-col max-w-md lg:max-w-none mx-auto lg:p-6 overflow-hidden">
           {/* Fixed Header Area */}
           <div className="flex-shrink-0 bg-white dark:bg-background lg:bg-transparent lg:rounded-xl lg:p-4">
             {/* User Greeting - Fixed */}
