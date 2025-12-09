@@ -64,8 +64,8 @@ export default function CardDeposit() {
     
     if (!depositAmount || depositAmount < 1) {
       toast({
-        title: "خطأ",
-        description: "الرجاء إدخال مبلغ صحيح (الحد الأدنى $1)",
+        title: "Error",
+        description: "Please enter a valid amount (minimum $1)",
         variant: "destructive",
       });
       return;
@@ -73,8 +73,8 @@ export default function CardDeposit() {
 
     if (!isFlutterwaveLoaded || !flutterwavePublicKey) {
       toast({
-        title: "خطأ",
-        description: "جاري تحميل بوابة الدفع، الرجاء الانتظار...",
+        title: "Error",
+        description: "Loading payment gateway, please wait...",
         variant: "destructive",
       });
       return;
@@ -82,8 +82,8 @@ export default function CardDeposit() {
 
     if (isUserLoading) {
       toast({
-        title: "جاري التحميل",
-        description: "الرجاء الانتظار...",
+        title: "Loading",
+        description: "Please wait...",
         variant: "default",
       });
       return;
@@ -91,8 +91,8 @@ export default function CardDeposit() {
 
     if (!user) {
       toast({
-        title: "خطأ",
-        description: "يجب تسجيل الدخول أولاً",
+        title: "Error",
+        description: "You must be logged in first",
         variant: "destructive",
       });
       setLocation('/login');
@@ -127,8 +127,8 @@ export default function CardDeposit() {
           phone_number: user.phone || '',
         },
         customizations: {
-          title: 'إيداع رصيد',
-          description: `إيداع $${depositAmount} في المحفظة`,
+          title: 'Deposit Balance',
+          description: `Deposit $${depositAmount} to wallet`,
           logo: '',
         },
         callback: async function(data: any) {
@@ -151,8 +151,8 @@ export default function CardDeposit() {
               if (verifyResponse.ok) {
                 setPaymentStatus('success');
                 toast({
-                  title: "تم الإيداع بنجاح!",
-                  description: `تم إضافة $${depositAmount} إلى رصيدك`,
+                  title: "Deposit Successful!",
+                  description: `$${depositAmount} has been added to your balance`,
                 });
                 setTimeout(() => {
                   setLocation('/wallet');
@@ -160,8 +160,8 @@ export default function CardDeposit() {
               } else {
                 setPaymentStatus('failed');
                 toast({
-                  title: "خطأ في التحقق",
-                  description: "حدث خطأ أثناء التحقق من الدفع",
+                  title: "Verification Error",
+                  description: "An error occurred while verifying the payment",
                   variant: "destructive",
                 });
               }
@@ -172,8 +172,8 @@ export default function CardDeposit() {
           } else {
             setPaymentStatus('failed');
             toast({
-              title: "فشل الدفع",
-              description: "لم تتم عملية الدفع بنجاح",
+              title: "Payment Failed",
+              description: "The payment was not completed successfully",
               variant: "destructive",
             });
           }
@@ -188,8 +188,8 @@ export default function CardDeposit() {
       console.error('Payment error:', error);
       setPaymentStatus('idle');
       toast({
-        title: "خطأ",
-        description: "حدث خطأ أثناء فتح بوابة الدفع",
+        title: "Error",
+        description: "An error occurred while opening the payment gateway",
         variant: "destructive",
       });
     }
@@ -202,14 +202,14 @@ export default function CardDeposit() {
           <div className="w-20 h-20 mx-auto bg-green-500/20 rounded-full flex items-center justify-center">
             <CheckCircle className="w-12 h-12 text-green-400" />
           </div>
-          <h2 className="text-2xl font-bold">تم الإيداع بنجاح!</h2>
-          <p className="text-gray-400">تم إضافة ${amount} إلى رصيدك</p>
+          <h2 className="text-2xl font-bold">Deposit Successful!</h2>
+          <p className="text-gray-400">${amount} has been added to your balance</p>
           <Button
             onClick={() => setLocation('/wallet')}
             className="mt-4 bg-purple-600 hover:bg-purple-700"
             data-testid="button-go-to-wallet"
           >
-            الذهاب للمحفظة
+            Go to Wallet
           </Button>
         </div>
       </div>
@@ -223,14 +223,14 @@ export default function CardDeposit() {
           <div className="w-20 h-20 mx-auto bg-red-500/20 rounded-full flex items-center justify-center">
             <XCircle className="w-12 h-12 text-red-400" />
           </div>
-          <h2 className="text-2xl font-bold">فشل الإيداع</h2>
-          <p className="text-gray-400">لم تتم عملية الدفع بنجاح</p>
+          <h2 className="text-2xl font-bold">Deposit Failed</h2>
+          <p className="text-gray-400">The payment was not completed successfully</p>
           <Button
             onClick={() => setPaymentStatus('idle')}
             className="mt-4 bg-purple-600 hover:bg-purple-700"
             data-testid="button-try-again"
           >
-            حاول مرة أخرى
+            Try Again
           </Button>
         </div>
       </div>
@@ -250,7 +250,7 @@ export default function CardDeposit() {
           >
             <ArrowLeft className="h-6 w-6" />
           </Button>
-          <h1 className="text-xl font-bold text-white">الإيداع عبر البطاقة</h1>
+          <h1 className="text-xl font-bold text-white">Card Deposit</h1>
         </div>
 
         <div className="bg-[#1a1a35] rounded-2xl p-6 mb-6">
@@ -259,17 +259,17 @@ export default function CardDeposit() {
               <CreditCard className="h-6 w-6 text-blue-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-white">البطاقة الائتمانية</h3>
+              <h3 className="font-semibold text-white">Credit Card</h3>
               <p className="text-sm text-gray-400">Visa, Mastercard</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-2">مبلغ الإيداع (USD)</label>
+              <label className="block text-sm text-gray-400 mb-2">Deposit Amount (USD)</label>
               <Input
                 type="number"
-                placeholder="أدخل المبلغ"
+                placeholder="Enter amount"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 className="bg-[#0f0f23] border-[#2a2a45] text-white text-lg h-14 text-center"
@@ -299,11 +299,11 @@ export default function CardDeposit() {
 
         <div className="bg-[#1a1a35]/60 rounded-xl p-4 mb-6">
           <div className="flex justify-between items-center text-sm">
-            <span className="text-gray-400">رسوم المعالجة</span>
+            <span className="text-gray-400">Processing Fee</span>
             <span className="text-gray-300">$0.00</span>
           </div>
           <div className="flex justify-between items-center text-sm mt-2">
-            <span className="text-gray-400">المبلغ الإجمالي</span>
+            <span className="text-gray-400">Total Amount</span>
             <span className="text-white font-semibold">${amount || '0.00'}</span>
           </div>
         </div>
@@ -317,23 +317,23 @@ export default function CardDeposit() {
           {paymentStatus === 'processing' ? (
             <>
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              جاري المعالجة...
+              Processing...
             </>
           ) : isUserLoading || !isFlutterwaveLoaded || !flutterwavePublicKey ? (
             <>
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              جاري التحميل...
+              Loading...
             </>
           ) : (
             <>
               <CreditCard className="w-5 h-5 mr-2" />
-              إيداع ${amount || '0'}
+              Deposit ${amount || '0'}
             </>
           )}
         </Button>
 
         <p className="text-center text-gray-500 text-sm mt-4">
-          الدفع آمن ومشفر عبر Flutterwave
+          Secure and encrypted payment via Flutterwave
         </p>
       </div>
     </div>
