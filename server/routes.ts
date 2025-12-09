@@ -1710,10 +1710,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
+      // Also fetch payment transactions (deposits from Flutterwave)
+      try {
+        const paymentTxns = await db
+          .select()
+          .from(schema.paymentTransactions)
+          .where(eq(schema.paymentTransactions.userId, userId))
+          .orderBy(desc(schema.paymentTransactions.createdAt));
+        
+        for (const ptxn of paymentTxns) {
+          allTransactions.push({
+            id: ptxn.id,
+            cardId: null,
+            type: 'deposit',
+            status: ptxn.status,
+            amount: ptxn.amount?.toString() || '0',
+            currency: ptxn.currency || 'USD',
+            merchant: 'Flutterwave',
+            description: `Deposit via ${ptxn.paymentMethod || 'card'}`,
+            createdAt: ptxn.createdAt?.toISOString() || new Date().toISOString(),
+          });
+        }
+      } catch (paymentTxnError) {
+        console.log('No payment transactions found or error fetching:', paymentTxnError);
+      }
+
+      // Also fetch bank transfers (deposits)
+      try {
+        const bankTransfers = await db
+          .select()
+          .from(schema.bankTransfers)
+          .where(eq(schema.bankTransfers.userId, userId))
+          .orderBy(desc(schema.bankTransfers.createdAt));
+        
+        for (const btxn of bankTransfers) {
+          allTransactions.push({
+            id: btxn.id,
+            cardId: null,
+            type: 'deposit',
+            status: btxn.status === 'approved' ? 'successful' : btxn.status,
+            amount: btxn.amount?.toString() || '0',
+            currency: 'USD',
+            merchant: 'Bank Transfer',
+            description: `Bank transfer deposit`,
+            createdAt: btxn.createdAt?.toISOString() || new Date().toISOString(),
+          });
+        }
+      } catch (bankTxnError) {
+        console.log('No bank transfers found or error fetching:', bankTxnError);
+      }
+
       // Sort by date (newest first)
       allTransactions.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-      console.log(`📊 Returning ${allTransactions.length} transactions (real Airwallex data) for user ${userId}`);
+      console.log(`📊 Returning ${allTransactions.length} transactions for user ${userId}`);
       res.json(allTransactions);
     } catch (error) {
       console.error("Error fetching transactions:", error);
