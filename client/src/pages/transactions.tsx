@@ -186,7 +186,7 @@ export default function Transactions() {
                               : 'text-red-600 dark:text-red-400'
                           }`}>
                             {transaction.type === 'deposit' || transaction.type === 'receive' ? '+' : '-'}
-                            ${Math.abs(transaction.amount / 100).toFixed(2)}
+                            ${Math.abs(Number(transaction.amount)).toFixed(2)}
                           </p>
                           {getTransactionStatusBadge(transaction.status)}
                         </div>
