@@ -134,7 +134,7 @@ function Router() {
       {isAuthenticated && !shouldHideBottomNav && <SidebarNavigation />}
       
       {/* Main content */}
-      <div className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900">
+      <div className="flex-1 overflow-auto bg-gray-50 dark:bg-[#0f0f23]">
         <div className="w-full h-full lg:pb-0 pb-20">
           <Switch>
             {/* Protected routes - only for authenticated users */}

@@ -852,7 +852,7 @@ html, body {
   }
 
   .dark .bottom-nav-blur {
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(15, 15, 35, 0.95);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
   }
@@ -867,7 +867,7 @@ html, body {
   }
 
   .dark .nav-icon-container {
-    background: rgba(51, 65, 85, 0.6);
+    background: rgba(26, 26, 53, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
@@ -885,7 +885,7 @@ html, body {
   }
 
   .dark .nav-icon-container:hover:not(.active) {
-    background: rgba(71, 85, 105, 0.8);
+    background: rgba(42, 42, 69, 0.9);
   }
 
   /* Native-like focus states */
