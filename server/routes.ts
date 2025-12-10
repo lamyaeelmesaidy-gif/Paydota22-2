@@ -1486,6 +1486,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/wallet/send", requireAuth, async (req: any, res) => {
     try {
       const userId = req.session?.userId;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      
       const { amount, recipient, type, note } = req.body;
       
       if (!amount || amount <= 0) {
@@ -1496,29 +1500,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Recipient is required" });
       }
 
-      // Get user's primary card
-      const cards = await storage.getCardsByUserId(userId);
-      if (cards.length === 0) {
-        return res.status(400).json({ message: "No card found for sending" });
+      // Check wallet balance first
+      const currentBalance = await storage.getWalletBalance(userId);
+      if (currentBalance < amount) {
+        return res.status(400).json({ 
+          message: "Insufficient balance",
+          currentBalance,
+          requiredAmount: amount
+        });
       }
 
-      const primaryCard = cards[0];
+      // Deduct from wallet balance
+      const newBalance = currentBalance - amount;
+      await storage.updateWalletBalance(userId, newBalance);
+      
+      console.log(`💸 Transfer: User ${userId} sent ${amount}. Balance: ${currentBalance} -> ${newBalance}`);
+
+      // Get user's primary card for transaction record (create virtual card if none exists)
+      let cards = await storage.getCardsByUserId(userId);
+      let primaryCard = cards[0];
+      
+      if (!primaryCard) {
+        // Create a virtual internal card for transaction tracking
+        primaryCard = await storage.createCard({
+          userId,
+          type: "virtual",
+          holderName: "Internal Wallet",
+          brand: "visa",
+          status: "active",
+          currency: "USD",
+          design: "default",
+          expiryMonth: 12,
+          expiryYear: new Date().getFullYear() + 5
+        });
+      }
 
       // Create transaction record
       await storage.createTransaction({
         cardId: primaryCard.id,
-        amount: -amount, // Negative for sending
+        amount: (-amount).toString(),
+        currency: "USD",
         type: "transfer",
         description: `Transfer to ${recipient}${note ? `: ${note}` : ''}`,
         status: "completed",
-        merchantName: "Transfer System",
+        merchant: "Transfer System",
       });
 
       res.json({
         success: true,
         message: "Transfer sent successfully",
         amount: amount,
-        recipient: recipient
+        recipient: recipient,
+        newBalance: newBalance
       });
     } catch (error) {
       console.error("Error processing transfer:", error);
