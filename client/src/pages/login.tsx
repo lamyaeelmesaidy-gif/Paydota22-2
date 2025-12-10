@@ -6,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLanguage } from '@/hooks/useLanguage';
 import { HelpCircle, Check, Smartphone } from 'lucide-react';
+import walletIllustration from '@assets/generated_images/digital_wallet_app_illustration.png';
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -83,24 +84,11 @@ export default function Login() {
 
           {/* Illustration Area */}
           <div className="relative w-full max-w-xs mx-auto h-48 flex items-center justify-center">
-            {/* Decorative Circle Background */}
-            <div className="absolute w-40 h-40 bg-gradient-to-br from-purple-500/30 to-pink-500/20 rounded-full blur-2xl"></div>
-            
-            {/* Phone Illustration */}
-            <div className="relative z-10 flex items-center justify-center">
-              <div className="w-24 h-40 bg-gradient-to-b from-purple-600 to-purple-800 rounded-2xl border-4 border-purple-400/50 shadow-2xl shadow-purple-500/30 flex items-center justify-center">
-                <div className="w-16 h-28 bg-[#1a1028] rounded-xl grid grid-cols-3 gap-1 p-2">
-                  {[...Array(9)].map((_, i) => (
-                    <div key={i} className="bg-purple-500/30 rounded-sm"></div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Decorative Elements */}
-              <div className="absolute -left-8 top-4 w-8 h-8 bg-purple-400/20 rounded-full"></div>
-              <div className="absolute -right-6 bottom-8 w-6 h-6 bg-pink-400/20 rounded-full"></div>
-              <div className="absolute left-4 -bottom-2 w-4 h-4 bg-purple-300/30 rounded-full"></div>
-            </div>
+            <img 
+              src={walletIllustration} 
+              alt="Digital Wallet" 
+              className="w-48 h-48 object-contain drop-shadow-2xl"
+            />
           </div>
         </div>
 
