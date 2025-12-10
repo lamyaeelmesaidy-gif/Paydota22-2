@@ -64,9 +64,9 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#161022] flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#0f0a19' }}>
       {/* Top Section with Logo and Illustration */}
-      <div className="flex-shrink-0 pt-12 pb-6 px-4 text-center">
+      <div className="flex-shrink-0 pt-12 pb-6 px-4 text-center" style={{ backgroundColor: '#0f0a19' }}>
         {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-8">
           <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center">
@@ -99,7 +99,7 @@ export default function Login() {
       </div>
 
       {/* Form Section - Bottom Card */}
-      <div className="flex-1 px-6 pt-8 pb-8">
+      <div className="flex-1 px-6 pt-8 pb-8" style={{ backgroundColor: '#0f0a19' }}>
         {/* Header with Help Icon */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-white text-2xl font-semibold">Access My Account</h2>
