@@ -5,8 +5,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLanguage } from '@/hooks/useLanguage';
-import { HelpCircle, Check } from 'lucide-react';
-import walletIllustration from '@assets/generated_images/transparent_wallet_icons_png.png';
+import { HelpCircle, Check, CreditCard, Wallet, Coins } from 'lucide-react';
 
 export default function Register() {
   const [, setLocation] = useLocation();
@@ -161,12 +160,47 @@ export default function Register() {
           </div>
 
           {/* Illustration Area */}
-          <div className="relative w-full max-w-xs mx-auto h-32 flex items-center justify-center">
-            <img 
-              src={walletIllustration} 
-              alt="Digital Wallet" 
-              className="w-36 h-36 object-contain drop-shadow-2xl"
-            />
+          <div className="relative w-full max-w-xs mx-auto h-36 flex items-center justify-center">
+            {/* Glow Effects */}
+            <div className="absolute w-32 h-32 bg-purple-600/20 rounded-full blur-3xl"></div>
+            <div className="absolute w-20 h-20 bg-pink-500/15 rounded-full blur-2xl translate-x-6 -translate-y-3"></div>
+            
+            {/* Main Phone */}
+            <div className="relative z-10">
+              <div className="w-24 h-40 bg-gradient-to-b from-[#2a1f4e] to-[#1a1030] rounded-3xl border-2 border-purple-500/30 shadow-2xl shadow-purple-500/20 flex flex-col items-center justify-center p-2 relative overflow-hidden">
+                {/* Screen Shine */}
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-transparent"></div>
+                
+                {/* Wallet Icon */}
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center mb-2 shadow-lg">
+                  <Wallet className="w-7 h-7 text-white" />
+                </div>
+                
+                {/* Balance Text */}
+                <div className="text-center">
+                  <p className="text-gray-400 text-[9px]">Balance</p>
+                  <p className="text-white font-bold text-xs">$2,459.00</p>
+                </div>
+              </div>
+              
+              {/* Floating Card 1 */}
+              <div className="absolute -left-8 top-3 w-14 h-9 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg shadow-xl shadow-purple-500/30 flex items-center justify-center transform -rotate-12">
+                <CreditCard className="w-5 h-5 text-white/80" />
+              </div>
+              
+              {/* Floating Card 2 */}
+              <div className="absolute -right-6 top-10 w-12 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg shadow-xl shadow-pink-500/30 flex items-center justify-center transform rotate-12">
+                <CreditCard className="w-4 h-4 text-white/80" />
+              </div>
+              
+              {/* Floating Coins */}
+              <div className="absolute -right-4 bottom-6 w-7 h-7 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full shadow-lg flex items-center justify-center">
+                <span className="text-yellow-900 font-bold text-[10px]">$</span>
+              </div>
+              <div className="absolute -left-3 bottom-10 w-5 h-5 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full shadow-md flex items-center justify-center">
+                <span className="text-yellow-800 font-bold text-[7px]">$</span>
+              </div>
+            </div>
           </div>
         </div>
 
