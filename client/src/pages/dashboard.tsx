@@ -1,350 +1,250 @@
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Minus, ArrowRight, QrCode, ChevronDown, Info, Gift, Bell, Crown, Grid3X3, AlertTriangle, CreditCard, Wallet, Settings, Activity, TrendingUp, Eye, EyeOff, Copy, Send, Smartphone, DollarSign, PiggyBank, Zap, Shield, MapPin, Clock, MoreHorizontal, ArrowUpRight, ArrowDownLeft, Building2, Banknote, Heart, FileText } from "lucide-react";
-import { Link } from "wouter";
+import { Bell, Menu, ChevronDown, ChevronRight, Building2, Wallet } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
-import { useNativeInteractions } from "@/hooks/useNativeInteractions";
 import NotificationCenter from "@/components/notification-center";
-import PullToRefresh from "@/components/pull-to-refresh";
-import KycWarning from "@/components/kyc-warning";
 
 export default function Dashboard() {
   const { t } = useLanguage();
   const [isNotificationCenterOpen, setIsNotificationCenterOpen] = useState(false);
-  const [isBalanceVisible, setIsBalanceVisible] = useState(true);
-  const queryClient = useQueryClient();
-  const { triggerHaptic } = useNativeInteractions();
+  const [sendAmount, setSendAmount] = useState("0.00");
+  const [sendCurrency, setSendCurrency] = useState("USD");
+  const [receiveCurrency, setReceiveCurrency] = useState("EUR");
   
-  // Fetch user info
-  const { data: userInfo } = useQuery({
+  const { data: userInfo } = useQuery<any>({
     queryKey: ["/api/auth/user"],
   });
-  
-  const { data: walletData } = useQuery({
-    queryKey: ["/api/wallet/balance"],
-  });
 
-  // Fetch pending balances
-  const { data: pendingBalances = [], isLoading: pendingLoading } = useQuery({
-    queryKey: ["/api/wallet/pending-balances"],
-  });
-
-  // Fetch unread notifications count
-  const { data: notificationsData } = useQuery({
+  const { data: notificationsData } = useQuery<any>({
     queryKey: ["/api/notifications/unread-count"],
   });
 
-  // Fetch recent transactions
-  const { data: transactions = [], isLoading: transactionsLoading } = useQuery({
-    queryKey: ["/api/transactions"],
-  });
-
-  // Fetch KYC status
-  const { data: kycStatus } = useQuery({
+  const { data: kycStatus } = useQuery<any>({
     queryKey: ["/api/user/kyc-status"],
   });
 
-  const balance = walletData?.balance || 0;
-  const pendingBalance = walletData?.pendingBalance || 0;
   const unreadCount = notificationsData?.count || 0;
 
-  // Pull to refresh function
-  const handleRefresh = async () => {
-    triggerHaptic();
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] }),
-      queryClient.invalidateQueries({ queryKey: ["/api/wallet/balance"] }),
-      queryClient.invalidateQueries({ queryKey: ["/api/wallet/pending-balances"] }),
-      queryClient.invalidateQueries({ queryKey: ["/api/notifications/unread-count"] }),
-      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] }),
-    ]);
-  };
-
-  // Get the first name from user info
   const getFirstName = () => {
     if (userInfo?.firstName) {
-      return userInfo.firstName.toUpperCase();
+      return userInfo.firstName;
     }
-    return "USER";
+    return "User";
   };
 
-  // Remove skeleton loading - show dashboard immediately
+  const currencies = [
+    { code: "USD", flag: "🇺🇸", symbol: "$", name: "US Dollar" },
+    { code: "EUR", flag: "🇪🇺", symbol: "€", name: "Euro" },
+    { code: "GBP", flag: "🇬🇧", symbol: "£", name: "British Pound" },
+    { code: "MAD", flag: "🇲🇦", symbol: "د.م", name: "Moroccan Dirham" },
+    { code: "AED", flag: "🇦🇪", symbol: "د.إ", name: "UAE Dirham" },
+    { code: "SAR", flag: "🇸🇦", symbol: "﷼", name: "Saudi Riyal" },
+  ];
+
+  const getSendCurrencyData = () => currencies.find(c => c.code === sendCurrency) || currencies[0];
+  const getReceiveCurrencyData = () => currencies.find(c => c.code === receiveCurrency) || currencies[1];
+
+  const exchangeRate = 1.1213134;
+  const fee = 0;
+  const totalToPay = parseFloat(sendAmount) || 0;
+  const receiverGets = (totalToPay * exchangeRate).toFixed(2);
+
+  const bgColor = '#0f0a19';
+  const cardBg = '#1a1230';
+  const inputBg = '#1f1730';
+  const borderColor = '#2a2040';
 
   return (
-    <div className="h-screen bg-gray-50 dark:bg-background lg:h-auto lg:overflow-auto overflow-hidden pb-24 lg:pb-6">
-      <PullToRefresh onRefresh={handleRefresh}>
-        <div className="h-full flex flex-col max-w-md lg:max-w-none mx-auto lg:p-6 overflow-hidden">
-          {/* Fixed Header Area */}
-          <div className="flex-shrink-0 bg-white dark:bg-background lg:bg-transparent lg:rounded-xl lg:p-4">
-            {/* User Greeting - Fixed */}
-            <div className="flex items-center justify-between px-4 lg:px-6 py-4 lg:bg-white lg:dark:bg-background lg:rounded-xl lg:shadow-sm">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">
-                    {getFirstName().charAt(0)}
-                  </span>
-                </div>
-                <div>
-                  <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    HELLO {getFirstName()}
-                  </h1>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
-                    HAPPY TO SEE YOU <Heart className="h-4 w-4 text-purple-500 fill-purple-500" />
-                  </p>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-muted rounded-full"
-                onClick={() => setIsNotificationCenterOpen(true)}
-              >
-                <Bell className="h-5 w-5" />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    {unreadCount > 9 ? '9+' : unreadCount}
-                  </span>
-                )}
-              </Button>
-            </div>
-
-            {/* Account/Card Toggle - Fixed */}
-            <div className="px-4 lg:px-6 mb-2 lg:mb-0 lg:mt-4">
-              <div className="bg-gray-200 dark:bg-muted rounded-full p-1 flex lg:max-w-md lg:mx-auto">
-                <Button className="flex-1 rounded-full py-2 px-4 text-sm font-medium bg-purple-500 text-white">
-                  ACCOUNT
-                </Button>
-                <Button 
-                  variant="ghost"
-                  className="flex-1 rounded-full py-2 px-4 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-border"
-                >
-                  CARD
-                </Button>
-              </div>
-            </div>
-
-            {/* Balance Section - Fixed */}
-            <div className="mb-2 py-4 border-b border-gray-50 dark:border-border lg:border-0 lg:py-6 lg:bg-white lg:dark:bg-background lg:rounded-xl lg:shadow-sm lg:mt-4 lg:mx-4">
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <p className="text-gray-600 dark:text-gray-400 text-sm">Total Balance</p>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-muted rounded-full h-6 w-6"
-                  onClick={() => setIsBalanceVisible(!isBalanceVisible)}
-                >
-                  {isBalanceVisible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-                </Button>
-              </div>
-              
-              <div className="text-center mb-3">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {isBalanceVisible ? `${(balance + pendingBalance).toLocaleString()} USD` : '******* USD'}
-                </h2>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-3 px-4 mt-4">
-                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Wallet className="h-4 w-4 text-green-600" />
-                    <p className="text-xs text-green-600 font-medium">Available</p>
-                  </div>
-                  <p className="text-lg font-bold text-green-700 dark:text-green-400">
-                    {isBalanceVisible ? `${balance.toLocaleString()} USD` : '*******'}
-                  </p>
-                </div>
-                
-                <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Clock className="h-4 w-4 text-purple-600" />
-                    <p className="text-xs text-purple-600 font-medium">Pending</p>
-                  </div>
-                  <p className="text-lg font-bold text-purple-700 dark:text-purple-400">
-                    {isBalanceVisible ? `${pendingBalance.toLocaleString()} USD` : '*******'}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Fixed Content Area - Completely Static */}
-          <div className="flex-shrink-0 p-3 lg:p-0 lg:mt-6 overflow-hidden">
-            {/* KYC Warning */}
-            {kycStatus && !kycStatus.isVerified && (
-              <div className="mb-6 lg:mx-4">
-                <KycWarning status={kycStatus.status} message={kycStatus.message} />
-              </div>
+    <div 
+      className="fixed inset-0 overflow-y-auto"
+      style={{ backgroundColor: bgColor }}
+    >
+      <div className="min-h-full flex flex-col pb-24" style={{ backgroundColor: bgColor }}>
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="text-purple-400 hover:bg-purple-500/20 rounded-full w-10 h-10 sm:w-11 sm:h-11"
+          >
+            <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
+          </Button>
+          
+          <h1 className="text-white font-semibold text-lg sm:text-xl">Send money</h1>
+          
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="relative text-purple-400 hover:bg-purple-500/20 rounded-full w-10 h-10 sm:w-11 sm:h-11"
+            onClick={() => setIsNotificationCenterOpen(true)}
+          >
+            <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
             )}
+          </Button>
+        </div>
 
-            {/* Quick Actions - Fixed */}
-            <div className="mb-6 lg:bg-white lg:dark:bg-background lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
-              <h3 className="hidden lg:block text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
-              <div className="grid grid-cols-4 lg:grid-cols-8 gap-4">
-                <Link href={kycStatus?.isVerified ? "/send" : "#"}>
-                  <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-500/20 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <ArrowUpRight className="h-6 w-6 text-purple-600 dark:text-purple-300" />
-                    </div>
-                    <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">Send</span>
-                  </div>
-                </Link>
-
-                <Link href={kycStatus?.isVerified ? "/deposit" : "#"}>
-                  <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-500/20 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <ArrowDownLeft className="h-6 w-6 text-purple-600 dark:text-purple-300" />
-                    </div>
-                    <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">Deposit</span>
-                  </div>
-                </Link>
-
-                <Link href={kycStatus?.isVerified ? "/withdraw" : "#"}>
-                  <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-500/20 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <Banknote className="h-6 w-6 text-purple-600 dark:text-purple-300" />
-                    </div>
-                    <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">Withdraw</span>
-                  </div>
-                </Link>
-
-                <Link href={kycStatus?.isVerified ? "/services" : "#"}>
-                  <div className={`text-center cursor-pointer hover:opacity-80 transition-opacity ${!kycStatus?.isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <div className="w-16 h-16 bg-purple-100/80 dark:bg-purple-500/20 rounded-full flex items-center justify-center mb-2 shadow-sm mx-auto">
-                      <Grid3X3 className="h-6 w-6 text-purple-600 dark:text-purple-300" />
-                    </div>
-                    <span className="text-xs text-gray-700 dark:text-gray-300 font-medium block">More</span>
-                  </div>
-                </Link>
-              </div>
+        {/* Transfer Limit Alert */}
+        <div className="px-4 sm:px-6 mb-4 sm:mb-6">
+          <div 
+            className="rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-start gap-3 sm:gap-4"
+            style={{ backgroundColor: '#2a1f4e', border: `1px solid ${borderColor}` }}
+          >
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-bold text-sm sm:text-base">
+                {getFirstName().charAt(0).toUpperCase()}
+              </span>
             </div>
-
-            {/* Pending Balances Section */}
-            {pendingBalances.length > 0 && (
-              <div className="mb-6 lg:bg-white lg:dark:bg-background lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-5 w-5 text-purple-600" />
-                    <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white">Pending Funds</h3>
-                  </div>
-                  <Badge variant="secondary" className="bg-purple-100 text-purple-700">
-                    {pendingBalances.length} pending
-                  </Badge>
-                </div>
-                
-                <div className="space-y-3">
-                  {pendingBalances.map((pending: any) => {
-                    const releaseDate = new Date(pending.releaseDate);
-                    const now = new Date();
-                    const daysLeft = Math.max(0, Math.ceil((releaseDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
-                    const isAvailableNow = daysLeft === 0;
-                    
-                    return (
-                      <div key={pending.id} className={`p-3 rounded-lg border ${isAvailableNow ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800'}`}>
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <p className="font-medium text-gray-900 dark:text-white text-sm mb-1">
-                              {pending.description || 'Payment Link Transaction'}
-                            </p>
-                            <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-                              <Clock className="h-3 w-3" />
-                              <span className={isAvailableNow ? 'text-green-600 dark:text-green-400 font-semibold' : ''}>
-                                {isAvailableNow
-                                  ? 'Releasing now...'
-                                  : `Available in ${daysLeft} day${daysLeft > 1 ? 's' : ''}`}
-                              </span>
-                            </div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                              Release: {releaseDate.toLocaleDateString()}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <p className={`font-bold text-sm ${isAvailableNow ? 'text-green-700 dark:text-green-400' : 'text-purple-700 dark:text-purple-400'}`}>
-                              +${parseFloat(pending.amount).toLocaleString()}
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                              {pending.currency}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                
-                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <div className="flex items-start gap-2">
-                    <Info className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs text-blue-700 dark:text-blue-300">
-                      For your security, funds from payment links are held for 7 days before being released to your wallet.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Recent Transactions - Fixed */}
-            <div className="pb-3 lg:bg-white lg:dark:bg-background lg:rounded-xl lg:shadow-sm lg:p-6 lg:mx-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white">Recent transactions</h3>
-                <Link href="/transactions">
-                  <Button variant="ghost" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white flex items-center gap-1">
-                    See more
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
-
-              {transactionsLoading ? (
-                <div className="space-y-3">
-                  {[1, 2].map((i) => (
-                    <div key={i} className="animate-pulse flex items-center gap-3 p-3 bg-gray-50 dark:bg-muted rounded-lg">
-                      <div className="w-10 h-10 bg-gray-200 dark:bg-border rounded-full"></div>
-                      <div className="flex-1">
-                        <div className="h-4 bg-gray-200 dark:bg-border rounded w-3/4 mb-2"></div>
-                        <div className="h-3 bg-gray-200 dark:bg-border rounded w-1/2"></div>
-                      </div>
-                      <div className="h-4 bg-gray-200 dark:bg-border rounded w-16"></div>
-                    </div>
-                  ))}
-                </div>
-              ) : transactions.length > 0 ? (
-                <div className="space-y-3">
-                  {transactions.slice(0, 2).map((transaction: any) => (
-                    <div key={transaction.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-muted rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
-                          <Building2 className="h-5 w-5 text-red-600 dark:text-red-400" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900 dark:text-white text-sm">
-                            {transaction.merchant || transaction.description || 'معاملة مالية'}
-                          </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            Invalid Date
-                          </p>
-                        </div>
-                      </div>
-                      <span className="font-semibold text-red-600 dark:text-red-400 text-sm">
-                        -${typeof transaction.amount === 'string' ? transaction.amount : (transaction.amount / 100)?.toFixed(2) || '0.00'}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  <div className="w-16 h-16 bg-gray-100 dark:bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                    <FileText className="h-8 w-8 text-gray-400 dark:text-gray-600" />
-                  </div>
-                  <p className="text-sm">No recent transactions</p>
-                </div>
-              )}
+            <div className="flex-1 min-w-0">
+              <h3 className="text-white font-semibold text-sm sm:text-base mb-1">Increase transfer limit</h3>
+              <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
+                You're currently on Tier 2. Submit required documents to access Tier 3 and send higher amounts.{' '}
+                <span className="text-purple-400 underline cursor-pointer">Complete Verification.</span>
+              </p>
             </div>
           </div>
         </div>
-      </PullToRefresh>
+
+        {/* You Send Section */}
+        <div className="px-4 sm:px-6 mb-3 sm:mb-4">
+          <div 
+            className="rounded-xl sm:rounded-2xl p-4 sm:p-5"
+            style={{ backgroundColor: cardBg, border: `1px solid ${borderColor}` }}
+          >
+            <p className="text-gray-400 text-xs sm:text-sm font-medium mb-2 sm:mb-3">You Send</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                <span className="text-purple-400 text-2xl sm:text-3xl font-light">{getSendCurrencyData().symbol}</span>
+                <input
+                  type="text"
+                  value={sendAmount}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/[^0-9.]/g, '');
+                    setSendAmount(val);
+                  }}
+                  className="bg-transparent text-white text-2xl sm:text-3xl font-semibold w-32 sm:w-40 outline-none"
+                  placeholder="0.00"
+                  data-testid="input-send-amount"
+                />
+              </div>
+              
+              <div 
+                className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                style={{ backgroundColor: inputBg, border: `1px solid ${borderColor}` }}
+              >
+                <span className="text-xl sm:text-2xl">{getSendCurrencyData().flag}</span>
+                <span className="text-white font-medium text-sm sm:text-base">{sendCurrency}</span>
+                <ChevronDown className="w-4 h-4 text-gray-400" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Fee Details Section */}
+        <div className="px-4 sm:px-6 mb-3 sm:mb-4">
+          <div 
+            className="rounded-xl sm:rounded-2xl p-4 sm:p-5 space-y-3 sm:space-y-4"
+            style={{ backgroundColor: cardBg, border: `1px solid ${borderColor}` }}
+          >
+            {/* Fee */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs sm:text-sm">✓</span>
+                </div>
+                <span className="text-gray-300 text-sm sm:text-base">Fee</span>
+              </div>
+              <span className="text-green-400 font-semibold text-sm sm:text-base">FREE</span>
+            </div>
+
+            {/* Total to pay */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center">
+                  <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                </div>
+                <span className="text-gray-300 text-sm sm:text-base">Total to pay</span>
+              </div>
+              <span className="text-white font-semibold text-sm sm:text-base">
+                {getSendCurrencyData().symbol}{totalToPay.toFixed(2)}
+              </span>
+            </div>
+
+            {/* Rate */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs sm:text-sm">≈</span>
+                </div>
+                <span className="text-gray-300 text-sm sm:text-base">Rate</span>
+              </div>
+              <span className="text-white font-medium text-xs sm:text-sm">
+                {getSendCurrencyData().symbol} 1 = {getReceiveCurrencyData().symbol} {exchangeRate}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Receiver Gets Section */}
+        <div className="px-4 sm:px-6 mb-3 sm:mb-4">
+          <div 
+            className="rounded-xl sm:rounded-2xl p-4 sm:p-5"
+            style={{ backgroundColor: cardBg, border: `1px solid ${borderColor}` }}
+          >
+            <p className="text-gray-400 text-xs sm:text-sm font-medium mb-2 sm:mb-3">Receiver Gets</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                <span className="text-purple-400 text-2xl sm:text-3xl font-light">{getReceiveCurrencyData().symbol}</span>
+                <span className="text-white text-2xl sm:text-3xl font-semibold">{receiverGets}</span>
+              </div>
+              
+              <div 
+                className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                style={{ backgroundColor: inputBg, border: `1px solid ${borderColor}` }}
+              >
+                <span className="text-xl sm:text-2xl">{getReceiveCurrencyData().flag}</span>
+                <span className="text-white font-medium text-sm sm:text-base">{receiveCurrency}</span>
+                <ChevronDown className="w-4 h-4 text-gray-400" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Delivery Method Section */}
+        <div className="px-4 sm:px-6 mb-6">
+          <p className="text-gray-500 text-xs sm:text-sm font-medium mb-2 sm:mb-3 uppercase tracking-wider">Delivery Method</p>
+          <div 
+            className="rounded-xl sm:rounded-2xl p-4 sm:p-5 flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: cardBg, border: `1px solid ${borderColor}` }}
+          >
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl flex items-center justify-center">
+                <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              </div>
+              <div>
+                <h4 className="text-white font-semibold text-sm sm:text-base">Bank Account</h4>
+                <p className="text-gray-400 text-xs sm:text-sm">Transfers within 2 days</p>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-400" />
+          </div>
+        </div>
+
+        {/* Continue Button */}
+        <div className="px-4 sm:px-6 mt-auto">
+          <Button
+            className="w-full h-12 sm:h-14 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-semibold rounded-xl sm:rounded-2xl shadow-lg shadow-purple-500/30 text-base sm:text-lg transition-all duration-300"
+            data-testid="button-continue"
+            disabled={totalToPay <= 0}
+          >
+            Continue
+          </Button>
+        </div>
+      </div>
 
       {/* Notification Center */}
       <NotificationCenter 
