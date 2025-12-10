@@ -99,7 +99,7 @@ export default function Login() {
       </div>
 
       {/* Form Section - Bottom Card */}
-      <div className="flex-1 bg-[#161022] rounded-t-[2rem] px-6 pt-8 pb-8">
+      <div className="flex-1 px-6 pt-8 pb-8">
         {/* Header with Help Icon */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-white text-2xl font-semibold">Access My Account</h2>
