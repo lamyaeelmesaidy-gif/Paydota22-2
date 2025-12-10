@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -116,11 +115,12 @@ export default function Login() {
               Phone Number
             </Label>
             <div className="relative">
-              <Input
+              <input
                 type="text"
                 value={formData.username}
                 onChange={(e) => handleInputChange('username', e.target.value)}
-                className="w-full h-14 bg-[#1f1730] border-[#2a2040] focus:border-purple-500 rounded-xl text-white text-lg px-4 pr-12"
+                className="w-full h-14 rounded-xl text-lg px-4 pr-12 outline-none focus:ring-2 focus:ring-purple-500"
+                style={{ backgroundColor: '#1f1730', border: '1px solid #2a2040', color: 'white' }}
                 placeholder="Enter phone or email"
                 data-testid="input-username"
               />
@@ -139,11 +139,12 @@ export default function Login() {
             <Label className="text-gray-400 text-sm font-medium">
               Password
             </Label>
-            <Input
+            <input
               type="password"
               value={formData.password}
               onChange={(e) => handleInputChange('password', e.target.value)}
-              className="w-full h-14 bg-[#1f1730] border-[#2a2040] focus:border-purple-500 rounded-xl text-white text-lg px-4"
+              className="w-full h-14 rounded-xl text-lg px-4 outline-none focus:ring-2 focus:ring-purple-500"
+              style={{ backgroundColor: '#1f1730', border: '1px solid #2a2040', color: 'white' }}
               placeholder="Enter your password"
               data-testid="input-password"
             />
