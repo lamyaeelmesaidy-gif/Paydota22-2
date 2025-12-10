@@ -6,7 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLanguage } from '@/hooks/useLanguage';
 import { HelpCircle, Check } from 'lucide-react';
-import walletIllustration from '@assets/generated_images/digital_wallet_app_illustration.png';
+import walletIllustration from '@assets/generated_images/wallet_phone_dark_background.png';
 
 export default function Register() {
   const [, setLocation] = useLocation();
