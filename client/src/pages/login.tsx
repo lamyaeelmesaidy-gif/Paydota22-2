@@ -64,7 +64,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0a19] flex flex-col">
+    <div className="min-h-screen bg-[#161022] flex flex-col">
       {/* Top Section with Logo and Illustration */}
       <div className="flex-shrink-0 pt-12 pb-6 px-4 text-center">
         {/* Logo */}
