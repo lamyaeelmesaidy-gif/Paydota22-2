@@ -64,7 +64,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#0f0a19' }}>
+    <div className="h-screen overflow-hidden flex flex-col" style={{ backgroundColor: '#0f0a19' }}>
       {/* Top Section with Logo and Illustration */}
       <div className="flex-shrink-0 pt-12 pb-6 px-4 text-center" style={{ backgroundColor: '#0f0a19' }}>
         {/* Logo */}
