@@ -35,21 +35,27 @@ html, body {
 
 /* Additional scrollbar hiding for all browsers */
 html {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: thin; /* Show thin scrollbar */
+  -ms-overflow-style: auto;
 }
 
 html::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: block; /* Show scrollbar */
+  width: 6px;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 10px;
 }
 
 body {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: auto;
+  -ms-overflow-style: auto;
 }
 
 body::-webkit-scrollbar {
-  display: none;
+  display: block;
 }
 
 /* Main app container */
