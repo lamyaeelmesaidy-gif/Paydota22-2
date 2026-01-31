@@ -23,54 +23,62 @@
 }
 
 /* Allow basic scrolling but prevent elastic behavior */
-html, body {
+html {
   overscroll-behavior: none;
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden; /* Prevent html from scrolling, let body handle it */
   margin: 0;
   padding: 0;
 }
 
+body {
+  overscroll-behavior: none;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto !important; /* Force body to be the scroll container */
+  margin: 0;
+  padding: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Scrollbar visibility for desktop/mouse users */
 @media (pointer: fine) {
-  html, body {
+  body {
     scrollbar-width: thin;
     -ms-overflow-style: auto;
   }
 
   ::-webkit-scrollbar {
     display: block !important;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
   }
 
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.05);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground) / 0.3);
+    background: hsl(var(--primary) / 0.4);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground) / 0.5);
+    background: hsl(var(--primary) / 0.6);
     background-clip: padding-box;
   }
 }
 
-/* Hide scrollbars for touch devices unless scrolling */
+/* For touch devices, we keep the native behavior which is usually hidden bars until scroll */
 @media (pointer: coarse) {
-  * {
-    -ms-overflow-style: none;
+  body {
     scrollbar-width: none;
   }
-  
-  *::-webkit-scrollbar {
+  body::-webkit-scrollbar {
     display: none;
   }
 }
