@@ -383,7 +383,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         const cardholder = await airwallex.createCardholder({
           type: 'INDIVIDUAL',
-          email: user.email || `user${user.id}@paydota.com`,
+          email: user.email || `user${user.id}@appsfondation.com`,
           mobile_number: user.phone || '+1234567890',
           individual: {
             name: {
@@ -434,7 +434,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           primary_contact_details: {
             first_name: user.firstName || user.email?.split('@')[0] || 'User',
             last_name: user.lastName || 'User',
-            email: user.email || `user${user.id}@paydota.com`
+            email: user.email || `user${user.id}@appsfondation.com`
           },
           postal_address: cardData.type === 'physical' ? {
             line1: user.address || '8206 Louisiana Blvd Ne, Ste A 6342',
@@ -774,7 +774,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const cardholderData = {
         type: 'INDIVIDUAL' as const,
-        email: user.email || `user${user.id}@paydota.com`,
+        email: user.email || `user${user.id}@appsfondation.com`,
         mobile_number: user.phone || '+1234567890',
         individual: {
           name: {
@@ -1486,10 +1486,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/wallet/send", requireAuth, async (req: any, res) => {
     try {
       const userId = req.session?.userId;
-      if (!userId) {
-        return res.status(401).json({ message: "Unauthorized" });
-      }
-      
       const { amount, recipient, type, note } = req.body;
       
       if (!amount || amount <= 0) {
@@ -1500,58 +1496,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Recipient is required" });
       }
 
-      // Check wallet balance first
-      const currentBalance = await storage.getWalletBalance(userId);
-      if (currentBalance < amount) {
-        return res.status(400).json({ 
-          message: "Insufficient balance",
-          currentBalance,
-          requiredAmount: amount
-        });
+      // Get user's primary card
+      const cards = await storage.getCardsByUserId(userId);
+      if (cards.length === 0) {
+        return res.status(400).json({ message: "No card found for sending" });
       }
 
-      // Deduct from wallet balance
-      const newBalance = currentBalance - amount;
-      await storage.updateWalletBalance(userId, newBalance);
-      
-      console.log(`💸 Transfer: User ${userId} sent ${amount}. Balance: ${currentBalance} -> ${newBalance}`);
-
-      // Get user's primary card for transaction record (create virtual card if none exists)
-      let cards = await storage.getCardsByUserId(userId);
-      let primaryCard = cards[0];
-      
-      if (!primaryCard) {
-        // Create a virtual internal card for transaction tracking
-        primaryCard = await storage.createCard({
-          userId,
-          type: "virtual",
-          holderName: "Internal Wallet",
-          brand: "visa",
-          status: "active",
-          currency: "USD",
-          design: "default",
-          expiryMonth: 12,
-          expiryYear: new Date().getFullYear() + 5
-        });
-      }
+      const primaryCard = cards[0];
 
       // Create transaction record
       await storage.createTransaction({
         cardId: primaryCard.id,
-        amount: (-amount).toString(),
-        currency: "USD",
+        amount: -amount, // Negative for sending
         type: "transfer",
         description: `Transfer to ${recipient}${note ? `: ${note}` : ''}`,
         status: "completed",
-        merchant: "Transfer System",
+        merchantName: "Transfer System",
       });
 
       res.json({
         success: true,
         message: "Transfer sent successfully",
         amount: amount,
-        recipient: recipient,
-        newBalance: newBalance
+        recipient: recipient
       });
     } catch (error) {
       console.error("Error processing transfer:", error);
@@ -1946,7 +1913,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json({
           isVerified: false,
           status: null,
-          message: "لم يتم تقديم طلب التحقق من الهوية بعد"
+          message: "Identity verification hasn't been submitted yet."
         });
       }
       
@@ -1956,12 +1923,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         isVerified: latestKyc.status === 'approved' || latestKyc.status === 'verified',
         status: latestKyc.status,
         message: latestKyc.status === 'approved' || latestKyc.status === 'verified'
-          ? "تم التحقق من الهوية بنجاح"
+          ? "Identity verified successfully"
           : latestKyc.status === 'pending'
-          ? "طلب التحقق قيد المراجعة"
+          ? "Verification request is under review"
           : latestKyc.status === 'under_review'
-          ? "طلب التحقق قيد المعالجة"
-          : "تم رفض طلب التحقق"
+          ? "Verification request is being processed"
+          : "Verification request was rejected"
       });
     } catch (error) {
       console.error("Error fetching KYC status:", error);

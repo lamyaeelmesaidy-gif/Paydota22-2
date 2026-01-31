@@ -206,7 +206,7 @@ export default function CardDeposit() {
           <p className="text-gray-400">${amount} has been added to your balance</p>
           <Button
             onClick={() => setLocation('/wallet')}
-            className="mt-4 bg-purple-600 hover:bg-purple-700"
+            className="mt-4 bg-primary hover:bg-red-700"
             data-testid="button-go-to-wallet"
           >
             Go to Wallet
@@ -227,7 +227,7 @@ export default function CardDeposit() {
           <p className="text-gray-400">The payment was not completed successfully</p>
           <Button
             onClick={() => setPaymentStatus('idle')}
-            className="mt-4 bg-purple-600 hover:bg-purple-700"
+            className="mt-4 bg-primary hover:bg-red-700"
             data-testid="button-try-again"
           >
             Try Again
@@ -245,7 +245,7 @@ export default function CardDeposit() {
             variant="ghost"
             size="sm"
             onClick={() => setLocation("/deposit")}
-            className="p-2 hover:bg-purple-500/20 text-gray-400 hover:text-white"
+            className="p-2 hover:bg-red-500/20 text-gray-400 hover:text-white"
             data-testid="button-back"
           >
             <ArrowLeft className="h-6 w-6" />
@@ -253,7 +253,7 @@ export default function CardDeposit() {
           <h1 className="text-xl font-bold text-white">Card Deposit</h1>
         </div>
 
-        <div className="bg-[#1a1a35] rounded-2xl p-6 mb-6">
+        <div className="bg-[#3a1010] rounded-2xl p-6 mb-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
               <CreditCard className="h-6 w-6 text-blue-400" />
@@ -272,7 +272,7 @@ export default function CardDeposit() {
                 placeholder="Enter amount"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="bg-[#0f0f23] border-[#2a2a45] text-white text-lg h-14 text-center"
+                className="bg-[#0f0f23] border-[#4a1515] text-white text-lg h-14 text-center"
                 data-testid="input-amount"
               />
             </div>
@@ -283,9 +283,9 @@ export default function CardDeposit() {
                   key={quickAmount}
                   variant="outline"
                   onClick={() => setAmount(quickAmount.toString())}
-                  className={`border-[#2a2a45] hover:border-purple-500 hover:bg-purple-500/10 ${
+                  className={`border-[#4a1515] hover:border-red-500 hover:bg-red-500/10 ${
                     amount === quickAmount.toString() 
-                      ? 'border-purple-500 bg-purple-500/10 text-purple-400' 
+                      ? 'border-red-500 bg-red-500/10 text-red-400' 
                       : 'text-gray-300'
                   }`}
                   data-testid={`button-amount-${quickAmount}`}
@@ -297,7 +297,7 @@ export default function CardDeposit() {
           </div>
         </div>
 
-        <div className="bg-[#1a1a35]/60 rounded-xl p-4 mb-6">
+        <div className="bg-[#3a1010]/60 rounded-xl p-4 mb-6">
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-400">Processing Fee</span>
             <span className="text-gray-300">$0.00</span>
@@ -311,7 +311,7 @@ export default function CardDeposit() {
         <Button
           onClick={handleDeposit}
           disabled={!amount || paymentStatus === 'processing' || !isFlutterwaveLoaded || !flutterwavePublicKey || isUserLoading}
-          className="w-full py-6 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl text-lg"
+          className="w-full py-6 bg-primary hover:bg-red-700 text-white font-semibold rounded-xl text-lg"
           data-testid="button-deposit"
         >
           {paymentStatus === 'processing' ? (

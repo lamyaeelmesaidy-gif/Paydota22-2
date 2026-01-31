@@ -128,38 +128,38 @@ html {
   --card-foreground: 222 84% 4.9%;
   --border: 214 32% 91%; /* #E2E8F0 */
   --input: 214 32% 91%;
-  --primary: 265 85% 60%; /* Purple primary */
+  --primary: 88 50% 53%; /* Pistachio green primary (#93C572) */
   --primary-foreground: 0 0% 100%;
   --secondary: 160 84% 39%; /* Keep secondary green */
   --secondary-foreground: 0 0% 98%;
-  --accent: 265 85% 70%; /* Purple accent */
+  --accent: 88 50% 63%; /* Lighter pistachio accent */
   --accent-foreground: 0 0% 98%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
-  --ring: 265 85% 60%; /* Purple ring */
+  --ring: 88 50% 53%; /* Pistachio ring */
   --radius: 0.75rem;
 }
 
 .dark {
-  --background: 240 40% 10%; /* #0f0f23 - Dark purple background */
+  --background: 88 50% 5%; /* Very dark green background */
   --foreground: 210 40% 98%; /* #f8fafc - Light text */
-  --muted: 240 40% 13%; /* #1a1a35 - Slightly lighter for subtle contrast */
+  --muted: 88 40% 10%; /* Slightly lighter dark green */
   --muted-foreground: 215 20% 65%; /* #94a3b8 - Light gray */
-  --popover: 240 40% 10%; /* #0f0f23 - Same as background */
-  --popover-foreground: 210 40% 98%; /* Light text */
-  --card: 240 40% 13%; /* #1a1a35 - Slightly lighter for cards */
-  --card-foreground: 210 40% 98%; /* Light text */
-  --border: 240 30% 20%; /* #2a2a45 - Subtle border */
-  --input: 240 40% 13%; /* #1a1a35 - Slightly lighter for inputs */
-  --primary: 265 85% 60%; /* Purple primary */
+  --popover: 88 50% 5%;
+  --popover-foreground: 210 40% 98%;
+  --card: 88 40% 10%;
+  --card-foreground: 210 40% 98%;
+  --border: 88 35% 15%;
+  --input: 88 40% 10%;
+  --primary: 88 50% 53%; /* Pistachio primary */
   --primary-foreground: 0 0% 100%; /* Pure white */
   --secondary: 160 84% 39%; /* Keep secondary green */
   --secondary-foreground: 0 0% 100%; /* Pure white */
-  --accent: 265 85% 70%; /* Purple accent */
+  --accent: 88 50% 63%; /* Pistachio accent */
   --accent-foreground: 0 0% 100%; /* Pure white */
   --destructive: 0 84% 60%; /* Red */
   --destructive-foreground: 0 0% 100%; /* Pure white */
-  --ring: 265 85% 60%; /* Purple ring */
+  --ring: 88 50% 53%; /* Pistachio ring */
 }
 
 /* Mobile-specific styles for Capacitor */
@@ -548,19 +548,19 @@ html, body {
 
   /* Banking specific styles */
   .banking-gradient {
-    background: hsl(271 81% 66%);
+    background: hsl(88 50% 53%);
   }
 
   .card-gradient-blue {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(217 91% 70%) 100%);
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(88 50% 70%) 100%);
   }
 
   .card-gradient-green {
     background: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(160 84% 50%) 100%);
   }
 
-  .card-gradient-purple {
-    background: linear-gradient(135deg, hsl(271 81% 56%) 0%, hsl(271 81% 66%) 100%);
+  .card-gradient-red {
+    background: linear-gradient(135deg, hsl(88 50% 43%) 0%, hsl(88 50% 53%) 100%);
   }
 
   /* Enhanced shadows for banking UI */
@@ -852,7 +852,7 @@ html, body {
   }
 
   .dark .bottom-nav-blur {
-    background: rgba(15, 15, 35, 0.95);
+    background: rgba(42, 12, 12, 0.95);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
   }
@@ -867,14 +867,14 @@ html, body {
   }
 
   .dark .nav-icon-container {
-    background: rgba(26, 26, 53, 0.8);
+    background: rgba(60, 20, 20, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .nav-icon-container.active {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(271 81% 66%) 100%);
-    border: 1px solid rgba(147, 51, 234, 0.3);
-    box-shadow: 0 4px 20px rgba(147, 51, 234, 0.3);
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(88 50% 43%) 100%);
+    border: 1px solid rgba(147, 197, 114, 0.3);
+    box-shadow: 0 4px 20px rgba(147, 197, 114, 0.3);
     transform: translateY(-2px) scale(1.05);
   }
 
@@ -885,7 +885,7 @@ html, body {
   }
 
   .dark .nav-icon-container:hover:not(.active) {
-    background: rgba(42, 42, 69, 0.9);
+    background: rgba(58, 16, 16, 0.9);
   }
 
   /* Native-like focus states */

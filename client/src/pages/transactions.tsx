@@ -56,13 +56,13 @@ export default function Transactions() {
   const getTransactionIcon = (type: string) => {
     switch (type) {
       case "send":
-        return <ArrowUpRight className="h-4 w-4 text-red-600" />;
+        return <ArrowUpRight className="h-4 w-4 text-primary" />;
       case "receive":
         return <ArrowDownLeft className="h-4 w-4 text-green-600" />;
       case "deposit":
         return <ArrowDownLeft className="h-4 w-4 text-green-600" />;
       case "withdraw":
-        return <ArrowUpRight className="h-4 w-4 text-red-600" />;
+        return <ArrowUpRight className="h-4 w-4 text-primary" />;
       default:
         return <DollarSign className="h-4 w-4 text-gray-600" />;
     }
@@ -118,7 +118,7 @@ export default function Transactions() {
                 placeholder="Search transactions..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-white dark:bg-background border-gray-200 dark:border-border focus:border-gray-400 dark:focus:border-purple-500 rounded-2xl"
+                className="pl-10 bg-white dark:bg-background border-gray-200 dark:border-border focus:border-gray-400 dark:focus:border-red-500 rounded-2xl"
               />
             </div>
 
@@ -138,7 +138,7 @@ export default function Transactions() {
                   onClick={() => setSelectedFilter(filter.key)}
                   className={`whitespace-nowrap text-xs px-3 py-2 min-w-0 flex-shrink-0 ${
                     selectedFilter === filter.key 
-                      ? "bg-purple-500 text-white shadow-lg"
+                      ? "bg-red-500 text-white shadow-lg"
                       : "bg-white dark:bg-background border border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-muted"
                   }`}
                 >
@@ -183,7 +183,7 @@ export default function Transactions() {
                           <p className={`font-semibold ${
                             transaction.type === 'deposit' || transaction.type === 'receive'
                               ? 'text-green-600 dark:text-green-400'
-                              : 'text-red-600 dark:text-red-400'
+                              : 'text-primary dark:text-red-400'
                           }`}>
                             {transaction.type === 'deposit' || transaction.type === 'receive' ? '+' : '-'}
                             ${Math.abs(Number(transaction.amount)).toFixed(2)}
