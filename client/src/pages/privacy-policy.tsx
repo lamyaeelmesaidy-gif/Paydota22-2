@@ -222,7 +222,7 @@ export default function PrivacyPolicy() {
               </div>
               <div className="flex flex-col gap-1">
                 <strong className="text-gray-900 dark:text-white">Phone:</strong>
-                <p className="text-gray-700 dark:text-gray-300 ml-2">+19134278758</p>
+                <p className="text-gray-700 dark:text-gray-300 ml-2">+(785) 915 9048</p>
               </div>
               <div className="flex flex-col gap-1">
                 <strong className="text-gray-900 dark:text-white">Address:</strong>
