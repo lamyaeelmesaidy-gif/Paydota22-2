@@ -6,19 +6,19 @@ export default function AMLPolicy() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-red-900 dark:to-blue-900 relative overflow-hidden pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary/10 dark:from-primary/10 dark:via-background dark:to-primary/5 relative overflow-hidden pb-20">
       {/* Background decorative elements */}
-      <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-gradient-to-br from-red-200/30 to-pink-200/30 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-gradient-to-tr from-blue-200/20 to-red-200/20 rounded-full blur-3xl"></div>
+      <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-gradient-to-tr from-primary/10 to-primary/20 rounded-full blur-3xl"></div>
       
       {/* Header */}
-      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-red-200/30 dark:border-red-700/30 p-4 relative z-10 sticky top-0">
+      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-primary/20 dark:border-primary/30 p-4 relative z-10 sticky top-0">
         <div className="flex items-center space-x-4">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setLocation("/account")}
-            className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20"
+            className="p-2 hover:bg-primary/10 dark:hover:bg-primary/20"
           >
             <ArrowLeft className="h-6 w-6" />
           </Button>
@@ -33,15 +33,15 @@ export default function AMLPolicy() {
         <div className="space-y-6 text-gray-700 dark:text-gray-300">
           
           {/* Overview */}
-          <div className="bg-red-50/50 dark:bg-red-900/20 border border-red-200/50 dark:border-red-700/50 rounded-lg p-5">
+          <div className="bg-primary/10 dark:bg-primary/20 border border-primary/20 dark:border-primary/30 rounded-lg p-5">
             <div className="flex items-center gap-3 mb-3">
-              <ShieldCheck className="h-6 w-6 text-primary dark:text-red-400" />
-              <h2 className="text-lg font-bold text-red-900 dark:text-red-100 m-0">Anti-Money Laundering (AML) Policy</h2>
+              <ShieldCheck className="h-6 w-6 text-primary dark:text-primary" />
+              <h2 className="text-lg font-bold text-primary dark:text-primary m-0">Anti-Money Laundering (AML) Policy</h2>
             </div>
-            <p className="text-sm text-red-900/80 dark:text-red-200/80 leading-relaxed m-0 font-medium">
+            <p className="text-sm text-primary/80 dark:text-primary/80 leading-relaxed m-0 font-medium">
               BRAND APPS SOFTWARE COMPANY
             </p>
-            <p className="text-sm text-red-900/80 dark:text-red-200/80 leading-relaxed mt-2 m-0">
+            <p className="text-sm text-primary/80 dark:text-primary/80 leading-relaxed mt-2 m-0">
               BRAND APPS SOFTWARE COMPANY is committed to preventing money laundering, terrorist financing, and other financial crimes. This policy outlines our commitment to compliance with applicable laws, regulations, and international best practices.
             </p>
           </div>

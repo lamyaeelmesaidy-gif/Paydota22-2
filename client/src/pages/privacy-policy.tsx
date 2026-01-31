@@ -6,19 +6,19 @@ export default function PrivacyPolicy() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-red-900 dark:to-blue-900 relative pb-20 overflow-y-auto">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary/10 dark:from-primary/10 dark:via-background dark:to-primary/5 relative pb-20 overflow-y-auto">
       {/* Background decorative elements */}
-      <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-gradient-to-br from-red-200/30 to-pink-200/30 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-gradient-to-tr from-blue-200/20 to-red-200/20 rounded-full blur-3xl"></div>
+      <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-gradient-to-tr from-primary/10 to-primary/20 rounded-full blur-3xl"></div>
       
       {/* Header */}
-      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-red-200/30 dark:border-red-700/30 p-4 relative z-10 sticky top-0">
+      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-primary/20 dark:border-primary/30 p-4 relative z-10 sticky top-0">
         <div className="flex items-center space-x-4">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setLocation("/account")}
-            className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20"
+            className="p-2 hover:bg-primary/10 dark:hover:bg-primary/20"
           >
             <ArrowLeft className="h-6 w-6" />
           </Button>
@@ -33,8 +33,8 @@ export default function PrivacyPolicy() {
         <div className="space-y-6 text-gray-700 dark:text-gray-300">
           
           {/* Last Updated */}
-          <div className="bg-blue-50/50 dark:bg-blue-900/20 border border-blue-200/50 dark:border-blue-700/50 rounded-lg p-4">
-            <p className="text-sm text-blue-900 dark:text-blue-300">
+          <div className="bg-primary/10 dark:bg-primary/20 border border-primary/20 dark:border-primary/30 rounded-lg p-4">
+            <p className="text-sm text-primary dark:text-primary">
               <strong>Last Updated:</strong> December 2024
             </p>
           </div>
@@ -211,7 +211,7 @@ export default function PrivacyPolicy() {
             <p className="text-sm leading-relaxed mb-4">
               If you have questions about this Privacy Policy, our privacy practices, or wish to exercise your privacy rights, please contact us:
             </p>
-            <div className="bg-red-50/50 dark:bg-red-900/20 border border-red-200/50 dark:border-red-700/50 rounded-lg p-4 text-sm mt-3 space-y-3">
+            <div className="bg-primary/5 dark:bg-primary/10 border border-primary/20 dark:border-primary/30 rounded-lg p-4 text-sm mt-3 space-y-3">
               <div className="flex flex-col gap-1">
                 <strong className="text-gray-900 dark:text-white">Developer:</strong>
                 <p className="text-gray-700 dark:text-gray-300 ml-2">BRAND APPS SOFTWARE COMPANY</p>
