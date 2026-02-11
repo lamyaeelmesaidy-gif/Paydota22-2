@@ -156,7 +156,7 @@ export const shareContent = async (title: string, text: string, url?: string) =>
         title,
         text,
         url,
-        dialogTitle: 'مشاركة AppsPay'
+        dialogTitle: 'مشاركة LM WORK MA'
       });
     } catch (error) {
       console.warn('Share failed:', error);

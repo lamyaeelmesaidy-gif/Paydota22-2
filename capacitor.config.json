@@ -1,6 +1,6 @@
 {
-  "appId": "com.paydota.banking",
-  "appName": "PayDota",
+  "appId": "com.lmwork-pay.banking",
+  "appName": "LM WORK PAY",
   "webDir": "dist/public",
   "server": {
     "url": "https://probrandify.org",
