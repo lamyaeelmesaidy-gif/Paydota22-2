@@ -11,5 +11,17 @@
         "FC:30:25:12:10:17:0D:31:F6:FB:52:04:4F:55:CE:64:0C:88:0A:42:A1:05:19:F4:84:67:CB:75:95:85:37:E3"
       ]
     }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "site.lmworkpay.twa",
+      "sha256_cert_fingerprints": [
+        "E5:EB:DD:79:BB:DA:17:77:58:1C:90:01:F7:FD:E3:3F:89:16:3B:74:73:8A:A2:E2:0B:57:0B:7A:D5:F5:21:6E"
+      ]
+    }
   }
 ]
