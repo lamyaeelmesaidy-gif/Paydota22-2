@@ -113,7 +113,7 @@ export default function PaymentPassword() {
         <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-red-200/30 dark:border-red-700/30 shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center space-x-3 space-x-reverse text-gray-900 dark:text-white">
-              <Key className="h-5 w-5 text-primary dark:text-red-400" />
+              <Key className="h-5 w-5 text-red-600 dark:text-red-400" />
               <span>Payment Password</span>
             </CardTitle>
           </CardHeader>
@@ -196,7 +196,7 @@ export default function PaymentPassword() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-primary to-pink-600 hover:from-red-700 hover:to-pink-700 text-white"
+                className="w-full bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white"
               >
                 {isLoading ? (
                   "Updating..."

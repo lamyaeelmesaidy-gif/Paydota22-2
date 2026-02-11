@@ -187,7 +187,7 @@ export default function Currency() {
 
             <Button 
               onClick={convertCurrency}
-              className="w-full bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-red-800"
+              className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
             >
               Convert
             </Button>

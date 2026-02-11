@@ -134,7 +134,7 @@ export default function UserManagement() {
             <CardContent className="p-3">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
-                  <Shield className="h-4 w-4 text-primary dark:text-red-400" />
+                  <Shield className="h-4 w-4 text-red-600 dark:text-red-400" />
                 </div>
                 <div>
                   <p className="text-xs text-gray-600 dark:text-gray-400">Administrators</p>
@@ -196,7 +196,7 @@ export default function UserManagement() {
                 filteredUsers.map((user: any, index: number) => (
                   <div key={index} className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                     <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-primary to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-white font-semibold text-xs">
                           {user.firstName?.[0]}{user.lastName?.[0]}
                         </span>

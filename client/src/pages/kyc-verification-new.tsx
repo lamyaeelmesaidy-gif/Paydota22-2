@@ -226,7 +226,7 @@ export default function KYCVerificationNew() {
               <div key={step} className="flex flex-col items-center bg-white">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-1 text-sm font-medium ${
                   currentStep >= step 
-                    ? "bg-primary text-white" 
+                    ? "bg-red-600 text-white" 
                     : "bg-gray-300 text-gray-600"
                 }`}>
                   {step}
@@ -372,7 +372,7 @@ export default function KYCVerificationNew() {
                   <Button
                     onClick={() => setCurrentStep(3)}
                     disabled={!isStep2Valid()}
-                    className="flex-1 h-12 bg-primary hover:bg-red-700 text-base font-medium"
+                    className="flex-1 h-12 bg-red-600 hover:bg-red-700 text-base font-medium"
                   >
                     Continue
                   </Button>
@@ -556,7 +556,7 @@ export default function KYCVerificationNew() {
                   <Button
                     onClick={() => setCurrentStep(4)}
                     disabled={!isStep3Valid()}
-                    className="flex-1 bg-gradient-to-r from-primary to-pink-600 hover:from-red-700 hover:to-pink-700"
+                    className="flex-1 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
                   >
                     Continue
                   </Button>

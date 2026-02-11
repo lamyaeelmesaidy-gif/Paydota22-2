@@ -150,7 +150,7 @@ export default function AirwallexTest() {
               <Button 
                 onClick={testAirwallexConnection}
                 disabled={isLoading}
-                className="bg-red-500 hover:bg-primary"
+                className="bg-red-500 hover:bg-red-600"
               >
                 {isLoading ? (
                   <>
@@ -166,7 +166,7 @@ export default function AirwallexTest() {
                 onClick={getAccountInfo}
                 disabled={accountLoading}
                 variant="outline"
-                className="border-red-500 text-primary hover:bg-red-50"
+                className="border-red-500 text-red-600 hover:bg-red-50"
               >
                 {accountLoading ? (
                   <>
@@ -238,7 +238,7 @@ export default function AirwallexTest() {
                     <div>
                       <strong className="text-gray-700">بيانات الاعتماد:</strong>
                       <p className={`mt-1 ${
-                        result.credentials_configured ? 'text-green-600' : 'text-primary'
+                        result.credentials_configured ? 'text-green-600' : 'text-red-600'
                       }`}>
                         {result.credentials_configured ? '✓ مُهيأة' : '✗ غير مُهيأة'}
                       </p>
@@ -345,7 +345,7 @@ export default function AirwallexTest() {
                   <div>
                     <strong className="text-gray-700">حالة:</strong>
                     <p className={`mt-1 font-semibold ${
-                      accountInfo.success ? 'text-blue-600' : 'text-primary'
+                      accountInfo.success ? 'text-blue-600' : 'text-red-600'
                     }`}>
                       {accountInfo.message}
                     </p>
@@ -456,7 +456,7 @@ export default function AirwallexTest() {
                   <div>
                     <strong className="text-gray-700">حالة:</strong>
                     <p className={`mt-1 font-semibold ${
-                      cardsInfo.success ? 'text-green-600' : 'text-primary'
+                      cardsInfo.success ? 'text-green-600' : 'text-red-600'
                     }`}>
                       {cardsInfo.message}
                     </p>

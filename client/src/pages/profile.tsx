@@ -143,7 +143,7 @@ export default function Profile() {
           {!isEditing ? (
             <Button
               onClick={() => setIsEditing(true)}
-              className="bg-gradient-to-r from-primary to-pink-600 hover:from-red-700 hover:to-pink-700 text-white"
+              className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white"
             >
               <Edit className="h-4 w-4 mr-2" />
               Edit
@@ -160,7 +160,7 @@ export default function Profile() {
               <Button
                 onClick={handleSave}
                 disabled={isLoading}
-                className="bg-gradient-to-r from-primary to-pink-600 hover:from-red-700 hover:to-pink-700 text-white"
+                className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white"
               >
                 {isSaving ? (
                   <>
@@ -186,11 +186,11 @@ export default function Profile() {
         <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-red-200/30 dark:border-red-700/30 shadow-lg">
           <CardContent className="p-6 text-center">
             <div className="relative inline-block">
-              <div className="w-24 h-24 bg-gradient-to-br from-primary to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-24 h-24 bg-gradient-to-br from-red-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <User className="h-12 w-12 text-white" />
               </div>
               {isEditing && (
-                <button className="absolute bottom-2 right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white hover:bg-red-700 transition-colors">
+                <button className="absolute bottom-2 right-2 w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white hover:bg-red-700 transition-colors">
                   <Camera className="h-4 w-4" />
                 </button>
               )}
@@ -208,7 +208,7 @@ export default function Profile() {
         <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-red-200/30 dark:border-red-700/30 shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center space-x-3 space-x-reverse text-gray-900 dark:text-white">
-              <User className="h-5 w-5 text-primary dark:text-red-400" />
+              <User className="h-5 w-5 text-red-600 dark:text-red-400" />
               <span>Personal Information</span>
             </CardTitle>
           </CardHeader>
@@ -319,7 +319,7 @@ export default function Profile() {
         <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-red-200/30 dark:border-red-700/30 shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center space-x-3 space-x-reverse text-gray-900 dark:text-white">
-              <MapPin className="h-5 w-5 text-primary dark:text-red-400" />
+              <MapPin className="h-5 w-5 text-red-600 dark:text-red-400" />
               <span>Address Information</span>
             </CardTitle>
           </CardHeader>

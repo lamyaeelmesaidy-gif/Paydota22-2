@@ -110,7 +110,7 @@ export default function AdminAddUser() {
             Add New User
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Create new user accounts for the BrandSoft Pay wallet platform
+            Create new user accounts for the AppsPay wallet platform
           </p>
         </div>
 
@@ -210,7 +210,7 @@ export default function AdminAddUser() {
                   <Button
                     type="submit"
                     disabled={createUserMutation.isPending}
-                    className="flex-1 bg-primary hover:bg-red-700"
+                    className="flex-1 bg-red-600 hover:bg-red-700"
                   >
                     {createUserMutation.isPending ? (
                       <>Creating...</>

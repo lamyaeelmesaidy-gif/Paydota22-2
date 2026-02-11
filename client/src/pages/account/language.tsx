@@ -53,7 +53,7 @@ export default function LanguageSettings() {
         <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-red-200/30 dark:border-red-700/30 shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center space-x-3 space-x-reverse text-gray-900 dark:text-white">
-              <Globe className="h-5 w-5 text-primary dark:text-red-400" />
+              <Globe className="h-5 w-5 text-red-600 dark:text-red-400" />
               <span>{t('selectAppLanguage')}</span>
             </CardTitle>
           </CardHeader>
@@ -77,7 +77,7 @@ export default function LanguageSettings() {
                   </p>
                 </div>
                 {language === lang.code && (
-                  <Check className="h-5 w-5 text-primary dark:text-red-400" />
+                  <Check className="h-5 w-5 text-red-600 dark:text-red-400" />
                 )}
               </button>
             ))}

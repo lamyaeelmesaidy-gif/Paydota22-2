@@ -124,7 +124,7 @@ export default function Referral() {
             
             <Button 
               onClick={shareReferral}
-              className="w-full bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-red-800"
+              className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
             >
               <Share className="h-4 w-4 mr-2" />
               Share with Friends
@@ -140,7 +140,7 @@ export default function Referral() {
           <CardContent className="space-y-4">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-primary font-bold text-sm">1</span>
+                <span className="text-red-600 font-bold text-sm">1</span>
               </div>
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">Share your code</p>
@@ -150,7 +150,7 @@ export default function Referral() {
             
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-primary font-bold text-sm">2</span>
+                <span className="text-red-600 font-bold text-sm">2</span>
               </div>
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">They sign up</p>
@@ -160,7 +160,7 @@ export default function Referral() {
             
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-primary font-bold text-sm">3</span>
+                <span className="text-red-600 font-bold text-sm">3</span>
               </div>
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">Earn rewards</p>

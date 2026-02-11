@@ -47,7 +47,7 @@ export default function SystemReports() {
               </Button>
             </Link>
             
-            <div className="w-10 h-10 bg-gradient-to-r from-primary to-violet-600 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-violet-600 rounded-xl flex items-center justify-center">
               <BarChart3 className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -61,7 +61,7 @@ export default function SystemReports() {
           </div>
 
           <div className="w-full sm:w-auto sm:ml-auto">
-            <Button className="bg-primary hover:bg-red-700 text-white w-full sm:w-auto">
+            <Button className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto">
               <Download className="h-4 w-4 mr-2" />
               Export Reports
             </Button>
@@ -116,7 +116,7 @@ export default function SystemReports() {
             <CardContent className="p-3">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
-                  <CreditCard className="h-4 w-4 text-primary dark:text-red-400" />
+                  <CreditCard className="h-4 w-4 text-red-600 dark:text-red-400" />
                 </div>
                 <div>
                   <p className="text-xs text-gray-600 dark:text-gray-400">Rejected</p>
@@ -246,7 +246,7 @@ export default function SystemReports() {
                           ? 'text-green-600 dark:text-green-400' 
                           : kyc.status === 'pending'
                           ? 'text-orange-600 dark:text-orange-400'
-                          : 'text-primary dark:text-red-400'
+                          : 'text-red-600 dark:text-red-400'
                       }`} />
                     </div>
                     <div className="flex-1 min-w-0">

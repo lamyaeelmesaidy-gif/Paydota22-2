@@ -206,7 +206,7 @@ export default function CardDeposit() {
           <p className="text-gray-400">${amount} has been added to your balance</p>
           <Button
             onClick={() => setLocation('/wallet')}
-            className="mt-4 bg-primary hover:bg-red-700"
+            className="mt-4 bg-red-600 hover:bg-red-700"
             data-testid="button-go-to-wallet"
           >
             Go to Wallet
@@ -227,7 +227,7 @@ export default function CardDeposit() {
           <p className="text-gray-400">The payment was not completed successfully</p>
           <Button
             onClick={() => setPaymentStatus('idle')}
-            className="mt-4 bg-primary hover:bg-red-700"
+            className="mt-4 bg-red-600 hover:bg-red-700"
             data-testid="button-try-again"
           >
             Try Again
@@ -311,7 +311,7 @@ export default function CardDeposit() {
         <Button
           onClick={handleDeposit}
           disabled={!amount || paymentStatus === 'processing' || !isFlutterwaveLoaded || !flutterwavePublicKey || isUserLoading}
-          className="w-full py-6 bg-primary hover:bg-red-700 text-white font-semibold rounded-xl text-lg"
+          className="w-full py-6 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl text-lg"
           data-testid="button-deposit"
         >
           {paymentStatus === 'processing' ? (

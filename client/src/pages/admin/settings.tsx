@@ -271,7 +271,7 @@ export default function AdminSettings() {
               {settings.maintenanceMode && (
                 <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
                   <div className="flex items-start gap-3">
-                    <Lock className="h-5 w-5 text-primary dark:text-red-400 mt-0.5" />
+                    <Lock className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5" />
                     <div>
                       <p className="text-sm font-medium text-red-800 dark:text-red-200">Maintenance Mode Active</p>
                       <p className="text-sm text-red-700 dark:text-red-300">

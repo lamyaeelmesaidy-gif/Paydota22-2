@@ -99,7 +99,7 @@ export default function PublicCheckoutPage() {
         <Card className="w-full max-w-md sm:max-w-lg relative z-10 shadow-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-800">
           <CardContent className="pt-8 pb-8">
             <div className="flex items-center justify-center">
-              <Loader2 className="w-8 h-8 animate-spin text-primary dark:text-red-400" />
+              <Loader2 className="w-8 h-8 animate-spin text-red-600 dark:text-red-400" />
             </div>
           </CardContent>
         </Card>
@@ -116,7 +116,7 @@ export default function PublicCheckoutPage() {
           <CardHeader className="text-center space-y-3 pt-8">
             <div className="flex justify-center">
               <div className="p-3 bg-red-50 dark:bg-red-900/30 rounded-full">
-                <XCircle className="w-8 h-8 text-primary dark:text-red-400" />
+                <XCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
               </div>
             </div>
             <CardTitle className="text-2xl text-gray-900 dark:text-white">Payment Link Not Found</CardTitle>

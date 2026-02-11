@@ -70,7 +70,7 @@ export default function Vouchers() {
       case "used":
         return <CheckCircle className="h-5 w-5 text-blue-600" />;
       case "expired":
-        return <XCircle className="h-5 w-5 text-primary" />;
+        return <XCircle className="h-5 w-5 text-red-600" />;
       default:
         return <Clock className="h-5 w-5 text-yellow-600" />;
     }
@@ -83,7 +83,7 @@ export default function Vouchers() {
       case "used":
         return "text-blue-600 bg-blue-50 dark:bg-blue-900/20";
       case "expired":
-        return "text-primary bg-red-50 dark:bg-red-900/20";
+        return "text-red-600 bg-red-50 dark:bg-red-900/20";
       default:
         return "text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20";
     }
@@ -131,7 +131,7 @@ export default function Vouchers() {
               />
               <Button 
                 onClick={redeemVoucher}
-                className="bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-red-800"
+                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
               >
                 Redeem
               </Button>
@@ -159,7 +159,7 @@ export default function Vouchers() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
                       <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
-                        <Ticket className="h-6 w-6 text-primary" />
+                        <Ticket className="h-6 w-6 text-red-600" />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">

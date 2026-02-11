@@ -51,7 +51,7 @@ export default function WalletPage() {
     switch (type) {
       case "send":
       case "withdraw":
-        return <ArrowUpRight className="h-4 w-4 text-primary" />;
+        return <ArrowUpRight className="h-4 w-4 text-red-600" />;
       case "receive":
       case "deposit":
         return <ArrowDownLeft className="h-4 w-4 text-green-600" />;
@@ -70,7 +70,7 @@ export default function WalletPage() {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="p-3 bg-red-100 rounded-xl">
-                  <Wallet className="h-6 w-6 text-primary" />
+                  <Wallet className="h-6 w-6 text-red-600" />
                 </div>
                 <div>
                   <h1 className="text-xl lg:text-2xl font-bold text-gray-900">My Wallet</h1>
@@ -90,7 +90,7 @@ export default function WalletPage() {
             {/* Balance Cards */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               {/* Total Balance */}
-              <Card className="bg-gradient-to-br from-primary to-red-700 border-0 text-white lg:col-span-2">
+              <Card className="bg-gradient-to-br from-red-600 to-red-700 border-0 text-white lg:col-span-2">
                 <CardContent className="p-6">
                   <p className="text-sm opacity-90 mb-2">Total Balance</p>
                   <h2 className="text-3xl lg:text-4xl font-bold mb-4">
@@ -120,8 +120,8 @@ export default function WalletPage() {
                 <Card className="bg-red-50 border-red-200">
                   <CardContent className="p-4">
                     <div className="flex items-center gap-2 mb-1">
-                      <Clock className="h-4 w-4 text-primary" />
-                      <p className="text-xs text-primary font-medium">Pending</p>
+                      <Clock className="h-4 w-4 text-red-600" />
+                      <p className="text-xs text-red-600 font-medium">Pending</p>
                     </div>
                     <p className="text-lg font-bold text-red-700">
                       {isBalanceVisible ? `$${pendingBalance.toLocaleString()}` : '******'}
@@ -141,7 +141,7 @@ export default function WalletPage() {
               <CardContent>
                 <div className="grid grid-cols-2 gap-3">
                   <Link href="/send">
-                    <Button className="w-full bg-primary hover:bg-red-700" data-testid="button-send">
+                    <Button className="w-full bg-red-600 hover:bg-red-700" data-testid="button-send">
                       <ArrowUpRight className="h-4 w-4 mr-2" />
                       Send
                     </Button>
@@ -173,7 +173,7 @@ export default function WalletPage() {
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-lg">Recent Transactions</CardTitle>
                 <Link href="/transactions">
-                  <Button variant="link" className="text-primary p-0 h-auto">
+                  <Button variant="link" className="text-red-600 p-0 h-auto">
                     View All
                   </Button>
                 </Link>
@@ -204,7 +204,7 @@ export default function WalletPage() {
                           <p className={`font-semibold ${
                             transaction.type === 'deposit' || transaction.type === 'receive'
                               ? 'text-green-600'
-                              : 'text-primary'
+                              : 'text-red-600'
                           }`}>
                             {transaction.type === 'deposit' || transaction.type === 'receive' ? '+' : '-'}
                             ${Math.abs(transaction.amount).toFixed(2)}
@@ -223,7 +223,7 @@ export default function WalletPage() {
                   <div className="text-center py-8">
                     <p className="text-gray-500">No transactions yet</p>
                     <Link href="/deposit">
-                      <Button variant="link" className="text-primary mt-2">
+                      <Button variant="link" className="text-red-600 mt-2">
                         Make your first deposit
                       </Button>
                     </Link>

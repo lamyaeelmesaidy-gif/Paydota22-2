@@ -238,7 +238,7 @@ export default function SendMoney() {
         <Button
           onClick={handleSend}
           disabled={sendMutation.isPending || !amount || !recipient}
-          className="w-full bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-red-800 text-white font-medium py-4 rounded-2xl text-lg shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200"
+          className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-medium py-4 rounded-2xl text-lg shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200"
         >
           <Send className="h-5 w-5 mr-2" />
           {sendMutation.isPending ? t('sending') : `${t('sendAmount')} $${amount || "0.00"}`}

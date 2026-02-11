@@ -317,7 +317,7 @@ export default function SecurityPrivacy() {
         {/* Emergency Actions */}
         <Card className="border-0 shadow-sm bg-white dark:bg-gray-900">
           <CardHeader>
-            <CardTitle className="text-base text-primary dark:text-red-400">
+            <CardTitle className="text-base text-red-600 dark:text-red-400">
               Emergency Actions
             </CardTitle>
           </CardHeader>
@@ -325,7 +325,7 @@ export default function SecurityPrivacy() {
             <Button variant="destructive" className="w-full">
               Logout All Devices
             </Button>
-            <Button variant="outline" className="w-full border-red-200 text-primary hover:bg-red-50">
+            <Button variant="outline" className="w-full border-red-200 text-red-600 hover:bg-red-50">
               Temporarily Freeze Account
             </Button>
           </CardContent>

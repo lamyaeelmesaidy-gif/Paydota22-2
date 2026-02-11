@@ -126,7 +126,7 @@ export default function AdminUserPasswords() {
             User Password Management
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Reset and manage user passwords for the BrandSoft Pay platform
+            Reset and manage user passwords for the AppsPay platform
           </p>
         </div>
 
@@ -247,7 +247,7 @@ export default function AdminUserPasswords() {
                   <Button
                     type="submit"
                     disabled={resetPasswordMutation.isPending}
-                    className="w-full bg-primary hover:bg-red-700"
+                    className="w-full bg-red-600 hover:bg-red-700"
                   >
                     {resetPasswordMutation.isPending ? (
                       <>Resetting...</>

@@ -84,7 +84,7 @@ export default function BankTransfer() {
           </Button>
           <div>
             <h1 className="text-xl font-bold text-gray-900 dark:text-white flex items-center">
-              <Building2 className="mr-3 h-6 w-6 text-primary dark:text-red-400" />
+              <Building2 className="mr-3 h-6 w-6 text-red-600 dark:text-red-400" />
               Bank Transfer
             </h1>
             <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -156,7 +156,7 @@ export default function BankTransfer() {
                               className="w-8 h-8 object-contain"
                             />
                           ) : (
-                            <Building2 className="w-6 h-6 text-primary dark:text-red-400" />
+                            <Building2 className="w-6 h-6 text-red-600 dark:text-red-400" />
                           )}
                         </div>
                         <div className="flex-1">
@@ -168,7 +168,7 @@ export default function BankTransfer() {
                           </p>
                         </div>
                         {selectedBank === bank.code && (
-                          <Check className="h-4 w-4 text-primary dark:text-red-400" />
+                          <Check className="h-4 w-4 text-red-600 dark:text-red-400" />
                         )}
                       </div>
                     </div>
@@ -197,7 +197,7 @@ export default function BankTransfer() {
             <Button
               type="submit"
               disabled={!amount || !selectedBank}
-              className="w-full bg-primary hover:bg-red-700 text-white py-3 rounded-lg text-base font-medium mt-4"
+              className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg text-base font-medium mt-4"
               data-testid="button-submit"
             >
               Create Transfer Request
@@ -209,7 +209,7 @@ export default function BankTransfer() {
         {selectedBank && selectedBankDetails && (
           <div className="bg-white dark:bg-[#1a1a2e] border border-gray-200 dark:border-gray-700 rounded-xl p-4 mb-4">
             <div className="flex items-center gap-2 mb-3">
-              <Building2 className="h-5 w-5 text-primary dark:text-red-400" />
+              <Building2 className="h-5 w-5 text-red-600 dark:text-red-400" />
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Selected Bank Details</h2>
             </div>
             
@@ -223,7 +223,7 @@ export default function BankTransfer() {
                       className="w-8 h-8 object-contain"
                     />
                   ) : (
-                    <Building2 className="w-6 h-6 text-primary dark:text-red-400" />
+                    <Building2 className="w-6 h-6 text-red-600 dark:text-red-400" />
                   )}
                 </div>
                 <div>
@@ -310,19 +310,19 @@ export default function BankTransfer() {
           </h3>
           <div className="space-y-2 text-red-800 dark:text-red-300">
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">1</div>
+              <div className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">1</div>
               <p className="text-sm">Select the appropriate bank from the list above</p>
             </div>
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">2</div>
+              <div className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">2</div>
               <p className="text-sm">Enter the amount you want to transfer</p>
             </div>
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">3</div>
+              <div className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">3</div>
               <p className="text-sm">Click "Create Transfer Request" to get bank details</p>
             </div>
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">4</div>
+              <div className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">4</div>
               <p className="text-sm">Use the displayed bank details to make the transfer from your bank</p>
             </div>
           </div>

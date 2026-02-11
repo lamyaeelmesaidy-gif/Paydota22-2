@@ -56,13 +56,13 @@ export default function Transactions() {
   const getTransactionIcon = (type: string) => {
     switch (type) {
       case "send":
-        return <ArrowUpRight className="h-4 w-4 text-primary" />;
+        return <ArrowUpRight className="h-4 w-4 text-red-600" />;
       case "receive":
         return <ArrowDownLeft className="h-4 w-4 text-green-600" />;
       case "deposit":
         return <ArrowDownLeft className="h-4 w-4 text-green-600" />;
       case "withdraw":
-        return <ArrowUpRight className="h-4 w-4 text-primary" />;
+        return <ArrowUpRight className="h-4 w-4 text-red-600" />;
       default:
         return <DollarSign className="h-4 w-4 text-gray-600" />;
     }
@@ -183,7 +183,7 @@ export default function Transactions() {
                           <p className={`font-semibold ${
                             transaction.type === 'deposit' || transaction.type === 'receive'
                               ? 'text-green-600 dark:text-green-400'
-                              : 'text-primary dark:text-red-400'
+                              : 'text-red-600 dark:text-red-400'
                           }`}>
                             {transaction.type === 'deposit' || transaction.type === 'receive' ? '+' : '-'}
                             ${Math.abs(Number(transaction.amount)).toFixed(2)}

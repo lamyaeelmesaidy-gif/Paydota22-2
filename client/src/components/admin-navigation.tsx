@@ -241,7 +241,7 @@ export default function AdminNavigation() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <Link href="/kyc-management">
-              <Button className="w-full justify-start bg-gradient-to-r from-red-500 to-pink-500 hover:from-primary hover:to-pink-600 text-white p-4 h-auto shadow-lg hover:shadow-xl transition-all duration-200">
+              <Button className="w-full justify-start bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white p-4 h-auto shadow-lg hover:shadow-xl transition-all duration-200">
                 <Shield className="h-5 w-5 mr-3" />
                 <div className="text-left">
                   <div className="font-medium">Review KYC Requests</div>
@@ -252,7 +252,7 @@ export default function AdminNavigation() {
             
             <Link href="/admin/users">
               <Button variant="outline" className="w-full justify-start p-4 h-auto border-2 border-red-200 dark:border-red-700 hover:border-red-300 dark:hover:border-red-600 hover:bg-red-50/50 dark:hover:bg-red-900/20 shadow-lg hover:shadow-xl transition-all duration-200">
-                <Users className="h-5 w-5 mr-3 text-primary dark:text-red-400" />
+                <Users className="h-5 w-5 mr-3 text-red-600 dark:text-red-400" />
                 <div className="text-left">
                   <div className="font-medium text-gray-900 dark:text-white">Manage Users</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">User administration</div>

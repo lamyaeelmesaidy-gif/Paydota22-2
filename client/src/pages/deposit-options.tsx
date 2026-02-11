@@ -124,7 +124,7 @@ export default function DepositOptions() {
         <div className="px-4 mt-8">
           <button
             onClick={handleContinue}
-            className="w-full py-4 bg-primary hover:bg-red-700 text-white font-semibold rounded-xl transition-colors"
+            className="w-full py-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-colors"
             data-testid="button-continue"
           >
             Continue

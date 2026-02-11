@@ -133,7 +133,7 @@ export default function AirwallexTest() {
                 <Button 
                   onClick={() => testEndpoint('/api/airwallex/account-info', 'GET', 'معلومات الحساب المحدّثة')}
                   disabled={isLoading}
-                  className="bg-red-500 hover:bg-primary"
+                  className="bg-red-500 hover:bg-red-600"
                 >
                   معلومات محدّثة
                 </Button>

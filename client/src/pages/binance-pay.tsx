@@ -206,7 +206,7 @@ export default function BinancePay() {
                 <Button
                   onClick={handleCreateOrder}
                   disabled={createOrderMutation.isPending}
-                  className="w-full h-12 bg-red-500/80 hover:bg-primary/80 text-white font-medium rounded-xl transition-colors"
+                  className="w-full h-12 bg-red-500/80 hover:bg-red-600/80 text-white font-medium rounded-xl transition-colors"
                 >
                   {createOrderMutation.isPending ? "جاري الإنشاء..." : "إنشاء طلب الدفع"}
                 </Button>
@@ -255,7 +255,7 @@ export default function BinancePay() {
               <div className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 shadow-sm">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 bg-red-100/80 rounded-xl flex items-center justify-center">
-                    <QrCode className="h-6 w-6 text-primary" />
+                    <QrCode className="h-6 w-6 text-red-600" />
                   </div>
                   <h2 className="text-lg font-semibold text-gray-900">امسح رمز QR</h2>
                 </div>
@@ -294,7 +294,7 @@ export default function BinancePay() {
                 <div className="space-y-3">
                   <Button
                     onClick={() => window.open(paymentOrder.paymentUrl, '_blank')}
-                    className="w-full h-12 bg-red-500/80 hover:bg-primary/80 text-white flex items-center justify-center gap-2 rounded-xl transition-colors"
+                    className="w-full h-12 bg-red-500/80 hover:bg-red-600/80 text-white flex items-center justify-center gap-2 rounded-xl transition-colors"
                   >
                     <ExternalLink className="h-5 w-5" />
                     <span>فتح صفحة دفع Binance</span>

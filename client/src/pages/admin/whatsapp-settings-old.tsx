@@ -182,7 +182,7 @@ export default function WhatsAppSettings() {
             <Card className="bg-white/60 backdrop-blur-sm border border-red-200/50 shadow-lg">
               <CardHeader className="bg-gradient-to-r from-red-500/10 to-pink-500/10 rounded-t-lg">
                 <CardTitle className="text-lg sm:text-xl text-gray-900 flex items-center gap-2">
-                  <Settings className="h-5 w-5 text-primary" />
+                  <Settings className="h-5 w-5 text-red-600" />
                   إعدادات API
                 </CardTitle>
                 <CardDescription className="text-sm sm:text-base text-gray-600">
@@ -223,10 +223,10 @@ export default function WhatsAppSettings() {
                   />
                   <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-md">
                     <p className="text-sm text-red-800 font-medium">⚠️ تحذير: انتهت صلاحية رمز الوصول</p>
-                    <p className="text-xs text-primary mt-1">
+                    <p className="text-xs text-red-600 mt-1">
                       انتهت صلاحية الرمز في 25 يونيو. تحتاج إلى الحصول على رمز جديد من Facebook Developer Console.
                     </p>
-                    <div className="mt-2 text-xs text-primary">
+                    <div className="mt-2 text-xs text-red-600">
                       <p><strong>خطوات الحصول على رمز جديد:</strong></p>
                       <ol className="list-decimal list-inside mt-1 space-y-1">
                         <li>اذهب إلى Facebook Developers Console</li>
@@ -397,9 +397,9 @@ export default function WhatsAppSettings() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">فشل الإرسال</p>
-                    <p className="text-2xl font-bold text-primary">{stats?.messagesFailed || 0}</p>
+                    <p className="text-2xl font-bold text-red-600">{stats?.messagesFailed || 0}</p>
                   </div>
-                  <XCircle className="h-8 w-8 text-primary" />
+                  <XCircle className="h-8 w-8 text-red-600" />
                 </div>
               </CardContent>
             </Card>
@@ -409,9 +409,9 @@ export default function WhatsAppSettings() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">القوالب المستخدمة</p>
-                    <p className="text-2xl font-bold text-primary">{stats?.templatesUsed || 0}</p>
+                    <p className="text-2xl font-bold text-red-600">{stats?.templatesUsed || 0}</p>
                   </div>
-                  <MessageCircle className="h-8 w-8 text-primary" />
+                  <MessageCircle className="h-8 w-8 text-red-600" />
                 </div>
               </CardContent>
             </Card>

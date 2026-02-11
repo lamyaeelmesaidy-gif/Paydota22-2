@@ -184,7 +184,7 @@ export default function WhatsAppSettings() {
             <Card className="bg-white/60 backdrop-blur-sm border border-red-200/50 shadow-lg">
               <CardHeader className="bg-gradient-to-r from-red-500/10 to-pink-500/10 rounded-t-lg">
                 <CardTitle className="text-lg sm:text-xl text-gray-900 flex items-center gap-2">
-                  <Settings className="h-5 w-5 text-primary" />
+                  <Settings className="h-5 w-5 text-red-600" />
                   إعدادات API
                 </CardTitle>
                 <CardDescription className="text-sm sm:text-base text-gray-600">
@@ -234,7 +234,7 @@ export default function WhatsAppSettings() {
                         href="https://developers.facebook.com/apps" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-primary hover:text-red-800 font-medium mt-2"
+                        className="inline-flex items-center gap-2 text-red-600 hover:text-red-800 font-medium mt-2"
                       >
                         Facebook Developer Console
                         <ExternalLink className="h-3 w-3" />
@@ -284,7 +284,7 @@ export default function WhatsAppSettings() {
                   <Button 
                     type="submit" 
                     disabled={saveSettings.isPending} 
-                    className="w-full h-12 bg-gradient-to-r from-red-500/80 to-pink-500/80 hover:from-primary/80 hover:to-pink-600/80 text-white font-medium"
+                    className="w-full h-12 bg-gradient-to-r from-red-500/80 to-pink-500/80 hover:from-red-600/80 hover:to-pink-600/80 text-white font-medium"
                   >
                     {saveSettings.isPending ? "جاري الحفظ..." : "حفظ الإعدادات"}
                   </Button>
@@ -298,7 +298,7 @@ export default function WhatsAppSettings() {
             <Card className="bg-white/60 backdrop-blur-sm border border-red-200/50 shadow-lg">
               <CardHeader className="bg-gradient-to-r from-red-500/10 to-pink-500/10 rounded-t-lg">
                 <CardTitle className="text-lg sm:text-xl text-gray-900 flex items-center gap-2">
-                  <Send className="h-5 w-5 text-primary" />
+                  <Send className="h-5 w-5 text-red-600" />
                   اختبار إرسال OTP
                 </CardTitle>
                 <CardDescription className="text-sm sm:text-base text-gray-600">
@@ -333,7 +333,7 @@ export default function WhatsAppSettings() {
                   <Button 
                     type="submit" 
                     disabled={testOTPSending.isPending} 
-                    className="w-full h-12 bg-gradient-to-r from-red-500/80 to-pink-500/80 hover:from-primary/80 hover:to-pink-600/80 text-white font-medium"
+                    className="w-full h-12 bg-gradient-to-r from-red-500/80 to-pink-500/80 hover:from-red-600/80 hover:to-pink-600/80 text-white font-medium"
                   >
                     {testOTPSending.isPending ? "جاري الإرسال..." : "إرسال رسالة اختبار"}
                   </Button>
@@ -350,7 +350,7 @@ export default function WhatsAppSettings() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-gray-600">الرسائل المرسلة</p>
-                      <p className="text-2xl font-bold text-primary">{stats?.messagesSent || 0}</p>
+                      <p className="text-2xl font-bold text-red-600">{stats?.messagesSent || 0}</p>
                     </div>
                     <Send className="h-8 w-8 text-red-500" />
                   </div>
@@ -374,7 +374,7 @@ export default function WhatsAppSettings() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-gray-600">الرسائل الفاشلة</p>
-                      <p className="text-2xl font-bold text-primary">{stats?.messagesFailed || 0}</p>
+                      <p className="text-2xl font-bold text-red-600">{stats?.messagesFailed || 0}</p>
                     </div>
                     <XCircle className="h-8 w-8 text-red-500" />
                   </div>
@@ -398,7 +398,7 @@ export default function WhatsAppSettings() {
             <Card className="bg-white/60 backdrop-blur-sm border border-red-200/50 shadow-lg mt-6">
               <CardHeader className="bg-gradient-to-r from-red-500/10 to-pink-500/10 rounded-t-lg">
                 <CardTitle className="text-lg sm:text-xl text-gray-900 flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-primary" />
+                  <BarChart3 className="h-5 w-5 text-red-600" />
                   حالة النظام
                 </CardTitle>
               </CardHeader>
@@ -411,8 +411,8 @@ export default function WhatsAppSettings() {
                     </span>
                   </div>
                   <div className="flex gap-2">
-                    <Smartphone className="h-5 w-5 text-primary" />
-                    <Monitor className="h-5 w-5 text-primary" />
+                    <Smartphone className="h-5 w-5 text-red-600" />
+                    <Monitor className="h-5 w-5 text-red-600" />
                   </div>
                 </div>
               </CardContent>

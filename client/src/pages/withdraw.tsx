@@ -123,7 +123,7 @@ export default function Withdraw() {
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2 text-gray-900 dark:text-white">
               <div className="p-1 bg-red-100 dark:bg-red-900/30 rounded-lg">
-                <DollarSign className="h-5 w-5 text-primary" />
+                <DollarSign className="h-5 w-5 text-red-600" />
               </div>
               {t("withdrawAmount")}
             </CardTitle>
@@ -210,7 +210,7 @@ export default function Withdraw() {
         <Button
           onClick={handleWithdraw}
           disabled={withdrawMutation.isPending || !amount || parseFloat(amount) > (balance?.balance || 0)}
-          className="w-full bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-red-800 text-white font-medium py-4 rounded-2xl text-lg shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200"
+          className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-medium py-4 rounded-2xl text-lg shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200"
         >
           <Minus className="h-5 w-5 mr-2" />
           {withdrawMutation.isPending ? t("processingWithdraw") : `${t("withdrawButton")} $${amount || "0.00"}`}

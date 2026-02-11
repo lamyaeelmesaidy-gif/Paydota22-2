@@ -129,7 +129,7 @@ export default function PaymentLinksPage() {
       case "successful":
         return <Badge className="bg-green-600 text-xs" data-testid="badge-successful"><CheckCircle2 className="w-2.5 h-2.5 lg:w-3 lg:h-3 mr-1" /> Successful</Badge>;
       case "failed":
-        return <Badge className="bg-primary text-xs" data-testid="badge-failed"><XCircle className="w-2.5 h-2.5 lg:w-3 lg:h-3 mr-1" /> Failed</Badge>;
+        return <Badge className="bg-red-600 text-xs" data-testid="badge-failed"><XCircle className="w-2.5 h-2.5 lg:w-3 lg:h-3 mr-1" /> Failed</Badge>;
       case "pending":
         return <Badge className="bg-yellow-600 text-xs" data-testid="badge-pending"><Clock className="w-2.5 h-2.5 lg:w-3 lg:h-3 mr-1" /> Pending</Badge>;
       default:
@@ -143,7 +143,7 @@ export default function PaymentLinksPage() {
         {/* Info Banner */}
         <div className="mb-4 lg:mb-6 bg-gradient-to-r from-red-50 to-blue-50 dark:from-red-900/20 dark:to-blue-900/20 border border-red-200 dark:border-red-700/50 rounded-lg p-3 lg:p-4">
           <div className="flex items-start gap-3">
-            <CreditCard className="w-5 h-5 text-primary dark:text-red-400 flex-shrink-0 mt-0.5" />
+            <CreditCard className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-sm lg:text-base text-gray-900 dark:text-white mb-1">Payment Link Acceptance via Bank Card</h3>
               <p className="text-xs lg:text-sm text-gray-700 dark:text-gray-300">
@@ -161,7 +161,7 @@ export default function PaymentLinksPage() {
           
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-primary hover:to-pink-600">
+              <Button className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600">
                 <Plus className="w-4 h-4 mr-2" />
                 Create Payment Link
               </Button>

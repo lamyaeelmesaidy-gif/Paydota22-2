@@ -237,7 +237,7 @@ export default function CardholderTest() {
               <Button 
                 onClick={testCardholderCreation}
                 disabled={isLoading}
-                className="w-full bg-red-500 hover:bg-primary"
+                className="w-full bg-red-500 hover:bg-red-600"
               >
                 {isLoading ? 'جاري الإنشاء...' : 'إنشاء Cardholder'}
               </Button>
@@ -283,7 +283,7 @@ export default function CardholderTest() {
           {error && (
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-primary">
+                <CardTitle className="flex items-center gap-2 text-red-600">
                   <XCircle className="h-5 w-5" />
                   نتيجة الاختبار - فشل ❌
                 </CardTitle>
@@ -292,7 +292,7 @@ export default function CardholderTest() {
                 <div className="space-y-4">
                   <div className="bg-red-50 p-4 rounded-lg">
                     <p className="text-red-700 font-semibold mb-2">خطأ:</p>
-                    <p className="text-primary">{error}</p>
+                    <p className="text-red-600">{error}</p>
                   </div>
                   
                   {error.includes('access_denied_not_enabled') && (

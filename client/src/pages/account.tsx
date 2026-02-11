@@ -191,7 +191,7 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <Globe className="h-5 w-5 text-primary dark:text-red-400" />
+                  <Globe className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <span className="text-gray-900 dark:text-white font-medium text-sm">
                   Language
@@ -206,7 +206,7 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <FileCheck className="h-5 w-5 text-primary dark:text-red-400" />
+                  <FileCheck className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <span className="text-gray-900 dark:text-white font-medium text-sm">
                   Identity Verification
@@ -221,7 +221,7 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <Settings className="h-5 w-5 text-primary dark:text-red-400" />
+                  <Settings className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <span className="text-gray-900 dark:text-white font-medium text-sm">
                   Setting Payment Password
@@ -241,7 +241,7 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <Phone className="h-5 w-5 text-primary dark:text-red-400" />
+                  <Phone className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <span className="text-gray-900 dark:text-white font-medium text-sm">
                   Customer Service
@@ -256,7 +256,7 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <Shield className="h-5 w-5 text-primary dark:text-red-400" />
+                  <Shield className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <span className="text-gray-900 dark:text-white font-medium text-sm">
                   Security Settings
@@ -276,7 +276,7 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <CreditCard className="h-5 w-5 text-primary dark:text-red-400" />
+                  <CreditCard className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <span className="text-gray-900 dark:text-white font-medium text-sm">
                   Card Purchase Record
@@ -291,7 +291,7 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <Gift className="h-5 w-5 text-primary dark:text-red-400" />
+                  <Gift className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <span className="text-gray-900 dark:text-white font-medium text-sm">
                   Coupons
@@ -306,11 +306,11 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <HelpCircle className="h-5 w-5 text-primary dark:text-red-400" />
+                  <HelpCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <div className="flex-1 text-left">
                   <span className="text-gray-900 dark:text-white font-medium text-sm block">
-                    About <span className="text-primary">BrandSoft Pay</span>
+                    About <span className="text-red-600">AppsPay</span>
                   </span>
                 </div>
                 <span className="text-gray-400 text-xs mr-2">v2.0.21</span>
@@ -324,7 +324,7 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <Shield className="h-5 w-5 text-primary dark:text-red-400" />
+                  <Shield className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <span className="text-gray-900 dark:text-white font-medium text-sm">
                   Privacy Policy
@@ -339,7 +339,7 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <FileCheck className="h-5 w-5 text-primary dark:text-red-400" />
+                  <FileCheck className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <span className="text-gray-900 dark:text-white font-medium text-sm">
                   AML Policy
@@ -359,14 +359,14 @@ export default function Account() {
                 className="w-full p-3 flex items-center justify-between hover:bg-red-50/70 dark:hover:bg-red-900/30 transition-colors"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="rounded-lg p-1.5 bg-gradient-to-r from-primary to-pink-600">
+                  <div className="rounded-lg p-1.5 bg-gradient-to-r from-red-600 to-pink-600">
                     <Crown className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-left">
                     <span className="text-red-700 dark:text-red-300 font-semibold text-sm block">
                       Admin Panel
                     </span>
-                    <span className="text-primary/70 dark:text-red-400/70 text-xs">
+                    <span className="text-red-600/70 dark:text-red-400/70 text-xs">
                       Manage platform settings
                     </span>
                   </div>
@@ -387,9 +387,9 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <LogOut className="h-5 w-5 text-primary dark:text-red-400" />
+                  <LogOut className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
-                <span className="text-primary dark:text-red-400 font-medium text-sm">
+                <span className="text-red-600 dark:text-red-400 font-medium text-sm">
                   Log out
                 </span>
               </div>
@@ -403,9 +403,9 @@ export default function Account() {
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg p-1.5">
-                  <Trash2 className="h-5 w-5 text-primary dark:text-red-400" />
+                  <Trash2 className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
-                <span className="text-primary dark:text-red-400 font-medium text-sm">
+                <span className="text-red-600 dark:text-red-400 font-medium text-sm">
                   Delete Account
                 </span>
               </div>
@@ -420,7 +420,7 @@ export default function Account() {
       <AlertDialog open={showDeleteDialog} onOpenChange={handleCloseDeleteDialog}>
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-primary">Confirm Account Deletion</AlertDialogTitle>
+            <AlertDialogTitle className="text-red-600">Confirm Account Deletion</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete your account? All your data will be permanently deleted and cannot be recovered.
               <div className="mt-4">
@@ -443,7 +443,7 @@ export default function Account() {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDeleteAccount}
-              className="bg-primary hover:bg-red-700 text-white"
+              className="bg-red-600 hover:bg-red-700 text-white"
               disabled={deleteAccountMutation.isPending || !isEmailMatch}
             >
               {deleteAccountMutation.isPending ? "Deleting..." : "Delete Account"}

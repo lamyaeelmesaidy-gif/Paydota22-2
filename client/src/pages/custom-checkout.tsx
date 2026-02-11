@@ -274,7 +274,7 @@ export default function CustomCheckoutPage() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="text-primary">Payment Link Not Found</CardTitle>
+            <CardTitle className="text-red-600">Payment Link Not Found</CardTitle>
             <CardDescription>
               The payment link you're looking for doesn't exist or has expired.
             </CardDescription>
@@ -311,9 +311,9 @@ export default function CustomCheckoutPage() {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900">
-              <AlertCircle className="h-8 w-8 text-primary dark:text-red-400" />
+              <AlertCircle className="h-8 w-8 text-red-600 dark:text-red-400" />
             </div>
-            <CardTitle className="text-primary dark:text-red-400">Payment Failed</CardTitle>
+            <CardTitle className="text-red-600 dark:text-red-400">Payment Failed</CardTitle>
             <CardDescription>
               Your payment could not be processed. Please try again or contact support.
             </CardDescription>

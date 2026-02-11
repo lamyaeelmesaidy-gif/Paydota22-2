@@ -247,7 +247,7 @@ export default function WhatsAppSettings() {
                   <div className="text-sm text-blue-700">رموز نشطة</div>
                 </div>
                 <div className="text-center p-3 bg-red-50/80 rounded-xl">
-                  <div className="text-2xl font-bold text-primary">
+                  <div className="text-2xl font-bold text-red-600">
                     {Object.keys(otpStats.byPurpose).length}
                   </div>
                   <div className="text-sm text-red-700">أنواع الأغراض</div>
@@ -315,7 +315,7 @@ export default function WhatsAppSettings() {
           <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-red-100/80 rounded-xl flex items-center justify-center">
-                <Shield className="h-6 w-6 text-primary" />
+                <Shield className="h-6 w-6 text-red-600" />
               </div>
               <h2 className="text-lg font-semibold text-gray-900">إدارة OTP</h2>
             </div>
@@ -357,7 +357,7 @@ export default function WhatsAppSettings() {
                 <Button
                   onClick={handleSendOtp}
                   disabled={sendOtpMutation.isPending}
-                  className="h-12 bg-red-500/80 hover:bg-primary/80 text-white rounded-xl"
+                  className="h-12 bg-red-500/80 hover:bg-red-600/80 text-white rounded-xl"
                 >
                   {sendOtpMutation.isPending ? "جاري الإرسال..." : "إرسال OTP"}
                 </Button>
