@@ -43,7 +43,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">1. Introduction</h2>
             <p className="text-sm leading-relaxed">
-              LM WORK MA, developed by LMWORK MA LIMITED ("we," "us," "our," or "Company"), is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and services.
+              LM WORK PAY, developed by LMWORK MA LIMITED ("we," "us," "our," or "Company"), is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and services.
             </p>
           </section>
 
@@ -218,11 +218,11 @@ export default function PrivacyPolicy() {
               </div>
               <div className="flex flex-col gap-1">
                 <strong className="text-gray-900 dark:text-white">Email:</strong>
-                <p className="text-gray-700 dark:text-gray-300 ml-2">Contact@brandsoftapps.com</p>
+                <p className="text-gray-700 dark:text-gray-300 ml-2">Contact@lmworkpay.site</p>
               </div>
               <div className="flex flex-col gap-1">
                 <strong className="text-gray-900 dark:text-white">Phone:</strong>
-                <p className="text-gray-700 dark:text-gray-300 ml-2">+(785) 915 9048</p>
+                <p className="text-gray-700 dark:text-gray-300 ml-2">+44 7735 306723</p>
               </div>
               <div className="flex flex-col gap-1">
                 <strong className="text-gray-900 dark:text-white">Address:</strong>
@@ -234,7 +234,7 @@ export default function PrivacyPolicy() {
               </div>
               <div className="flex flex-col gap-1">
                 <strong className="text-gray-900 dark:text-white">App Name:</strong>
-                <p className="text-gray-700 dark:text-gray-300 ml-2">LM WORK MA</p>
+                <p className="text-gray-700 dark:text-gray-300 ml-2">LM WORK PAY</p>
               </div>
               <div className="flex flex-col gap-1">
                 <strong className="text-gray-900 dark:text-white">Response Time:</strong>
