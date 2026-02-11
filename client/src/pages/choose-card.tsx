@@ -112,7 +112,7 @@ export default function ChooseCard() {
             </div>
             <div className="flex flex-col items-end justify-between h-full">
               <Wifi className="w-3 h-3 text-white/70" />
-              <div className="text-xs font-semibold text-white/80">LM WORK MA</div>
+              <div className="text-xs font-semibold text-white/80">BrandSoft Pay</div>
             </div>
           </div>
           
@@ -145,7 +145,7 @@ export default function ChooseCard() {
                 setLocation("/cards");
               }
             }}
-            className="flex items-center gap-2 text-primary hover:text-red-700 hover:bg-yellow-50"
+            className="flex items-center gap-2 text-primary hover:text-red-700 hover:bg-red-50"
           >
             <ArrowLeft className="w-4 h-4" />
             Back
@@ -234,7 +234,7 @@ export default function ChooseCard() {
                         value={formData.creditLimit} 
                         onValueChange={(value) => handleInputChange("creditLimit", value)}
                       >
-                        <SelectTrigger className="bg-white border-yellow-200 focus:border-red-500 h-10">
+                        <SelectTrigger className="bg-white border-red-200 focus:border-red-500 h-10">
                           <SelectValue placeholder="Select credit limit" />
                         </SelectTrigger>
                         <SelectContent>
@@ -253,7 +253,7 @@ export default function ChooseCard() {
                         value={formData.currency} 
                         onValueChange={(value) => handleInputChange("currency", value)}
                       >
-                        <SelectTrigger className="bg-white border-yellow-200 focus:border-red-500 h-10">
+                        <SelectTrigger className="bg-white border-red-200 focus:border-red-500 h-10">
                           <SelectValue placeholder="Select currency" />
                         </SelectTrigger>
                         <SelectContent>
@@ -271,7 +271,7 @@ export default function ChooseCard() {
                       type="button"
                       variant="outline"
                       onClick={() => setLocation("/cards")}
-                      className="flex-1 h-10 border-yellow-200 text-primary hover:bg-yellow-50"
+                      className="flex-1 h-10 border-red-200 text-primary hover:bg-red-50"
                     >
                       Cancel
                     </Button>

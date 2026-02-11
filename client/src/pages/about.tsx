@@ -55,7 +55,7 @@ export default function About() {
             <ArrowLeft className="h-6 w-6" />
           </Button>
           <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-            About <span className="text-primary">LM WORK PAY</span>
+            About <span className="text-primary">BrandSoft Pay</span>
           </h1>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default function About() {
               <Heart className="h-8 w-8 text-white" />
             </div>
             <CardTitle className="text-gray-900 dark:text-white">
-              LM WORK PAY v2.0.21
+              BrandSoft Pay v2.0.21
             </CardTitle>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
               Your trusted digital wallet companion
@@ -116,7 +116,7 @@ export default function About() {
             <div>
               <h4 className="font-medium text-gray-900 dark:text-white text-sm">Developer</h4>
               <p className="text-xs text-gray-600 dark:text-gray-400">
-                LMWORK MA LIMITED
+                BRAND APPS SOFTWARE COMPANY
               </p>
             </div>
             <div>
@@ -134,10 +134,9 @@ export default function About() {
             <div>
               <h4 className="font-medium text-gray-900 dark:text-white text-sm">Contact</h4>
               <p className="text-xs text-gray-600 dark:text-gray-400">
-                Email: info@lmworkpay.site<br />
-                Website: https://lmworkpay.site<br />
+                Email: Contact@brandsoftapps.com<br />
                 Phone: +(785) 915 9048<br />
-                Address: 2 Frederick Street, Kings Cross, LONDON - WC1X 0ND, United Kingdom (GB)
+                Address: 920 N. TYLER RD STE 304 #584, WICHITA, KS 67212, USA
               </p>
             </div>
           </CardContent>
@@ -172,7 +171,7 @@ export default function About() {
 
         {/* Copyright */}
         <div className="text-center text-xs text-gray-500 dark:text-gray-400">
-          © 2024 <span className="text-primary">LMWORK MA LIMITED</span>. All rights reserved.
+          © 2024 <span className="text-primary">BRAND APPS SOFTWARE COMPANY</span>. All rights reserved.
         </div>
       </div>
     </div>

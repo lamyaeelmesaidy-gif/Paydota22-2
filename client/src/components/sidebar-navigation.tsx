@@ -28,7 +28,7 @@ export default function SidebarNavigation() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center">
               <span className="text-white font-bold text-sm">PD</span>
             </div>
-            <span className="font-bold text-lg text-gray-900 dark:text-white">LM WORK PAY</span>
+            <span className="font-bold text-lg text-gray-900 dark:text-white">BrandSoft Pay</span>
           </div>
         )}
         <Button
@@ -91,7 +91,7 @@ export default function SidebarNavigation() {
       <div className="p-4 border-t border-gray-200 dark:border-gray-800 space-y-2">
         <button
           onClick={() => logout()}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-primary dark:text-red-400 hover:bg-yellow-50 dark:hover:bg-red-900/20 transition-all"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-primary dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all"
           data-testid="button-logout"
         >
           <LogOut className="w-5 h-5 flex-shrink-0" />
